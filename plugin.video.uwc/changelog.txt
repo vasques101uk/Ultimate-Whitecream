@@ -1,0 +1,21 @@
+[B]Version 1.0.4[/B]
+Added: Sorting for Scens and Movies
+Added: Setting to skip asking for a videohost (default=off)
+
+
+[B]Version 1.0.3[/B]
+Added: Top Pornstars for Scenes
+
+
+[B]Version 1.0.2[/B]
+Added: Search for Scenes and Movies
+Added: A to Z Hentai list, censored and uncensored
+
+
+[B]Version 1.0.1[/B]
+Fixed: Pagination - Thanks to 'hstegeman'
+Fixed: Better regex for Videomega host
+
+
+[B]Version 1.0.0[/B]
+Initial public release
