@@ -2,7 +2,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.5"
+__version__ = "1.0.6"
 
 import urllib
 import urllib2
@@ -87,7 +87,14 @@ def getVideoLink(url, referer):
     req2 = Request(url, '', headers)
     req2.add_header('Referer', referer)
     url2 = urlopen(req2).geturl()
-    return url2    
+    return url2
+
+def cleantext(text):
+    text = text.replace('&#8211;','-')
+    text = text.replace('&#038;','&')
+    text = text.replace('&#8217;','\'')
+    text = text.replace('&#8230;','...')
+    return text
 
 
 def PLAYVIDEO(url, name):
@@ -172,14 +179,17 @@ def getParams():
     return param
 
 
-def addDownLink(name, url, mode, iconimage):
+def addDownLink(name, url, mode, iconimage, desc):
     u = (sys.argv[0] +
          "?url=" + urllib.quote_plus(url) +
          "&mode=" + str(mode) +
          "&name=" + urllib.quote_plus(name))
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    liz.setInfo(type="Video", infoLabels={"Title": name})
+    if len(desc) < 1:
+        liz.setInfo(type="Video", infoLabels={"Title": name})
+    else:
+        liz.setInfo(type="Video", infoLabels={"Title": name, "plot": desc, "plotoutline": desc})
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=False)
     return ok
     
@@ -248,17 +258,16 @@ def WXFSearch(url):
 def WXFList(url, page):
     sort = getWXFSortMethod()
     if re.search('\?', url, re.DOTALL | re.IGNORECASE):
-        url = url + '&filtre=' + sort
+        url = url + '&filtre=' + sort + '&display=extract'
     else:
-        url = url + '?filtre=' + sort
+        url = url + '?filtre=' + sort + '&display=extract'
     print url
     listhtml = getHtml(url, '')
-    match = re.compile('src="([^"]+)"[^<]+</noscript>.*?<a href="([^"]+)" title="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for img, videopage, name in match:
-        name = name.replace('&#8211;','-')
-        name = name.replace('&#038;','&')
-        name = name.replace('&#8217;','\'')
-        addDownLink(name, videopage, 13, img)
+    match = re.compile('src="([^"]+)"[^<]+</noscript>.*?<a href="([^"]+)" title="([^"]+)".*?<p>([^<]+)</p>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for img, videopage, name, desc in match:
+        name = cleantext(name)
+        desc = cleantext(desc)
+        addDownLink(name, videopage, 13, img, desc)
     if re.search('<link rel="next"', listhtml, re.DOTALL | re.IGNORECASE):
         npage = page + 1        
         url = url.replace('/page/'+str(page)+'/','/page/'+str(npage)+'/')
@@ -319,9 +328,11 @@ def XTList(url, page):
         url = url + '?orderby=' + sort
     print url
     listhtml = getHtml(url, '')
-    match = re.compile('src="([^"]+)" alt="([^"]+)"[^<]+<span class="vertical-align"></span>.*?<h2 class="entry-title"><a href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for img, name, videopage in match:
-        addDownLink(name, videopage, 23, img)
+    match = re.compile('src="([^"]+)" alt="([^"]+)"[^<]+<span class="vertical-align"></span>.*?<h2 class="entry-title"><a href="([^"]+)".*?summary">([^<]+)</p>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for img, name, videopage, desc in match:
+        name = cleantext(name)
+        desc = cleantext(desc)
+        addDownLink(name, videopage, 23, img, desc)
     if re.search('<link rel="next"', listhtml, re.DOTALL | re.IGNORECASE):
         npage = page + 1        
         url = url.replace('/page/'+str(page)+'/','/page/'+str(npage)+'/')
@@ -373,7 +384,7 @@ def HCEpisodes(url,name, img):
     link = getHtml(url, '')
     eps = re.compile('<li><a href="([^"]+)">([^<]+)</a> <', re.DOTALL | re.IGNORECASE).findall(link)
     for url, name in eps:
-        addDownLink(name,url,32,img)
+        addDownLink(name,url,32,img, '')
         
 def HCPlayvid(url,name):
     progress.create('Play video', 'Searching videofile.')
