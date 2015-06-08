@@ -1,3 +1,8 @@
+[B]Version 1.0.5[/B]
+Fixed: Searching works again
+Fixed: Better videomega recognition
+
+
 [B]Version 1.0.4[/B]
 Added: Sorting for Scens and Movies
 Added: Setting to skip asking for a videohost (default=off)

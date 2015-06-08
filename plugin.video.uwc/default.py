@@ -2,7 +2,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.4"
+__version__ = "1.0.5"
 
 import urllib
 import urllib2
@@ -116,8 +116,10 @@ def PLAYVIDEO(url, name):
     
     if vidhost == 'VideoMega':
         progress.update( 40, "", "Loading videomegatv", "" )
-        if re.search("http://videomega.tv/iframe.js", videosource, re.DOTALL | re.IGNORECASE):
+        if re.search("videomega.tv/iframe.js", videosource, re.DOTALL | re.IGNORECASE):
             hashref = re.compile("""javascript["']>ref=['"]([^'"]+)""", re.DOTALL | re.IGNORECASE).findall(videosource)
+        elif re.search("videomega.tv/iframe.php", videosource, re.DOTALL | re.IGNORECASE):
+            hashref = re.compile(r"iframe\.php\?ref=([^&]+)&", re.DOTALL | re.IGNORECASE).findall(videosource)
         else:
             hashkey = re.compile("""hashkey=([^"']+)""", re.DOTALL | re.IGNORECASE).findall(videosource)
             hashpage = getHtml('http://videomega.tv/validatehash.php?hashkey='+hashkey[0], url)
@@ -245,7 +247,10 @@ def WXFSearch(url):
 
 def WXFList(url, page):
     sort = getWXFSortMethod()
-    url = url + '?filtre=' + sort
+    if re.search('\?', url, re.DOTALL | re.IGNORECASE):
+        url = url + '&filtre=' + sort
+    else:
+        url = url + '?filtre=' + sort
     print url
     listhtml = getHtml(url, '')
     match = re.compile('src="([^"]+)"[^<]+</noscript>.*?<a href="([^"]+)" title="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
@@ -308,7 +313,10 @@ def XTSearch(url):
 
 def XTList(url, page):
     sort = getXTSortMethod()
-    url = url + '?orderby=' + sort
+    if re.search('\?', url, re.DOTALL | re.IGNORECASE):
+        url = url + '&orderby=' + sort
+    else:
+        url = url + '?orderby=' + sort
     print url
     listhtml = getHtml(url, '')
     match = re.compile('src="([^"]+)" alt="([^"]+)"[^<]+<span class="vertical-align"></span>.*?<h2 class="entry-title"><a href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
