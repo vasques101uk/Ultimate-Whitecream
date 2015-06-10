@@ -2,7 +2,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.6"
+__version__ = "1.0.7"
 
 import urllib
 import urllib2
@@ -328,7 +328,7 @@ def XTList(url, page):
         url = url + '?orderby=' + sort
     print url
     listhtml = getHtml(url, '')
-    match = re.compile('src="([^"]+)" alt="([^"]+)"[^<]+<span class="vertical-align"></span>.*?<h2 class="entry-title"><a href="([^"]+)".*?summary">([^<]+)</p>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile('id="post.*?src="([^"]+)" alt="([^"]+)"[^<]+<span class="vertical-align"></span>.*?<h2 class="entry-title"><a href="([^"]+)".*?summary">([^<]+)</p>', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for img, name, videopage, desc in match:
         name = cleantext(name)
         desc = cleantext(desc)
