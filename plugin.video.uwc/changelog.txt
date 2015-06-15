@@ -1,3 +1,7 @@
+[B]Version 1.0.8[/B]
+Added: Another movies source, not finished yet but the main list works 
+
+
 [B]Version 1.0.7[/B]
 Fixed: A  bug in the regex for the Movies, when browsing a categorie
 

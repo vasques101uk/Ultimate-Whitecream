@@ -2,7 +2,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.7"
+__version__ = "1.0.8"
 
 import urllib
 import urllib2
@@ -62,6 +62,7 @@ sortlistxt = [addon.getLocalizedString(30022), addon.getLocalizedString(30023), 
 def INDEX():
     addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Scenes[/COLOR]','http://www.watchxxxfree.com/page/1/',10,'','')
     addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Movies[/COLOR]','http://xtheatre.net/page/1/',20,'','')
+    addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Movies 2[/COLOR] [COLOR blue]Beta[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,'','')
     addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Hentai[/COLOR]','http://www.hentaicraving.com/?genre=Uncensored',30,'','')
     xbmcplugin.endOfDirectory(addon_handle)
 
@@ -436,6 +437,51 @@ def addHCDir(name,url,mode,iconimage,desc):
     return ok
 
 #####################
+
+
+########### Nudeflix
+
+def NFMain():
+    NFList('http://www.nudeflix.com/browse?order=released&page=1',1)
+    xbmcplugin.endOfDirectory(addon_handle)
+    
+
+def NFList(url,page):
+    listhtml = getHtml(url, '')
+    match = re.compile('href="([^"]+)" class="link">[^"]+?"([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for videopage, img, name in match:
+        videopage = 'http://www.nudeflix.com' + videopage
+        addDir(name, videopage, 42, img, '')
+    if re.search("<strong>next &raquo;</strong>", listhtml, re.DOTALL | re.IGNORECASE):
+        npage = page + 1        
+        url = url.replace('page='+str(page),'page='+str(npage))
+        addDir('Next Page ('+str(npage)+')', url, 41, '', npage)
+    xbmcplugin.endOfDirectory(addon_handle)
+
+
+def NFScenes(url):
+    scenehtml = getHtml(url, '')
+    match = re.compile(r'class="scene">.*?href="([^"]+)"[^(]+?\(([^)]+)\).*?<div class="description">[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(scenehtml)
+    scenecount = 1
+    for sceneurl, img, desc in match:
+        name = 'Scene ' + str(scenecount)
+        scenecount = scenecount + 1
+        sceneurl = 'http://www.nudeflix.com' + sceneurl
+        addDownLink(name, sceneurl, 43, img, desc)        
+    xbmcplugin.endOfDirectory(addon_handle)
+
+
+def NFPlayvid(url, name):
+    videopage = getHtml(url, '')
+    match = re.compile('<source src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
+    videourl = match[0]
+    iconimage = xbmc.getInfoImage("ListItem.Thumb")
+    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+    xbmc.Player().play(videourl, listitem)
+
+
+#####################
     
     
 params = getParams()
@@ -506,6 +552,16 @@ elif mode == 31:
 elif mode == 32:
     HCPlayvid(url, name)
 elif mode == 33:
-    HCA2Z(url)     
+    HCA2Z(url) 
+
+elif mode == 40:
+    NFMain()
+elif mode == 41:
+    NFList(url, page)
+elif mode == 42:
+    NFScenes(url)
+elif mode == 43:
+    NFPlayvid(url, name)
+    
 
 xbmcplugin.endOfDirectory(addon_handle)
