@@ -1,3 +1,8 @@
+[B]Version 1.0.9[/B]
+Added: Categories for 'Movies 2'
+Fixed: Movies due to site changes
+
+
 [B]Version 1.0.8[/B]
 Added: Another movies source, not finished yet but the main list works 
 

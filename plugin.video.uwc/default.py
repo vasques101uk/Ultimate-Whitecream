@@ -2,7 +2,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.8"
+__version__ = "1.0.9"
 
 import urllib
 import urllib2
@@ -62,7 +62,7 @@ sortlistxt = [addon.getLocalizedString(30022), addon.getLocalizedString(30023), 
 def INDEX():
     addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Scenes[/COLOR]','http://www.watchxxxfree.com/page/1/',10,'','')
     addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Movies[/COLOR]','http://xtheatre.net/page/1/',20,'','')
-    addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Movies 2[/COLOR] [COLOR blue]Beta[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,'','')
+    addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Movies 2[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,'','')
     addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Hentai[/COLOR]','http://www.hentaicraving.com/?genre=Uncensored',30,'','')
     xbmcplugin.endOfDirectory(addon_handle)
 
@@ -303,10 +303,11 @@ def XTMain():
 
 def XTCat(url):
     cathtml = getHtml(url, '')
-    match = re.compile('<li class="cat[^<]+<a href="([^"]+)">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
-    for catpage, name in match:
+    match = re.compile('src="([^"]+)"[^<]+</noscript>.*?<a href="([^"]+)"[^<]+<span>([^<]+)</s.*?">([^<]+)', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    for img, catpage, name, videos in match:
         catpage = catpage + 'page/1/'
-        addDir(name, catpage, 21, '', 1)
+        name = name + ' [COLOR blue]' + videos + '[/COLOR]'
+        addDir(name, catpage, 21, img, 1)
     xbmcplugin.endOfDirectory(addon_handle)
     
     
@@ -324,13 +325,13 @@ def XTSearch(url):
 def XTList(url, page):
     sort = getXTSortMethod()
     if re.search('\?', url, re.DOTALL | re.IGNORECASE):
-        url = url + '&orderby=' + sort
+        url = url + '&filtre=' + sort
     else:
-        url = url + '?orderby=' + sort
+        url = url + '?filtre=' + sort
     print url
     listhtml = getHtml(url, '')
-    match = re.compile('id="post.*?src="([^"]+)" alt="([^"]+)"[^<]+<span class="vertical-align"></span>.*?<h2 class="entry-title"><a href="([^"]+)".*?summary">([^<]+)</p>', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for img, name, videopage, desc in match:
+    match = re.compile('src="([^"]+?)" class="attachment.*?<a href="([^"]+)" title="([^"]+)".*?<div class="right">.<p>([^<]+)</p>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for img, videopage, name, desc in match:
         name = cleantext(name)
         desc = cleantext(desc)
         addDownLink(name, videopage, 23, img, desc)
@@ -442,9 +443,20 @@ def addHCDir(name,url,mode,iconimage,desc):
 ########### Nudeflix
 
 def NFMain():
+    addDir('[COLOR yellow]Categories[/COLOR]','http://www.nudeflix.com/browse',44,'','')
     NFList('http://www.nudeflix.com/browse?order=released&page=1',1)
     xbmcplugin.endOfDirectory(addon_handle)
-    
+
+
+def NFCat(url):
+    cathtml = getHtml(url, '')
+    match = re.compile('<select name="category[^>]+>(.*?)</select>', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match1 = re.compile('<option value="([^"]+)">([^<]+)</', re.DOTALL | re.IGNORECASE).findall(match[0])
+    for catpage, name in match1:
+        catpage = 'http://www.nudeflix.com/browse/category/' + catpage + '?order=released&page=1'
+        addDir(name, catpage, 41, '', 1)
+    xbmcplugin.endOfDirectory(addon_handle)
+
 
 def NFList(url,page):
     listhtml = getHtml(url, '')
@@ -482,8 +494,8 @@ def NFPlayvid(url, name):
 
 
 #####################
-    
-    
+
+
 params = getParams()
 url = None
 name = None
@@ -562,6 +574,8 @@ elif mode == 42:
     NFScenes(url)
 elif mode == 43:
     NFPlayvid(url, name)
+elif mode == 44:
+    NFCat(url)
     
 
 xbmcplugin.endOfDirectory(addon_handle)
