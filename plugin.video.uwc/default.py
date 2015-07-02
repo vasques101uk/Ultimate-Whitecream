@@ -2,7 +2,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.9"
+__version__ = "1.0.10"
 
 import urllib
 import urllib2
@@ -453,6 +453,7 @@ def NFCat(url):
     match = re.compile('<select name="category[^>]+>(.*?)</select>', re.DOTALL | re.IGNORECASE).findall(cathtml)
     match1 = re.compile('<option value="([^"]+)">([^<]+)</', re.DOTALL | re.IGNORECASE).findall(match[0])
     for catpage, name in match1:
+        catpage = catpage.replace(' ','%20')    
         catpage = 'http://www.nudeflix.com/browse/category/' + catpage + '?order=released&page=1'
         addDir(name, catpage, 41, '', 1)
     xbmcplugin.endOfDirectory(addon_handle)
