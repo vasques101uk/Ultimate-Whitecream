@@ -2,7 +2,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.14"
+__version__ = "1.0.15"
 
 import urllib
 import urllib2
@@ -77,6 +77,7 @@ def INDEXS():
     addDir('[COLOR yellow]WatchXXXFree[/COLOR]','http://www.watchxxxfree.com/page/1/',10,os.path.join(imgDir, 'wxf.png'),'')
     addDir('[COLOR yellow]PornTrex[/COLOR]','http://www.porntrex.com/videos?o=mr&page=1',50,os.path.join(imgDir, 'pt.png'),'')
     addDir('[COLOR yellow]PornAQ[/COLOR]','http://www.pornaq.com/page/1/',60,os.path.join(imgDir, 'paq.png'),'')
+    addDir('[COLOR yellow]Porn00[/COLOR]','http://www.porn00.com/page/1/',64,os.path.join(imgDir, 'p00.png'),'')
 
 def INDEXM():    
     addDir('[COLOR yellow]Xtheatre[/COLOR]','http://xtheatre.net/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
@@ -613,6 +614,52 @@ def PAQCat(url):
 ######################
 
 
+############### Porn00
+
+
+def P00Main():
+    addDir('[COLOR yellow]Categories[/COLOR]','http://www.porn00.com',67,'','')
+    PAQList('http://www.porn00.com/page/1/',1)
+    xbmcplugin.endOfDirectory(addon_handle)
+
+
+def P00List(url, page):
+    listhtml = getHtml(url, '')
+    match = re.compile('src="([^"]+)" class="attachment-primary-post-thumbnail wp-post-image".*?<a title="([^"]+)" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for img, name, videopage in match:
+        name = cleantext(name)
+        addDownLink(name, videopage, 66, img, '')
+    if re.search("<a title='Next page'", listhtml, re.DOTALL | re.IGNORECASE):
+        npage = page + 1        
+        url = url.replace('page/'+str(page)+'/','page/'+str(npage)+'/')
+        addDir('Next Page ('+str(npage)+')', url, 65, '', npage)
+    xbmcplugin.endOfDirectory(addon_handle)
+
+
+def P00Playvid(url, name):
+    videopage = getHtml(url, '')
+    match = re.compile('<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
+    iframepage = getHtml(match[0], url)
+    video720 = re.compile("_720 = '([^']+)'", re.DOTALL | re.IGNORECASE).findall(iframepage)
+    videourl = video720[0]
+    iconimage = xbmc.getInfoImage("ListItem.Thumb")
+    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+    xbmc.Player().play(videourl, listitem)
+
+def P00Cat(url):
+    caturl = getHtml(url, '')
+    cathtml = re.compile('<ul id="categorias">(.*?)</html>', re.DOTALL | re.IGNORECASE).findall(caturl)    
+    match = re.compile("""<li.*?href=(?:'|")([^'"]+)(?:'|").*?>([^<]+)""", re.DOTALL | re.IGNORECASE).findall(cathtml[0])
+    for url, name in match:
+        url = url + "page/1/"
+        addDir(name, url, 65, '', 1)
+    xbmcplugin.endOfDirectory(addon_handle)
+
+
+######################
+
+
 params = getParams()
 url = None
 name = None
@@ -716,6 +763,14 @@ elif mode == 62:
     PAQPlayvid(url, name)
 elif mode == 63:
     PAQCat(url) 
+elif mode == 64:
+    P00Main()
+elif mode == 65:
+    P00List(url, page)
+elif mode == 66:
+    P00Playvid(url, name)
+elif mode == 67:
+    P00Cat(url)    
     
 
 xbmcplugin.endOfDirectory(addon_handle)
