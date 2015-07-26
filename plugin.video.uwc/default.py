@@ -2,7 +2,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.12"
+__version__ = "1.0.13"
 
 import urllib
 import urllib2
@@ -33,6 +33,14 @@ addon = xbmcaddon.Addon(id=__scriptid__)
 progress = xbmcgui.DialogProgress()
 dialog = xbmcgui.Dialog()
 
+
+rootDir = addon.getAddonInfo('path')
+if rootDir[-1] == ';':
+    rootDir = rootDir[0:-1]
+rootDir = xbmc.translatePath(rootDir)
+resDir = os.path.join(rootDir, 'resources')
+imgDir = os.path.join(resDir, 'images')
+
 profileDir = addon.getAddonInfo('profile')
 profileDir = xbmc.translatePath(profileDir).decode("utf-8")
 cookiePath = os.path.join(profileDir, 'cookies.lwp')
@@ -60,11 +68,18 @@ sortlistxt = [addon.getLocalizedString(30022), addon.getLocalizedString(30023), 
 
 
 def INDEX():
-    addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Scenes[/COLOR]','http://www.watchxxxfree.com/page/1/',10,'','')
-    addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Movies[/COLOR]','http://xtheatre.net/page/1/',20,'','')
-    addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Movies 2[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,'','')
-    addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Hentai[/COLOR]','http://www.hentaicraving.com/?genre=Uncensored',30,'','')
+    addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Scenes[/COLOR]','',2,'','')
+    addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Movies[/COLOR]','',3,'','')
+    addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Hentai[/COLOR]','http://www.hentaicraving.com/?genre=Uncensored',30,os.path.join(imgDir, 'hc.jpg'),'')
     xbmcplugin.endOfDirectory(addon_handle)
+    
+def INDEXS():
+    addDir('[COLOR yellow]WatchXXXFree[/COLOR]','http://www.watchxxxfree.com/page/1/',10,os.path.join(imgDir, 'wxf.png'),'')
+    addDir('[COLOR yellow]PornTrex[/COLOR]','http://www.porntrex.com/videos?o=mr&page=1',50,os.path.join(imgDir, 'pt.png'),'')
+
+def INDEXM():    
+    addDir('[COLOR yellow]Xtheatre[/COLOR]','http://xtheatre.net/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
+    addDir('[COLOR yellow]Nudeflix[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,os.path.join(imgDir, 'nf.png'),'')
 
 
 def getHtml(url, referer):
@@ -497,6 +512,58 @@ def NFPlayvid(url, name):
 #####################
 
 
+############# Porntrex
+
+def PTMain():
+    addDir('[COLOR yellow]Categories[/COLOR]','http://www.porntrex.com/categories',53,'','')
+    PTList('http://www.porntrex.com/videos?o=mr&page=1',1)
+    xbmcplugin.endOfDirectory(addon_handle)
+
+def PTList(url, page):
+    listhtml = getHtml(url, '')
+    match = re.compile(r'<img src="([^"]+)" title="([^"]+)".*?rotate_([^_]+)_[^>]+>(.*?)duration">[^\d]+([^\t\n\r]+)', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for img, name, urlid, hd, duration in match:
+        name = cleantext(name)
+        if hd.find('HD') > 0:
+            hd = " [COLOR orange]HD[/COLOR] "
+        else:
+            hd = " "
+        videopage = "http://www.porntrex.com/media/nuevo/config.php?key=" + urlid + "-1-1"
+        name = name + hd + "[COLOR blue]" + duration + "[/COLOR]"
+        addDownLink(name, videopage, 52, img, '')
+    if re.search('class="prevnext">&raquo;', listhtml, re.DOTALL | re.IGNORECASE):
+        npage = page + 1        
+        url = url.replace('page='+str(page),'page='+str(npage))
+        addDir('Next Page ('+str(npage)+')', url, 51, '', npage)
+    xbmcplugin.endOfDirectory(addon_handle)
+
+def PTPlayvid(url, name):
+    videopage = getHtml(url, '')
+    match = re.compile("<filehd>([^<]+)<", re.DOTALL | re.IGNORECASE).findall(videopage)
+    match2 = re.compile("<file>([^<]+)<", re.DOTALL | re.IGNORECASE).findall(videopage)
+    try: videourl = match[0]
+    except: videourl = match2[0]
+    print videourl
+    iconimage = xbmc.getInfoImage("ListItem.Thumb")
+    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+    xbmc.Player().play(videourl, listitem)
+
+
+def PTCat(url):
+    cathtml = getHtml(url, '')
+    match = re.compile('c=([^"]+)".*?<img src="([^"]+)" title="([^"]+)".*?badge">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    for catid, img, name, videos in match:
+        img = "http://www.porntrex.com/" + img
+        catpage = "http://www.porntrex.com/videos?c="+ catid + "&o=mr&page=1"
+        name = name + ' [COLOR blue]' + videos + '[/COLOR]'
+        addDir(name, catpage, 51, img, 1)
+    xbmcplugin.endOfDirectory(addon_handle)
+
+
+######################
+
+
 params = getParams()
 url = None
 name = None
@@ -527,6 +594,11 @@ except:
 
 if mode is None:
     INDEX()
+    
+elif mode == 2:
+    INDEXS()
+elif mode == 3:
+    INDEXM()
     
 elif mode == 10:
     WXFMain()
@@ -577,6 +649,15 @@ elif mode == 43:
     NFPlayvid(url, name)
 elif mode == 44:
     NFCat(url)
+
+elif mode == 50:
+    PTMain()
+elif mode == 51:
+    PTList(url, page)
+elif mode == 52:
+    PTPlayvid(url, name)
+elif mode == 53:
+    PTCat(url)    
     
 
 xbmcplugin.endOfDirectory(addon_handle)

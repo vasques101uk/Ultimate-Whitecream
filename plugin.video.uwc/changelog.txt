@@ -1,3 +1,8 @@
+[B]Version 1.0.13[/B]
+Added: New video site, Porntrex
+Added: Images for the different video sites
+
+
 [B]Version 1.0.12[/B]
 Fixed: Another fix for the OpenLoad video's
 
