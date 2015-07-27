@@ -2,7 +2,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.15"
+__version__ = "1.0.16"
 
 import urllib
 import urllib2
@@ -520,6 +520,7 @@ def NFPlayvid(url, name):
 
 def PTMain():
     addDir('[COLOR yellow]Categories[/COLOR]','http://www.porntrex.com/categories',53,'','')
+    addDir('[COLOR yellow]Search[/COLOR]','http://www.porntrex.com/search?search_type=videos&page=1&search_query=',54,'','')
     PTList('http://www.porntrex.com/videos?o=mr&page=1',1)
     xbmcplugin.endOfDirectory(addon_handle)
 
@@ -565,6 +566,17 @@ def PTCat(url):
     xbmcplugin.endOfDirectory(addon_handle)
 
 
+def PTSearch(url):
+    searchUrl = url
+    vq = _get_keyboard(heading="Searching for...")
+    if (not vq): return False, 0
+    title = urllib.quote_plus(vq)
+    title = title.replace(' ','+')
+    searchUrl = searchUrl + title
+    print "Searching URL: " + searchUrl
+    PTList(searchUrl, 1) 
+
+
 ######################
 
 
@@ -573,6 +585,7 @@ def PTCat(url):
 
 def PAQMain():
     addDir('[COLOR yellow]Categories[/COLOR]','http://www.pornaq.com',63,'','')
+    addDir('[COLOR yellow]Search[/COLOR]','http://www.pornaq.com/page/1/?s=',68,'','')
     PAQList('http://www.pornaq.com/page/1/',1)
     xbmcplugin.endOfDirectory(addon_handle)
 
@@ -583,7 +596,7 @@ def PAQList(url, page):
     for img, name, videopage in match:
         name = cleantext(name)
         addDownLink(name, videopage, 62, img, '')
-    if re.search("<a title='Next page'", listhtml, re.DOTALL | re.IGNORECASE):
+    if re.search("<span class='current'>\d+?</span><span>", listhtml, re.DOTALL | re.IGNORECASE):
         npage = page + 1        
         url = url.replace('page/'+str(page)+'/','page/'+str(npage)+'/')
         addDir('Next Page ('+str(npage)+')', url, 61, '', npage)
@@ -611,6 +624,17 @@ def PAQCat(url):
     xbmcplugin.endOfDirectory(addon_handle)
 
 
+def PAQSearch(url):
+    searchUrl = url
+    vq = _get_keyboard(heading="Searching for...")
+    if (not vq): return False, 0
+    title = urllib.quote_plus(vq)
+    title = title.replace(' ','+')
+    searchUrl = searchUrl + title
+    print "Searching URL: " + searchUrl
+    PAQList(searchUrl, 1)       
+
+
 ######################
 
 
@@ -618,8 +642,9 @@ def PAQCat(url):
 
 
 def P00Main():
-    addDir('[COLOR yellow]Categories[/COLOR]','http://www.porn00.com',67,'','')
-    PAQList('http://www.porn00.com/page/1/',1)
+    addDir('[COLOR yellow]Categories[/COLOR]','http://www.porn00.org',67,'','')
+    addDir('[COLOR yellow]Search[/COLOR]','http://www.porn00.org/page/1/?s=',69,'','')
+    PAQList('http://www.porn00.org/page/1/',1)
     xbmcplugin.endOfDirectory(addon_handle)
 
 
@@ -629,7 +654,7 @@ def P00List(url, page):
     for img, name, videopage in match:
         name = cleantext(name)
         addDownLink(name, videopage, 66, img, '')
-    if re.search("<a title='Next page'", listhtml, re.DOTALL | re.IGNORECASE):
+    if re.search("<span class='current'>\d+?</span><span>", listhtml, re.DOTALL | re.IGNORECASE):
         npage = page + 1        
         url = url.replace('page/'+str(page)+'/','page/'+str(npage)+'/')
         addDir('Next Page ('+str(npage)+')', url, 65, '', npage)
@@ -655,6 +680,17 @@ def P00Cat(url):
         url = url + "page/1/"
         addDir(name, url, 65, '', 1)
     xbmcplugin.endOfDirectory(addon_handle)
+
+
+def P00Search(url):
+    searchUrl = url
+    vq = _get_keyboard(heading="Searching for...")
+    if (not vq): return False, 0
+    title = urllib.quote_plus(vq)
+    title = title.replace(' ','+')
+    searchUrl = searchUrl + title
+    print "Searching URL: " + searchUrl
+    P00List(searchUrl, 1)     
 
 
 ######################
@@ -754,6 +790,8 @@ elif mode == 52:
     PTPlayvid(url, name)
 elif mode == 53:
     PTCat(url)    
+elif mode == 54:
+    PTSearch(url)
 
 elif mode == 60:
     PAQMain()
@@ -771,6 +809,10 @@ elif mode == 66:
     P00Playvid(url, name)
 elif mode == 67:
     P00Cat(url)    
+elif mode == 68:
+    PAQSearch(url)
+elif mode == 69:
+    P00Search(url)
     
 
 xbmcplugin.endOfDirectory(addon_handle)
