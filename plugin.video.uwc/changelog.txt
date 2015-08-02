@@ -1,3 +1,7 @@
+[B]Version 1.0.17[/B]
+Fixed: Some videos on xtheatre are split in 2 on videomega, it now asks which one to play
+
+
 [B]Version 1.0.16[/B]
 Added: Search for the latest additions: Porntrex, PornAQ and Porn00
 Fixed: Pagination for PornAQ and Porn00

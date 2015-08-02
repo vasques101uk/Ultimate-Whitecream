@@ -2,7 +2,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.16"
+__version__ = "1.0.17"
 
 import urllib
 import urllib2
@@ -149,7 +149,16 @@ def PLAYVIDEO(url, name):
             hashref = re.compile(r"iframe\.php\?ref=([^&]+)&", re.DOTALL | re.IGNORECASE).findall(videosource)
         else:
             hashkey = re.compile("""hashkey=([^"']+)""", re.DOTALL | re.IGNORECASE).findall(videosource)
-            hashpage = getHtml('http://videomega.tv/validatehash.php?hashkey='+hashkey[0], url)
+            if len(hashkey) > 1:
+                i = 1
+                hashlist = []
+                for x in hashkey:
+                    hashlist.append('Part ' + str(i))
+                    i += 1
+                vmvideo = dialog.select('Multiple parts found', hashlist)
+                hashkey = hashkey[vmvideo]
+            else: hashkey = hashkey[0]
+            hashpage = getHtml('http://videomega.tv/validatehash.php?hashkey='+hashkey, url)
             hashref = re.compile('ref="([^"]+)', re.DOTALL | re.IGNORECASE).findall(hashpage)
         progress.update( 80, "", "Getting video file", "" )
         videopage = getHtml('http://videomega.tv/view.php?ref='+hashref[0], url)
