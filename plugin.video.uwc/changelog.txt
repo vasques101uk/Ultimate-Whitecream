@@ -1,3 +1,8 @@
+[B]Version 1.0.18[/B]
+Added: New movie site, Pornhive.
+Changed: Moved all the sites to their own individual python file
+
+
 [B]Version 1.0.17[/B]
 Fixed: Some videos on xtheatre are split in 2 on videomega, it now asks which one to play
 

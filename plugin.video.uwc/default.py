@@ -1,192 +1,35 @@
-__scriptname__ = "Ultimate Whitecream"
-__author__ = "mortael"
-__scriptid__ = "plugin.video.uwc"
-__credits__ = "mortael"
-__version__ = "1.0.17"
+import urllib, urllib2, re, cookielib, os.path, sys, socket
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
-import urllib
-import urllib2
-import re
-import cookielib
-import os.path
-import sys
-import socket
-from jsbeautifier import beautify
+import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive
 
 socket.setdefaulttimeout(60)
 
-import xbmc
-import xbmcplugin
-import xbmcgui
-import xbmcaddon
+xbmcplugin.setContent(utils.addon_handle, 'movies')
+addon = xbmcaddon.Addon(id=utils.__scriptid__)
 
+progress = utils.progress
+dialog = utils.dialog
 
-USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
-
-headers = {'User-Agent': USER_AGENT,
-           'Accept': '*/*',
-           'Connection': 'keep-alive'}
-
-addon_handle = int(sys.argv[1])
-xbmcplugin.setContent(addon_handle, 'movies')
-addon = xbmcaddon.Addon(id=__scriptid__)
-progress = xbmcgui.DialogProgress()
-dialog = xbmcgui.Dialog()
-
-
-rootDir = addon.getAddonInfo('path')
-if rootDir[-1] == ';':
-    rootDir = rootDir[0:-1]
-rootDir = xbmc.translatePath(rootDir)
-resDir = os.path.join(rootDir, 'resources')
-imgDir = os.path.join(resDir, 'images')
-
-profileDir = addon.getAddonInfo('profile')
-profileDir = xbmc.translatePath(profileDir).decode("utf-8")
-cookiePath = os.path.join(profileDir, 'cookies.lwp')
-
-if not os.path.exists(profileDir):
-    os.makedirs(profileDir)
-
-urlopen = urllib2.urlopen
-cj = cookielib.LWPCookieJar()
-Request = urllib2.Request
-
-if cj != None:
-    if os.path.isfile(xbmc.translatePath(cookiePath)):
-        cj.load(xbmc.translatePath(cookiePath))
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-else:
-    opener = urllib2.build_opener()
-
-urllib2.install_opener(opener)
-
-sortlistwxf = [addon.getLocalizedString(30012), addon.getLocalizedString(30013), addon.getLocalizedString(30014)]
-            
-sortlistxt = [addon.getLocalizedString(30022), addon.getLocalizedString(30023), addon.getLocalizedString(30024),
-            addon.getLocalizedString(30025)]            
+imgDir = utils.imgDir
 
 
 def INDEX():
-    addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Scenes[/COLOR]','',2,'','')
-    addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Movies[/COLOR]','',3,'','')
-    addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Hentai[/COLOR]','http://www.hentaicraving.com/?genre=Uncensored',30,os.path.join(imgDir, 'hc.jpg'),'')
-    xbmcplugin.endOfDirectory(addon_handle)
+    utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Scenes[/COLOR]','',2,'','')
+    utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Movies[/COLOR]','',3,'','')
+    utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Hentai[/COLOR]','http://www.hentaicraving.com/?genre=Uncensored',30,os.path.join(imgDir, 'hc.jpg'),'')
+    xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXS():
-    addDir('[COLOR yellow]WatchXXXFree[/COLOR]','http://www.watchxxxfree.com/page/1/',10,os.path.join(imgDir, 'wxf.png'),'')
-    addDir('[COLOR yellow]PornTrex[/COLOR]','http://www.porntrex.com/videos?o=mr&page=1',50,os.path.join(imgDir, 'pt.png'),'')
-    addDir('[COLOR yellow]PornAQ[/COLOR]','http://www.pornaq.com/page/1/',60,os.path.join(imgDir, 'paq.png'),'')
-    addDir('[COLOR yellow]Porn00[/COLOR]','http://www.porn00.com/page/1/',64,os.path.join(imgDir, 'p00.png'),'')
+    utils.addDir('[COLOR yellow]WatchXXXFree[/COLOR]','http://www.watchxxxfree.com/page/1/',10,os.path.join(imgDir, 'wxf.png'),'')
+    utils.addDir('[COLOR yellow]PornTrex[/COLOR]','http://www.porntrex.com/videos?o=mr&page=1',50,os.path.join(imgDir, 'pt.png'),'')
+    utils.addDir('[COLOR yellow]PornAQ[/COLOR]','http://www.pornaq.com/page/1/',60,os.path.join(imgDir, 'paq.png'),'')
+    utils.addDir('[COLOR yellow]Porn00[/COLOR]','http://www.porn00.com/page/1/',64,os.path.join(imgDir, 'p00.png'),'')
 
 def INDEXM():    
-    addDir('[COLOR yellow]Xtheatre[/COLOR]','http://xtheatre.net/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
-    addDir('[COLOR yellow]Nudeflix[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,os.path.join(imgDir, 'nf.png'),'')
-
-
-def getHtml(url, referer):
-    req = Request(url, '', headers)
-    if len(referer) > 1:
-        req.add_header('Referer', referer)
-    response = urlopen(req, timeout=60)
-    data = response.read()
-    cj.save(cookiePath)
-    response.close()
-    return data
- 
-def getHtml2(url):
-    req = Request(url)
-    response = urlopen(req, timeout=60)
-    data = response.read()
-    response.close()
-    return data 
- 
-def getVideoLink(url, referer):
-    req2 = Request(url, '', headers)
-    req2.add_header('Referer', referer)
-    url2 = urlopen(req2).geturl()
-    return url2
-
-def cleantext(text):
-    text = text.replace('&#8211;','-')
-    text = text.replace('&#038;','&')
-    text = text.replace('&#8217;','\'')
-    text = text.replace('&#8230;','...')
-    text = text.replace('&quot;','"')
-    text = text.replace('&#039;','`')
-    return text
-
-
-def PLAYVIDEO(url, name):
-    progress.create('Play video', 'Searching videofile.')
-    progress.update( 10, "", "Loading video page", "" )
-    hosts = []
-    videosource = getHtml(url, url)
-    if re.search('videomega', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('VideoMega')
-    if re.search('openload', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('OpenLoad')
-    if re.search('www.flashx.tv', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('FlashX')        
-    if len(hosts) == 0:
-        progress.close()
-        dialog.ok('Oh oh','Couldn\'t find any video')
-        return
-    elif len(hosts) > 1:
-        if addon.getSetting("dontask") == "true":
-            vidhost = hosts[0]            
-        else:
-            vh = dialog.select('Videohost:', hosts)
-            vidhost = hosts[vh]
-    else:
-        vidhost = hosts[0]
-    
-    if vidhost == 'VideoMega':
-        progress.update( 40, "", "Loading videomegatv", "" )
-        if re.search("videomega.tv/iframe.js", videosource, re.DOTALL | re.IGNORECASE):
-            hashref = re.compile("""javascript["']>ref=['"]([^'"]+)""", re.DOTALL | re.IGNORECASE).findall(videosource)
-        elif re.search("videomega.tv/iframe.php", videosource, re.DOTALL | re.IGNORECASE):
-            hashref = re.compile(r"iframe\.php\?ref=([^&]+)&", re.DOTALL | re.IGNORECASE).findall(videosource)
-        else:
-            hashkey = re.compile("""hashkey=([^"']+)""", re.DOTALL | re.IGNORECASE).findall(videosource)
-            if len(hashkey) > 1:
-                i = 1
-                hashlist = []
-                for x in hashkey:
-                    hashlist.append('Part ' + str(i))
-                    i += 1
-                vmvideo = dialog.select('Multiple parts found', hashlist)
-                hashkey = hashkey[vmvideo]
-            else: hashkey = hashkey[0]
-            hashpage = getHtml('http://videomega.tv/validatehash.php?hashkey='+hashkey, url)
-            hashref = re.compile('ref="([^"]+)', re.DOTALL | re.IGNORECASE).findall(hashpage)
-        progress.update( 80, "", "Getting video file", "" )
-        videopage = getHtml('http://videomega.tv/view.php?ref='+hashref[0], url)
-        videourl = re.compile('<source src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
-        videourl = videourl[0]
-    elif vidhost == 'OpenLoad':
-        progress.update( 40, "", "Loading Openload", "" )
-        openloadurl = re.compile('<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
-        openloadsrc = getHtml(openloadurl[0], url)
-        videourl = re.compile("""<source.*?src=(?:"|')([^"']+)(?:"|')""", re.DOTALL | re.IGNORECASE).findall(openloadsrc)
-        progress.update( 80, "", "Getting video file", "" )
-        openload302 = getVideoLink(videourl[0],openloadurl[0])
-        realurl = openload302.replace('https://','http://')
-        videourl = realurl + "|" + openloadurl[0]
-    elif vidhost == 'FlashX':
-        progress.update( 40, "", "Loading FlashX", "" )
-        flashxurl = re.compile('<iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
-        flashxsrc = getHtml2(flashxurl[0])
-        flashxjs = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(flashxsrc)
-        progress.update( 80, "", "Getting video file", "" )
-        flashxujs = beautify(flashxjs[0])
-        videourl = re.compile(r',.*file: "([^"]+)".*\}\],', re.DOTALL | re.IGNORECASE).findall(flashxujs)
-        videourl = videourl[0]
-    progress.close()
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    xbmc.Player().play(videourl, listitem)
+    utils.addDir('[COLOR yellow]Xtheatre[/COLOR]','http://xtheatre.net/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
+    utils.addDir('[COLOR yellow]Nudeflix[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,os.path.join(imgDir, 'nf.png'),'')
+    utils.addDir('[COLOR yellow]PornHive[/COLOR]','http://www.pornhive.tv/en/movies/all',70,os.path.join(imgDir, 'ph.png'),'')
 
 
 def getParams():
@@ -207,504 +50,7 @@ def getParams():
 
     return param
 
-
-def addDownLink(name, url, mode, iconimage, desc):
-    u = (sys.argv[0] +
-         "?url=" + urllib.quote_plus(url) +
-         "&mode=" + str(mode) +
-         "&name=" + urllib.quote_plus(name))
-    ok = True
-    liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    if len(desc) < 1:
-        liz.setInfo(type="Video", infoLabels={"Title": name})
-    else:
-        liz.setInfo(type="Video", infoLabels={"Title": name, "plot": desc, "plotoutline": desc})
-    ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=False)
-    return ok
-    
-
-def addDir(name, url, mode, iconimage, page):
-    u = (sys.argv[0] +
-         "?url=" + urllib.quote_plus(url) +
-         "&mode=" + str(mode) +
-         "&page=" + str(page) +
-         "&name=" + urllib.quote_plus(name))
-    ok = True
-    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-    liz.setInfo(type="Video", infoLabels={"Title": name})
-    ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=True)
-    return ok
-    
-def _get_keyboard(default="", heading="", hidden=False):
-    """ shows a keyboard and returns a value """
-    keyboard = xbmc.Keyboard(default, heading, hidden)
-    keyboard.doModal()
-    if keyboard.isConfirmed():
-        return unicode(keyboard.getText(), "utf-8")
-    return default    
-
-########### WatchXXXFree
-
-def WXFMain():
-    addDir('[COLOR yellow]Categories[/COLOR]','http://www.watchxxxfree.com/categories/',12,'','')
-    addDir('[COLOR yellow]Search[/COLOR]','http://www.watchxxxfree.com/page/1/?s=',14,'','')
-    addDir('[COLOR yellow]Top Pornstars[/COLOR]','http://www.watchxxxfree.com/top-pornstars/',15,'','')
-    Sort = '[COLOR yellow]Current sort:[/COLOR] ' + sortlistwxf[int(addon.getSetting("sortwxf"))]
-    addDir(Sort, '', 16, '', '')
-    WXFList('http://www.watchxxxfree.com/page/1/',1)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def WXFCat(url):
-    cathtml = getHtml(url, '')
-    match = re.compile('src="([^"]+)"[^<]+</noscript>.*?<a href="([^"]+)"[^<]+<span>([^<]+)</s.*?">([^<]+)', re.DOTALL | re.IGNORECASE).findall(cathtml)
-    for img, catpage, name, videos in match:
-        catpage = catpage + 'page/1/'
-        name = name + ' [COLOR blue]' + videos + '[/COLOR]'
-        addDir(name, catpage, 11, img, 1)
-    xbmcplugin.endOfDirectory(addon_handle)
-    
-def WXFTPS(url):
-    tpshtml = getHtml(url, '')
-    match = re.compile("<li><a href='([^']+)[^>]+>([^<]+)", re.DOTALL | re.IGNORECASE).findall(tpshtml)
-    for tpsurl, name in match:
-        tpsurl = tpsurl + 'page/1/'
-        addDir(name, tpsurl, 11, '', 1)
-    xbmcplugin.endOfDirectory(addon_handle)    
-    
-    
-def WXFSearch(url):
-    searchUrl = url
-    vq = _get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','+')
-    searchUrl = searchUrl + title
-    print "Searching URL: " + searchUrl
-    WXFList(searchUrl, 1)    
-
-
-def WXFList(url, page):
-    sort = getWXFSortMethod()
-    if re.search('\?', url, re.DOTALL | re.IGNORECASE):
-        url = url + '&filtre=' + sort + '&display=extract'
-    else:
-        url = url + '?filtre=' + sort + '&display=extract'
-    print url
-    listhtml = getHtml(url, '')
-    match = re.compile('src="([^"]+)"[^<]+</noscript>.*?<a href="([^"]+)" title="([^"]+)".*?<p>([^<]+)</p>', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for img, videopage, name, desc in match:
-        name = cleantext(name)
-        desc = cleantext(desc)
-        addDownLink(name, videopage, 13, img, desc)
-    if re.search('<link rel="next"', listhtml, re.DOTALL | re.IGNORECASE):
-        npage = page + 1        
-        url = url.replace('/page/'+str(page)+'/','/page/'+str(npage)+'/')
-        addDir('Next Page ('+str(npage)+')', url, 11, '', npage)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def WXFVideo(url, name):
-    PLAYVIDEO(url, name)
-
-
-def getWXFSortMethod():
-    sortoptions = {0: 'date',
-                   1: 'rate',
-                   2: 'views'}
-    sortvalue = addon.getSetting("sortwxf")
-    return sortoptions[int(sortvalue)]    
-
-####################
-
-
-########### WatchXXXFree
-
-def XTMain():
-    addDir('[COLOR yellow]Categories[/COLOR]','http://xtheatre.net/categories/',22,'','')
-    addDir('[COLOR yellow]Search[/COLOR]','http://xtheatre.net/page/1/?s=',24,'','')
-    Sort = '[COLOR yellow]Current sort:[/COLOR] ' + sortlistxt[int(addon.getSetting("sortxt"))]
-    addDir(Sort, '', 25, '', '')    
-    XTList('http://xtheatre.net/page/1/',1)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def XTCat(url):
-    cathtml = getHtml(url, '')
-    match = re.compile('src="([^"]+)"[^<]+</noscript>.*?<a href="([^"]+)"[^<]+<span>([^<]+)</s.*?">([^<]+)', re.DOTALL | re.IGNORECASE).findall(cathtml)
-    for img, catpage, name, videos in match:
-        catpage = catpage + 'page/1/'
-        name = name + ' [COLOR blue]' + videos + '[/COLOR]'
-        addDir(name, catpage, 21, img, 1)
-    xbmcplugin.endOfDirectory(addon_handle)
-    
-    
-def XTSearch(url):
-    searchUrl = url
-    vq = _get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','+')
-    searchUrl = searchUrl + title
-    print "Searching URL: " + searchUrl
-    XTList(searchUrl, 1)     
-
-
-def XTList(url, page):
-    sort = getXTSortMethod()
-    if re.search('\?', url, re.DOTALL | re.IGNORECASE):
-        url = url + '&filtre=' + sort
-    else:
-        url = url + '?filtre=' + sort
-    print url
-    listhtml = getHtml(url, '')
-    match = re.compile('src="([^"]+?)" class="attachment.*?<a href="([^"]+)" title="([^"]+)".*?<div class="right">.<p>([^<]+)</p>', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for img, videopage, name, desc in match:
-        name = cleantext(name)
-        desc = cleantext(desc)
-        addDownLink(name, videopage, 23, img, desc)
-    if re.search('<link rel="next"', listhtml, re.DOTALL | re.IGNORECASE):
-        npage = page + 1        
-        url = url.replace('/page/'+str(page)+'/','/page/'+str(npage)+'/')
-        addDir('Next Page ('+str(npage)+')', url, 21, '', npage)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-def XTVideo(url, name):
-    PLAYVIDEO(url, name)
-    
-def getXTSortMethod():
-    sortoptions = {0: 'date',
-                   1: 'title',
-                   2: 'views',
-                   3: 'likes'}
-    sortvalue = addon.getSetting("sortxt")
-    return sortoptions[int(sortvalue)]    
-
-####################
-    
-    
-########### HCraving
-def getHC(url):
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', USER_AGENT)
-    response = urllib2.urlopen(req, timeout=60)
-    data = response.read()
-    response.close()
-    return data
-
-def HCList(url):
-    addDir('[COLOR white]A-Z List[/COLOR] [COLOR yellow]Censored & Uncensored[/COLOR]','http://www.hentaicraving.com/hentai-list/',33,'','')
-    link = getHtml(url, '')
-    match = re.compile("""<a href='([^']+)'><img.*?title="([^"]+)".*?src="([^"]+)".*?Description: </b> ([^<]+)<p>""", re.DOTALL | re.IGNORECASE).findall(link)
-    for videourl, name, img, desc in match:
-        addHCDir(name, videourl, 31, img, desc)
-    xbmc.executebuiltin('Container.SetViewMode(503)')
-    xbmcplugin.endOfDirectory(addon_handle)
-    
-def HCA2Z(url):
-    link = getHtml(url, '')
-    match = re.compile('hentai-series/([^/]+)/">([^<]+)', re.DOTALL | re.IGNORECASE).findall(link)
-    for link, name in match:
-        url = 'http://www.hentaicraving.com/hentai-series/' + link + '/'
-        img = 'http://www.hentaicraving.com/images/' + link + '.jpg'
-        addHCDir(name, url, 31, img, '')
-    xbmcplugin.endOfDirectory(addon_handle)    
-    
-def HCEpisodes(url,name, img):
-    link = getHtml(url, '')
-    eps = re.compile('<li><a href="([^"]+)">([^<]+)</a> <', re.DOTALL | re.IGNORECASE).findall(link)
-    for url, name in eps:
-        addDownLink(name,url,32,img, '')
-        
-def HCPlayvid(url,name):
-    progress.create('Play video', 'Searching videofile.')
-    progress.update( 10, "", "Loading video page", "" )
-    link = getHtml(url,'')
-    match = re.compile('<iframe.*? src="([^"]+)" FRAME', re.DOTALL | re.IGNORECASE).findall(link)
-    if len(match) > 1:
-        vh = dialog.select('Videohost:', match)
-    else:
-        vh = 0
-    progress.update( 40, "", "Loading video host", "" )
-    urldata2 = getHC(match[vh])
-    if match[vh].find('hentaiupload') > 0:
-        progress.update( 80, "", "Loading hentaiupload", "" )    
-        try:
-            match1 = re.compile('url: "([^"]+mp4)', re.DOTALL | re.IGNORECASE).findall(urldata2)
-            url = match1[0]
-        except: pass
-        videourl = url + "|referer="+ match[vh]
-    elif match[vh].find('hvidengine') > 0:
-        progress.update( 80, "", "Loading hvidengine", "" )        
-        try:
-            match1 = re.compile('file: "([^"]+)', re.DOTALL | re.IGNORECASE).findall(urldata2)
-            url = match1[0]
-        except: pass
-        videourl = url + "|referer="+ match[vh]
-    else:
-        progress.update( 80, "", "Loading video", "" )
-        match2 = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(urldata2)
-        res = beautify(match2[0])
-        match3 = re.compile("file.*?(http.*?mp4)", re.DOTALL | re.IGNORECASE).findall(res)
-        videourl = match3[0]
-    progress.close()
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    xbmc.Player().play(videourl, listitem)
-    
-def addHCDir(name,url,mode,iconimage,desc):
-    u = (sys.argv[0] +
-         "?url=" + urllib.quote_plus(url) +
-         "&mode=" + str(mode) +
-         "&name=" + urllib.quote_plus(name) +
-         "&img=" + urllib.quote_plus(iconimage))
-    ok = True
-    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-    liz.setInfo(type="Video", infoLabels={ "Title": name, "plot": desc, "plotoutline": desc })
-    ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=True)
-    return ok
-
-#####################
-
-
-########### Nudeflix
-
-def NFMain():
-    addDir('[COLOR yellow]Categories[/COLOR]','http://www.nudeflix.com/browse',44,'','')
-    NFList('http://www.nudeflix.com/browse?order=released&page=1',1)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def NFCat(url):
-    cathtml = getHtml(url, '')
-    match = re.compile('<select name="category[^>]+>(.*?)</select>', re.DOTALL | re.IGNORECASE).findall(cathtml)
-    match1 = re.compile('<option value="([^"]+)">([^<]+)</', re.DOTALL | re.IGNORECASE).findall(match[0])
-    for catpage, name in match1:
-        catpage = catpage.replace(' ','%20')    
-        catpage = 'http://www.nudeflix.com/browse/category/' + catpage + '?order=released&page=1'
-        addDir(name, catpage, 41, '', 1)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def NFList(url,page):
-    listhtml = getHtml(url, '')
-    match = re.compile('href="([^"]+)" class="link">[^"]+?"([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for videopage, img, name in match:
-        videopage = 'http://www.nudeflix.com' + videopage
-        addDir(name, videopage, 42, img, '')
-    if re.search("<strong>next &raquo;</strong>", listhtml, re.DOTALL | re.IGNORECASE):
-        npage = page + 1        
-        url = url.replace('page='+str(page),'page='+str(npage))
-        addDir('Next Page ('+str(npage)+')', url, 41, '', npage)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def NFScenes(url):
-    scenehtml = getHtml(url, '')
-    match = re.compile(r'class="scene">.*?href="([^"]+)"[^(]+?\(([^)]+)\).*?<div class="description">[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(scenehtml)
-    scenecount = 1
-    for sceneurl, img, desc in match:
-        name = 'Scene ' + str(scenecount)
-        scenecount = scenecount + 1
-        sceneurl = 'http://www.nudeflix.com' + sceneurl
-        addDownLink(name, sceneurl, 43, img, desc)        
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def NFPlayvid(url, name):
-    videopage = getHtml(url, '')
-    match = re.compile('<source src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
-    videourl = match[0]
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    xbmc.Player().play(videourl, listitem)
-
-
-#####################
-
-
-############# Porntrex
-
-def PTMain():
-    addDir('[COLOR yellow]Categories[/COLOR]','http://www.porntrex.com/categories',53,'','')
-    addDir('[COLOR yellow]Search[/COLOR]','http://www.porntrex.com/search?search_type=videos&page=1&search_query=',54,'','')
-    PTList('http://www.porntrex.com/videos?o=mr&page=1',1)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-def PTList(url, page):
-    listhtml = getHtml(url, '')
-    match = re.compile(r'<img src="([^"]+)" title="([^"]+)".*?rotate_([^_]+)_[^>]+>(.*?)duration">[^\d]+([^\t\n\r]+)', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for img, name, urlid, hd, duration in match:
-        name = cleantext(name)
-        if hd.find('HD') > 0:
-            hd = " [COLOR orange]HD[/COLOR] "
-        else:
-            hd = " "
-        videopage = "http://www.porntrex.com/media/nuevo/config.php?key=" + urlid + "-1-1"
-        name = name + hd + "[COLOR blue]" + duration + "[/COLOR]"
-        addDownLink(name, videopage, 52, img, '')
-    if re.search('class="prevnext">&raquo;', listhtml, re.DOTALL | re.IGNORECASE):
-        npage = page + 1        
-        url = url.replace('page='+str(page),'page='+str(npage))
-        addDir('Next Page ('+str(npage)+')', url, 51, '', npage)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-def PTPlayvid(url, name):
-    videopage = getHtml(url, '')
-    match = re.compile("<filehd>([^<]+)<", re.DOTALL | re.IGNORECASE).findall(videopage)
-    match2 = re.compile("<file>([^<]+)<", re.DOTALL | re.IGNORECASE).findall(videopage)
-    try: videourl = match[0]
-    except: videourl = match2[0]
-    print videourl
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    xbmc.Player().play(videourl, listitem)
-
-
-def PTCat(url):
-    cathtml = getHtml(url, '')
-    match = re.compile('c=([^"]+)".*?<img src="([^"]+)" title="([^"]+)".*?badge">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
-    for catid, img, name, videos in match:
-        img = "http://www.porntrex.com/" + img
-        catpage = "http://www.porntrex.com/videos?c="+ catid + "&o=mr&page=1"
-        name = name + ' [COLOR blue]' + videos + '[/COLOR]'
-        addDir(name, catpage, 51, img, 1)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def PTSearch(url):
-    searchUrl = url
-    vq = _get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','+')
-    searchUrl = searchUrl + title
-    print "Searching URL: " + searchUrl
-    PTList(searchUrl, 1) 
-
-
-######################
-
-
-############### PornAQ
-
-
-def PAQMain():
-    addDir('[COLOR yellow]Categories[/COLOR]','http://www.pornaq.com',63,'','')
-    addDir('[COLOR yellow]Search[/COLOR]','http://www.pornaq.com/page/1/?s=',68,'','')
-    PAQList('http://www.pornaq.com/page/1/',1)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def PAQList(url, page):
-    listhtml = getHtml(url, '')
-    match = re.compile('src="([^"]+)" class="attachment-primary-post-thumbnail wp-post-image".*?<a title="([^"]+)" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for img, name, videopage in match:
-        name = cleantext(name)
-        addDownLink(name, videopage, 62, img, '')
-    if re.search("<span class='current'>\d+?</span><span>", listhtml, re.DOTALL | re.IGNORECASE):
-        npage = page + 1        
-        url = url.replace('page/'+str(page)+'/','page/'+str(npage)+'/')
-        addDir('Next Page ('+str(npage)+')', url, 61, '', npage)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def PAQPlayvid(url, name):
-    videopage = getHtml(url, '')
-    match = re.compile('<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
-    iframepage = getHtml(match[0], url)
-    video720 = re.compile("_720 = '([^']+)'", re.DOTALL | re.IGNORECASE).findall(iframepage)
-    videourl = video720[0]
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    xbmc.Player().play(videourl, listitem)
-
-def PAQCat(url):
-    caturl = getHtml(url, '')
-    cathtml = re.compile('<ul id="categorias">(.*?)</html>', re.DOTALL | re.IGNORECASE).findall(caturl)    
-    match = re.compile("""<li.*?href=(?:'|")(/[^'"]+)(?:'|").*?>([^<]+)""", re.DOTALL | re.IGNORECASE).findall(cathtml[0])
-    for url, name in match:
-        url = "http://www.pornaq.com" + url + "page/1/"
-        addDir(name, url, 61, '', 1)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def PAQSearch(url):
-    searchUrl = url
-    vq = _get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','+')
-    searchUrl = searchUrl + title
-    print "Searching URL: " + searchUrl
-    PAQList(searchUrl, 1)       
-
-
-######################
-
-
-############### Porn00
-
-
-def P00Main():
-    addDir('[COLOR yellow]Categories[/COLOR]','http://www.porn00.org',67,'','')
-    addDir('[COLOR yellow]Search[/COLOR]','http://www.porn00.org/page/1/?s=',69,'','')
-    PAQList('http://www.porn00.org/page/1/',1)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def P00List(url, page):
-    listhtml = getHtml(url, '')
-    match = re.compile('src="([^"]+)" class="attachment-primary-post-thumbnail wp-post-image".*?<a title="([^"]+)" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for img, name, videopage in match:
-        name = cleantext(name)
-        addDownLink(name, videopage, 66, img, '')
-    if re.search("<span class='current'>\d+?</span><span>", listhtml, re.DOTALL | re.IGNORECASE):
-        npage = page + 1        
-        url = url.replace('page/'+str(page)+'/','page/'+str(npage)+'/')
-        addDir('Next Page ('+str(npage)+')', url, 65, '', npage)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def P00Playvid(url, name):
-    videopage = getHtml(url, '')
-    match = re.compile('<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
-    iframepage = getHtml(match[0], url)
-    video720 = re.compile("_720 = '([^']+)'", re.DOTALL | re.IGNORECASE).findall(iframepage)
-    videourl = video720[0]
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    xbmc.Player().play(videourl, listitem)
-
-def P00Cat(url):
-    caturl = getHtml(url, '')
-    cathtml = re.compile('<ul id="categorias">(.*?)</html>', re.DOTALL | re.IGNORECASE).findall(caturl)    
-    match = re.compile("""<li.*?href=(?:'|")([^'"]+)(?:'|").*?>([^<]+)""", re.DOTALL | re.IGNORECASE).findall(cathtml[0])
-    for url, name in match:
-        url = url + "page/1/"
-        addDir(name, url, 65, '', 1)
-    xbmcplugin.endOfDirectory(addon_handle)
-
-
-def P00Search(url):
-    searchUrl = url
-    vq = _get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','+')
-    searchUrl = searchUrl + title
-    print "Searching URL: " + searchUrl
-    P00List(searchUrl, 1)     
-
-
-######################
-
-
+   
 params = getParams()
 url = None
 name = None
@@ -742,86 +88,89 @@ elif mode == 3:
     INDEXM()
     
 elif mode == 10:
-    WXFMain()
+    watchxxxfree.WXFMain()
 elif mode == 11:
-    WXFList(url, page)
+    watchxxxfree.WXFList(url, page)
 elif mode == 12:
-    WXFCat(url)
+    watchxxxfree.WXFCat(url)
 elif mode == 13:
-    WXFVideo(url, name)
+    watchxxxfree.WXFVideo(url, name)
 elif mode == 14:
-    WXFSearch(url) 
+    watchxxxfree.WXFSearch(url) 
 elif mode == 15:
-    WXFTPS(url)  
+    watchxxxfree.WXFTPS(url)  
 elif mode == 16:
     addon.openSettings()
-    WXFMain()    
+    watchxxxfree.WXFMain()    
     
 elif mode == 20:
-    XTMain()
+    xtheatre.XTMain()
 elif mode == 21:
-    XTList(url, page)
+    xtheatre.XTList(url, page)
 elif mode == 22:
-    XTCat(url)
+    xtheatre.XTCat(url)
 elif mode == 23:
-    XTVideo(url, name)
+    xtheatre.XTVideo(url, name)
 elif mode == 24:
-    XTSearch(url)  
+    xtheatre.XTSearch(url)  
 elif mode == 25:
     addon.openSettings()
-    XTMain()    
+    xtheatre.XTMain()    
 
 elif mode == 30:
-    HCList(url)
+    hentaicraving.HCList(url)
 elif mode == 31:
-    HCEpisodes(url, name, img)
+    hentaicraving.HCEpisodes(url, name, img)
 elif mode == 32:
-    HCPlayvid(url, name)
+    hentaicraving.HCPlayvid(url, name)
 elif mode == 33:
-    HCA2Z(url) 
+    hentaicraving.HCA2Z(url) 
 
 elif mode == 40:
-    NFMain()
+    nudeflix.NFMain()
 elif mode == 41:
-    NFList(url, page)
+    nudeflix.NFList(url, page)
 elif mode == 42:
-    NFScenes(url)
+    nudeflix.NFScenes(url)
 elif mode == 43:
-    NFPlayvid(url, name)
+    nudeflix.NFPlayvid(url, name)
 elif mode == 44:
-    NFCat(url)
+    nudeflix.NFCat(url)
 
 elif mode == 50:
-    PTMain()
+    porntrex.PTMain()
 elif mode == 51:
-    PTList(url, page)
+    porntrex.PTList(url, page)
 elif mode == 52:
-    PTPlayvid(url, name)
+    porntrex.PTPlayvid(url, name)
 elif mode == 53:
-    PTCat(url)    
+    porntrex.PTCat(url)
 elif mode == 54:
-    PTSearch(url)
+    porntrex.PTSearch(url)
 
 elif mode == 60:
-    PAQMain()
+    hdporn.PAQMain()
 elif mode == 61:
-    PAQList(url, page)
+    hdporn.PAQList(url, page)
 elif mode == 62:
-    PAQPlayvid(url, name)
+    hdporn.PPlayvid(url, name)
 elif mode == 63:
-    PAQCat(url) 
+    hdporn.PCat(url)
 elif mode == 64:
-    P00Main()
+    hdporn.P00Main()
 elif mode == 65:
-    P00List(url, page)
-elif mode == 66:
-    P00Playvid(url, name)
-elif mode == 67:
-    P00Cat(url)    
+    hdporn.P00List(url, page)
 elif mode == 68:
-    PAQSearch(url)
-elif mode == 69:
-    P00Search(url)
+    hdporn.PSearch(url)
     
+elif mode == 70:
+    pornhive.PHMain()
+elif mode == 71:
+    pornhive.PHList(url)
+elif mode == 72:
+    pornhive.PHVideo(url, name)
+elif mode == 73:
+    pornhive.PHCat(url)    
 
-xbmcplugin.endOfDirectory(addon_handle)
+
+xbmcplugin.endOfDirectory(utils.addon_handle)
