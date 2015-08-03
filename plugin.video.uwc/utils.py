@@ -7,7 +7,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.19"
+__version__ = "1.0.20"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -100,9 +100,10 @@ def PLAYVIDEO(url, name):
         progress.update( 40, "", "Loading Openload", "" )
         openloadurl = re.compile('<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
         openloadsrc = getHtml(openloadurl[0], url)
-        videourl = re.compile("""<source.*?src=(?:"|')([^"']+)(?:"|')""", re.DOTALL | re.IGNORECASE).findall(openloadsrc)
+        videourl = re.compile(""""src", (?:"|')([^"']+)(?:"|')""", re.DOTALL | re.IGNORECASE).findall(openloadsrc)
         progress.update( 80, "", "Getting video file", "" )
-        openload302 = getVideoLink(videourl[0],openloadurl[0])
+        videourl = videourl[0].replace("\/","/")
+        openload302 = getVideoLink(videourl,openloadurl[0])
         realurl = openload302.replace('https://','http://')
         videourl = realurl + "|" + openloadurl[0]
     elif vidhost == 'FlashX':
