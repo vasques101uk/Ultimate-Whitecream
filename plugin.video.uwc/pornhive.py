@@ -9,6 +9,7 @@ progress = utils.progress
 
 def PHMain():
     utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.pornhive.tv/en/movies/all',73,'','')
+    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.pornhive.tv/en/search?title=',74,'','')
     PHList('http://www.pornhive.tv/en/movies/all')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -24,6 +25,17 @@ def PHList(url):
         utils.addDir('Next Page', nextp[0],71,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
+
+    
+def PHSearch(url):
+    searchUrl = url
+    vq = utils._get_keyboard(heading="Searching for...")
+    if (not vq): return False, 0
+    title = urllib.quote_plus(vq)
+    title = title.replace(' ','+')
+    searchUrl = searchUrl + title
+    print "Searching URL: " + searchUrl
+    PHList(searchUrl)
     
     
 def PHCat(url):
@@ -58,6 +70,10 @@ def PHVideo(url, name):
     elif sitename == "FlashX":
         progress.update( 30, "", "Getting FlashX", "" )
         playurl = getFlashX(outurl)
+    else:
+        progress.close()
+        utils.dialog.ok('Sorry','This host is not supported.')
+        return        
     progress.update( 90, "", "Playing video", "" )
     iconimage = xbmc.getInfoImage("ListItem.Thumb")
     listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)

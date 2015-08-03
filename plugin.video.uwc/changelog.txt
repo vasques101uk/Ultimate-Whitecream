@@ -1,5 +1,9 @@
+[B]Version 1.0.19[/B]
+Added: Search for Pornhive and a message for unsupported videosites
+
+
 [B]Version 1.0.18[/B]
-Added: New movie site, Pornhive.
+Added: New movie site, Pornhive
 Changed: Moved all the sites to their own individual python file
 
 

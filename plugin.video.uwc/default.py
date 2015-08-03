@@ -171,6 +171,8 @@ elif mode == 72:
     pornhive.PHVideo(url, name)
 elif mode == 73:
     pornhive.PHCat(url)    
+elif mode == 74:
+    pornhive.PHSearch(url)      
 
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
