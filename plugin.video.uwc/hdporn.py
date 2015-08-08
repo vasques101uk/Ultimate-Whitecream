@@ -44,16 +44,27 @@ def P00List(url, page):
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def PPlayvid(url, name):
+def PPlayvid(url, name, alternative=1):
+    print url
     videopage = utils.getHtml(url, '')
-    match = re.compile('<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
-    iframepage = utils.getHtml(match[0], url)
-    video720 = re.compile("_720 = '([^']+)'", re.DOTALL | re.IGNORECASE).findall(iframepage)
-    videourl = video720[0]
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    xbmc.Player().play(videourl, listitem)
+    if re.search('player/\?V', videopage, re.DOTALL | re.IGNORECASE):
+        match = re.compile('<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
+        iframepage = utils.getHtml(match[0], url)
+        video720 = re.compile("_720 = '([^']+)'", re.DOTALL | re.IGNORECASE).findall(iframepage)
+        videourl = video720[0]
+        iconimage = xbmc.getInfoImage("ListItem.Thumb")
+        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+        xbmc.Player().play(videourl, listitem)
+    else:
+        if alternative == 1:
+            alternative = 2
+            url = url + str(alternative)
+            PPlayvid(url, name, alternative)
+        else:
+            nalternative = alternative + 1
+            url.replace('/'+str(alternative),'/'+str(nalternative))
+            PPlayvid(url, name, nalternative)
 
 
 def PCat(url):
