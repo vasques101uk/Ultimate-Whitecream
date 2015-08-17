@@ -7,7 +7,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.21"
+__version__ = "1.0.22"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -58,6 +58,8 @@ def PLAYVIDEO(url, name):
         hosts.append('VideoMega')
     if re.search('openload', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('OpenLoad')
+    if re.search('streamin.to', videosource, re.DOTALL | re.IGNORECASE):
+        hosts.append('Streamin (beta)')          
     if re.search('www.flashx.tv', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('FlashX')        
     if len(hosts) == 0:
@@ -106,6 +108,14 @@ def PLAYVIDEO(url, name):
         openload302 = getVideoLink(videourl,openloadurl[0])
         realurl = openload302.replace('https://','http://')
         videourl = realurl + "|" + openloadurl[0]
+    elif vidhost == 'Streamin (beta)':
+        progress.update( 40, "", "Loading Streamin", "" )
+        streaminurl = re.compile('<iframe.*?src="(http://streamin\.to[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
+        streaminsrc = getHtml2(streaminurl[0])
+        videohash = re.compile('h=([^"]+)', re.DOTALL | re.IGNORECASE).findall(streaminsrc)
+        videourl = re.compile('image: "(http://[^/]+/)', re.DOTALL | re.IGNORECASE).findall(streaminsrc)
+        progress.update( 80, "", "Getting video file", "" )
+        videourl = videourl[0] + videohash[0] + "/v.mp4"
     elif vidhost == 'FlashX':
         progress.update( 40, "", "Loading FlashX", "" )
         flashxurl = re.compile('<iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)

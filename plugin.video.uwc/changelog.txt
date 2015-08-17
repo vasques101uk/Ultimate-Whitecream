@@ -1,3 +1,9 @@
+[B]Version 1.0.22[/B]
+Added: Beeg (video gets weird when skipped)
+Added: Streamin.to for Watchxxxfree (beta)
+Fixed: Fix for Porn00 that would crash the addon
+
+
 [B]Version 1.0.21[/B]
 Fixed: Quick (lazy) fix for the latest Porn00 videos
 

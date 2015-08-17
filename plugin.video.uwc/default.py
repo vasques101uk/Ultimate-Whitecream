@@ -1,7 +1,7 @@
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
-import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive
+import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg
 
 socket.setdefaulttimeout(60)
 
@@ -25,6 +25,7 @@ def INDEXS():
     utils.addDir('[COLOR yellow]PornTrex[/COLOR]','http://www.porntrex.com/videos?o=mr&page=1',50,os.path.join(imgDir, 'pt.png'),'')
     utils.addDir('[COLOR yellow]PornAQ[/COLOR]','http://www.pornaq.com/page/1/',60,os.path.join(imgDir, 'paq.png'),'')
     utils.addDir('[COLOR yellow]Porn00[/COLOR]','http://www.porn00.com/page/1/',64,os.path.join(imgDir, 'p00.png'),'')
+    utils.addDir('[COLOR yellow]Beeg[/COLOR]','http://beeg.com/page-1',80,os.path.join(imgDir, 'bg.png'),'')
 
 def INDEXM():    
     utils.addDir('[COLOR yellow]Xtheatre[/COLOR]','http://xtheatre.net/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
@@ -173,6 +174,17 @@ elif mode == 73:
     pornhive.PHCat(url)    
 elif mode == 74:
     pornhive.PHSearch(url)      
+
+elif mode == 80:
+    beeg.BGMain()
+elif mode == 81:
+    beeg.BGList(url)
+elif mode == 82:
+    beeg.BGPlayvid(url, name)
+elif mode == 83:
+    beeg.BGCat(url)
+elif mode == 84:
+    beeg.BGSearch(url)       
 
 
 xbmcplugin.endOfDirectory(utils.addon_handle)

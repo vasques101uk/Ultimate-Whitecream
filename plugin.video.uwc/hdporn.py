@@ -56,7 +56,7 @@ def PPlayvid(url, name, alternative=1):
         listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
         xbmc.Player().play(videourl, listitem)
-    else:
+    elif re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
         if alternative == 1:
             alternative = 2
             url = url + str(alternative)
@@ -65,6 +65,8 @@ def PPlayvid(url, name, alternative=1):
             nalternative = alternative + 1
             url.replace('/'+str(alternative),'/'+str(nalternative))
             PPlayvid(url, name, nalternative)
+    else:
+        utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
 
 
 def PCat(url):
