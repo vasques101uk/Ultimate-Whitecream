@@ -45,7 +45,7 @@ def BGList(url):
 
 def BGPlayvid(url, name):
     videopage = utils.getHtml(url, '')
-    match = re.compile("file': '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
+    match = re.compile(": '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
     videourl = match[0]
     iconimage = xbmc.getInfoImage("ListItem.Thumb")
     listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)

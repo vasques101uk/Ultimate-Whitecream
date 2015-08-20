@@ -1,3 +1,8 @@
+[B]Version 1.0.23[/B]
+Fixed: OpenLoad videos are working again
+Changed: Always get the highest quality video for Beeg
+
+
 [B]Version 1.0.22[/B]
 Added: Beeg (video gets weird when skipped)
 Added: Streamin.to for Watchxxxfree (beta)
