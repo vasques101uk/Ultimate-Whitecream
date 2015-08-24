@@ -7,7 +7,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.23"
+__version__ = "1.0.24"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -119,8 +119,12 @@ def PLAYVIDEO(url, name):
     elif vidhost == 'FlashX':
         progress.update( 40, "", "Loading FlashX", "" )
         flashxurl = re.compile('<iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
-        flashxsrc = getHtml2(flashxurl[0])
-        flashxjs = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(flashxsrc)
+        flashxsrc = utils.getHtml2(flashxurl[0])
+        progress.update( 60, "", "Grabbing video file", "" )
+        flashxurl2 = re.compile('<a href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(flashxsrc)
+        flashxsrc2 = utils.getHtml2(flashxurl2[0])
+        progress.update( 70, "", "Grabbing video file", "" ) 
+        flashxjs = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(flashxsrc2)
         progress.update( 80, "", "Getting video file", "" )
         flashxujs = beautify(flashxjs[0])
         videourl = re.compile(r',.*file: "([^"]+)".*\}\],', re.DOTALL | re.IGNORECASE).findall(flashxujs)
