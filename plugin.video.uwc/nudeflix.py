@@ -46,11 +46,14 @@ def NFScenes(url):
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def NFPlayvid(url, name):
+def NFPlayvid(url, name, download=None):
     videopage = utils.getHtml(url, '')
     match = re.compile('<source src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
     videourl = match[0]
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    xbmc.Player().play(videourl, listitem)
+    if download == 1:
+        downloadVideo(videourl, name)
+    else:
+        iconimage = xbmc.getInfoImage("ListItem.Thumb")
+        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+        xbmc.Player().play(videourl, listitem)

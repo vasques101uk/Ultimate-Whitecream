@@ -36,8 +36,8 @@ def PHSearch(url):
     searchUrl = searchUrl + title
     print "Searching URL: " + searchUrl
     PHList(searchUrl)
-    
-    
+
+
 def PHCat(url):
     cathtml = utils.getHtml(url, '')
     match = re.compile('<ul class="dropdown-menu my-drop">(.*?)</ul>', re.DOTALL | re.IGNORECASE).findall(cathtml)
@@ -47,7 +47,7 @@ def PHCat(url):
     xbmcplugin.endOfDirectory(utils.addon_handle)   
 
 
-def PHVideo(url, name):
+def PHVideo(url, name, download=None):
     progress.create('Play video', 'Searching videofile.')
     progress.update( 10, "", "Loading video page", "" )
     videopage = utils.getHtml(url, '')
@@ -75,10 +75,14 @@ def PHVideo(url, name):
         utils.dialog.ok('Sorry','This host is not supported.')
         return        
     progress.update( 90, "", "Playing video", "" )
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    xbmc.Player().play(playurl, listitem)
+    progress.close()
+    if download == 1:
+        downloadVideo(playurl, name)
+    else:
+        iconimage = xbmc.getInfoImage("ListItem.Thumb")
+        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+        xbmc.Player().play(playurl, listitem)
     
 def getFlashX(url):
     phpage = utils.getHtml(url, '')

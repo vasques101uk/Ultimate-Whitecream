@@ -41,7 +41,7 @@ def HCEpisodes(url,name, img):
     for url, name in eps:
         utils.addDownLink(name,url,32,img, '')
         
-def HCPlayvid(url,name):
+def HCPlayvid(url,name, download=None):
     progress.create('Play video', 'Searching videofile.')
     progress.update( 10, "", "Loading video page", "" )
     link = utils.getHtml(url,'')
@@ -73,10 +73,13 @@ def HCPlayvid(url,name):
         match3 = re.compile("file.*?(http.*?mp4)", re.DOTALL | re.IGNORECASE).findall(res)
         videourl = match3[0]
     progress.close()
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    xbmc.Player().play(videourl, listitem)
+    if download == 1:
+        downloadVideo(videourl, name)
+    else:    
+        iconimage = xbmc.getInfoImage("ListItem.Thumb")
+        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+        xbmc.Player().play(videourl, listitem)
     
 def addHCDir(name,url,mode,iconimage,desc):
     u = (sys.argv[0] +

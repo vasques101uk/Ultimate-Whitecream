@@ -58,8 +58,8 @@ def XTList(url, page):
         utils.addDir('Next Page ('+str(npage)+')', url, 21, '', npage)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
-def XTVideo(url, name):
-    utils.PLAYVIDEO(url, name)
+def XTVideo(url, name, download):
+    utils.PLAYVIDEO(url, name, download)
     
 def getXTSortMethod():
     sortoptions = {0: 'date',

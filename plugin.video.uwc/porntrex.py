@@ -28,17 +28,19 @@ def PTList(url, page):
         utils.addDir('Next Page ('+str(npage)+')', url, 51, '', npage)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
-def PTPlayvid(url, name):
+def PTPlayvid(url, name, download=None):
     videopage = utils.getHtml(url, '')
     match = re.compile("<filehd>([^<]+)<", re.DOTALL | re.IGNORECASE).findall(videopage)
     match2 = re.compile("<file>([^<]+)<", re.DOTALL | re.IGNORECASE).findall(videopage)
     try: videourl = match[0]
     except: videourl = match2[0]
-    print videourl
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    xbmc.Player().play(videourl, listitem)
+    if download == 1:
+        downloadVideo(videourl, name)
+    else:
+        iconimage = xbmc.getInfoImage("ListItem.Thumb")
+        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+        xbmc.Player().play(videourl, listitem)
 
 
 def PTCat(url):

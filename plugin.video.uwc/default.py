@@ -58,6 +58,7 @@ name = None
 mode = None
 img = None
 page = 1
+download = None
 
 try:
     url = urllib.unquote_plus(params["url"])
@@ -79,6 +80,10 @@ try:
     img = urllib.unquote_plus(params["img"])
 except:
     pass
+try:
+    download = int(params["download"])
+except:
+    pass    
 
 if mode is None:
     INDEX()
@@ -95,7 +100,7 @@ elif mode == 11:
 elif mode == 12:
     watchxxxfree.WXFCat(url)
 elif mode == 13:
-    watchxxxfree.WXFVideo(url, name)
+    watchxxxfree.WXFVideo(url, name, download)
 elif mode == 14:
     watchxxxfree.WXFSearch(url) 
 elif mode == 15:
@@ -111,7 +116,7 @@ elif mode == 21:
 elif mode == 22:
     xtheatre.XTCat(url)
 elif mode == 23:
-    xtheatre.XTVideo(url, name)
+    xtheatre.XTVideo(url, name, download)
 elif mode == 24:
     xtheatre.XTSearch(url)  
 elif mode == 25:
@@ -123,7 +128,7 @@ elif mode == 30:
 elif mode == 31:
     hentaicraving.HCEpisodes(url, name, img)
 elif mode == 32:
-    hentaicraving.HCPlayvid(url, name)
+    hentaicraving.HCPlayvid(url, name, download)
 elif mode == 33:
     hentaicraving.HCA2Z(url) 
 
@@ -134,7 +139,7 @@ elif mode == 41:
 elif mode == 42:
     nudeflix.NFScenes(url)
 elif mode == 43:
-    nudeflix.NFPlayvid(url, name)
+    nudeflix.NFPlayvid(url, name, download)
 elif mode == 44:
     nudeflix.NFCat(url)
 
@@ -143,7 +148,7 @@ elif mode == 50:
 elif mode == 51:
     porntrex.PTList(url, page)
 elif mode == 52:
-    porntrex.PTPlayvid(url, name)
+    porntrex.PTPlayvid(url, name, download)
 elif mode == 53:
     porntrex.PTCat(url)
 elif mode == 54:
@@ -154,7 +159,7 @@ elif mode == 60:
 elif mode == 61:
     hdporn.PAQList(url, page)
 elif mode == 62:
-    hdporn.PPlayvid(url, name)
+    hdporn.PPlayvid(url, name, download)
 elif mode == 63:
     hdporn.PCat(url)
 elif mode == 64:
@@ -169,18 +174,18 @@ elif mode == 70:
 elif mode == 71:
     pornhive.PHList(url)
 elif mode == 72:
-    pornhive.PHVideo(url, name)
+    pornhive.PHVideo(url, name, download)
 elif mode == 73:
-    pornhive.PHCat(url)    
+    pornhive.PHCat(url)
 elif mode == 74:
-    pornhive.PHSearch(url)      
+    pornhive.PHSearch(url)
 
 elif mode == 80:
     beeg.BGMain()
 elif mode == 81:
     beeg.BGList(url)
 elif mode == 82:
-    beeg.BGPlayvid(url, name)
+    beeg.BGPlayvid(url, name, download)
 elif mode == 83:
     beeg.BGCat(url)
 elif mode == 84:

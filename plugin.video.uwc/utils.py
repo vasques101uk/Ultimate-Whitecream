@@ -1,5 +1,6 @@
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
+import SimpleDownloader as downloader
 
 from jsbeautifier import beautify
 
@@ -7,7 +8,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.24"
+__version__ = "1.0.25"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -20,6 +21,7 @@ addon = xbmcaddon.Addon(id=__scriptid__)
 
 progress = xbmcgui.DialogProgress()
 dialog = xbmcgui.Dialog()
+downloader = downloader.SimpleDownloader()
 
 rootDir = addon.getAddonInfo('path')
 if rootDir[-1] == ';':
@@ -48,8 +50,22 @@ else:
 
 urllib2.install_opener(opener)
 
+def downloadVideo(url, name):
+    download_path = addon.getSetting('download_path')
+    if download_path == '':
+        try:
+            download_path = xbmcgui.Dialog().browse(0, "Download Path", 'myprograms', '', False, False)
+            addon.setSetting(id='download_path', value=download_path)
+            if not os.path.exists(download_path):
+                os.mkdir(download_path)
+        except:
+            pass
+    if download_path != '':
+        params = { "url": url, "download_path": download_path, "Title": name }
+        downloader.download(name+".mp4", params)
+    return ''
 
-def PLAYVIDEO(url, name):
+def PLAYVIDEO(url, name, download=None):
     progress.create('Play video', 'Searching videofile.')
     progress.update( 10, "", "Loading video page", "" )
     hosts = []
@@ -107,7 +123,7 @@ def PLAYVIDEO(url, name):
         videourl = videourl[0].replace("\/","/")
         openload302 = getVideoLink(videourl,openloadurl[0])
         realurl = openload302.replace('https://','http://')
-        videourl = realurl + "|" + openloadurl[0]
+        videourl = realurl
     elif vidhost == 'Streamin (beta)':
         progress.update( 40, "", "Loading Streamin", "" )
         streaminurl = re.compile('<iframe.*?src="(http://streamin\.to[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
@@ -130,10 +146,13 @@ def PLAYVIDEO(url, name):
         videourl = re.compile(r',.*file: "([^"]+)".*\}\],', re.DOTALL | re.IGNORECASE).findall(flashxujs)
         videourl = videourl[0]
     progress.close()
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    xbmc.Player().play(videourl, listitem)
+    if download == 1:
+        downloadVideo(videourl, name)
+    else:
+        iconimage = xbmc.getInfoImage("ListItem.Thumb")
+        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+        xbmc.Player().play(videourl, listitem)
 
 
 def getHtml(url, referer):
@@ -195,12 +214,18 @@ def addDownLink(name, url, mode, iconimage, desc):
          "?url=" + urllib.quote_plus(url) +
          "&mode=" + str(mode) +
          "&name=" + urllib.quote_plus(name))
+    dwnld = (sys.argv[0] +
+         "?url=" + urllib.quote_plus(url) +
+         "&mode=" + str(mode) +
+         "&download=" + str(1) +
+         "&name=" + urllib.quote_plus(name))         
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     if len(desc) < 1:
         liz.setInfo(type="Video", infoLabels={"Title": name})
     else:
         liz.setInfo(type="Video", infoLabels={"Title": name, "plot": desc, "plotoutline": desc})
+    liz.addContextMenuItems([('Download Video', 'xbmc.RunPlugin('+dwnld+')')])
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=False)
     return ok
     

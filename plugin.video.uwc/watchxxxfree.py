@@ -67,8 +67,8 @@ def WXFList(url, page):
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def WXFVideo(url, name):
-    utils.PLAYVIDEO(url, name)
+def WXFVideo(url, name, download):
+    utils.PLAYVIDEO(url, name, download)
 
 
 def getWXFSortMethod():
