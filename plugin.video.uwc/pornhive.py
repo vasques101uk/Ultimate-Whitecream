@@ -95,7 +95,7 @@ def getFlashX(url):
     progress.update( 70, "", "Grabbing video file", "" )
     flashxjs = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(flashxsrc2)
     flashxujs = beautify(flashxjs[0])
-    videourl = re.compile(r',.*file: "([^"]+)".*\}\],', re.DOTALL | re.IGNORECASE).findall(flashxujs)
+    videourl = re.compile(r',.*file: "([^"]+)"\s+}],', re.DOTALL | re.IGNORECASE).findall(flashxujs)
     progress.update( 80, "", "Returning video file", "" )
     videourl = videourl[0]
     return videourl

@@ -1,5 +1,10 @@
+[B]Version 1.0.26[/B]
+Added: Directly open your download folder (if set). Unfortunately, it doesn't go back to the addon.
+Fixed: FlashX videos (again)
+
+
 [B]Version 1.0.25[/B]
-Added: Download function for the videos (in context-menu). It uses the Simple Downloader service addon.
+Added: Download function for the videos (in contextmenu). It uses the Simple Downloader addon.
 
 
 [B]Version 1.0.24[/B]

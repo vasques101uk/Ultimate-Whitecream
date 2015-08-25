@@ -18,6 +18,9 @@ def INDEX():
     utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Scenes[/COLOR]','',2,'','')
     utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Movies[/COLOR]','',3,'','')
     utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Hentai[/COLOR]','http://www.hentaicraving.com/?genre=Uncensored',30,os.path.join(imgDir, 'hc.jpg'),'')
+    download_path = addon.getSetting('download_path')
+    if download_path != '' and os.path.exists(download_path):
+        utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Download Folder[/COLOR]',download_path,4,'','')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXS():
@@ -92,6 +95,9 @@ elif mode == 2:
     INDEXS()
 elif mode == 3:
     INDEXM()
+elif mode == 4:
+    print url
+    xbmc.executebuiltin('ActivateWindow(Videos, '+url+')')
     
 elif mode == 10:
     watchxxxfree.WXFMain()
