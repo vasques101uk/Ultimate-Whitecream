@@ -74,7 +74,7 @@ def HCPlayvid(url,name, download=None):
         videourl = match3[0]
     progress.close()
     if download == 1:
-        downloadVideo(videourl, name)
+        utils.downloadVideo(videourl, name)
     else:    
         iconimage = xbmc.getInfoImage("ListItem.Thumb")
         listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)

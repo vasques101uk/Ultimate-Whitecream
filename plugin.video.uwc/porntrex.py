@@ -35,7 +35,7 @@ def PTPlayvid(url, name, download=None):
     try: videourl = match[0]
     except: videourl = match2[0]
     if download == 1:
-        downloadVideo(videourl, name)
+        utils.downloadVideo(videourl, name)
     else:
         iconimage = xbmc.getInfoImage("ListItem.Thumb")
         listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)

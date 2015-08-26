@@ -77,7 +77,7 @@ def PHVideo(url, name, download=None):
     progress.update( 90, "", "Playing video", "" )
     progress.close()
     if download == 1:
-        downloadVideo(playurl, name)
+        utils.downloadVideo(playurl, name)
     else:
         iconimage = xbmc.getInfoImage("ListItem.Thumb")
         listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)

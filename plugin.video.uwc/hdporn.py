@@ -53,7 +53,7 @@ def PPlayvid(url, name, alternative=1, download=None):
         video720 = re.compile("_720 = '([^']+)'", re.DOTALL | re.IGNORECASE).findall(iframepage)
         videourl = video720[0]
         if download == 1:
-            downloadVideo(videourl, name)
+            utils.downloadVideo(videourl, name)
         else:
             iconimage = xbmc.getInfoImage("ListItem.Thumb")
             listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)

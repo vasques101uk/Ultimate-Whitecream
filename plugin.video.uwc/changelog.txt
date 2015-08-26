@@ -1,3 +1,7 @@
+[B]Version 1.0.27[/B]
+Fixed: Fix for downloading videos from sites other than watchxxfree and xtheatre
+
+
 [B]Version 1.0.26[/B]
 Added: Directly open your download folder (if set). Unfortunately, it doesn't go back to the addon.
 Fixed: FlashX videos (again)

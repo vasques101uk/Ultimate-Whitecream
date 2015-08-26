@@ -51,7 +51,7 @@ def NFPlayvid(url, name, download=None):
     match = re.compile('<source src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
     videourl = match[0]
     if download == 1:
-        downloadVideo(videourl, name)
+        utils.downloadVideo(videourl, name)
     else:
         iconimage = xbmc.getInfoImage("ListItem.Thumb")
         listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
