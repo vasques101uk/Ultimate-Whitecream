@@ -45,15 +45,20 @@ def BGList(url):
 
 def BGPlayvid(url, name, download=None):
     videopage = utils.getHtml(url, '')
-    match = re.compile(": '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
-    videourl = match[0]
-    if download == 1:
-        utils.downloadVideo(videourl, name)
-    else:
-        iconimage = xbmc.getInfoImage("ListItem.Thumb")
-        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-        xbmc.Player().play(videourl, listitem)
+    match = re.compile("'720p': '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
+    if not match:
+        match = re.compile("'480p': '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
+    if not match:
+        match = re.compile("'240p': '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
+    if match:    
+        videourl = match[0]
+        if download == 1:
+            utils.downloadVideo(videourl, name)
+        else:
+            iconimage = xbmc.getInfoImage("ListItem.Thumb")
+            listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+            listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+            xbmc.Player().play(videourl, listitem)
 
 
 def BGCat(url):
