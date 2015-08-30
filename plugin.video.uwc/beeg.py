@@ -58,7 +58,17 @@ def BGPlayvid(url, name, download=None):
             iconimage = xbmc.getInfoImage("ListItem.Thumb")
             listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
             listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-            xbmc.Player().play(videourl, listitem)
+            listitem.setProperty("IsPlayable","true")
+            if int(sys.argv[1]) == -1:
+                pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+                pl.clear()
+                pl.add(videourl, listitem)
+                xbmc.Player().play(pl)
+                #xbmc.Player().play(videourl, listitem)
+            else:
+                listitem.setPath(str(videourl))
+                xbmcplugin.setResolvedUrl(utils.addon_handle, True, listitem)
+
 
 
 def BGCat(url):

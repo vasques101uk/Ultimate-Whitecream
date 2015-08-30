@@ -1,3 +1,7 @@
+[B]Version 1.0.29[/B]
+Added: 'Play from here' support for Beeg, now you can watch all 300 previews per page at once :)
+
+
 [B]Version 1.0.28[/B]
 Fixed: Fix for downloading with Pornaq/Porn00
 Fixed: Due to site changes on Beeg, new way to pick the highest video quality (tnx hstegeman)
