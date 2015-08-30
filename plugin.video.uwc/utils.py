@@ -1,6 +1,5 @@
-import urllib, urllib2, re, cookielib, os.path, sys, socket
+import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
-import SimpleDownloader as downloader
 
 from jsbeautifier import beautify
 
@@ -8,7 +7,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.29"
+__version__ = "1.0.30"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -21,7 +20,6 @@ addon = xbmcaddon.Addon(id=__scriptid__)
 
 progress = xbmcgui.DialogProgress()
 dialog = xbmcgui.Dialog()
-downloader = downloader.SimpleDownloader()
 
 rootDir = addon.getAddonInfo('path')
 if rootDir[-1] == ';':
@@ -50,7 +48,32 @@ else:
 
 urllib2.install_opener(opener)
 
+class StopDownloading(Exception):
+    def __init__(self, value): self.value = value 
+    def __str__(self): return repr(self.value)
+
 def downloadVideo(url, name):
+
+    def _pbhook(numblocks, blocksize, filesize, url=None,dp=None):
+        try:
+            percent = min((numblocks*blocksize*100)/filesize, 100)
+            speed = str(int((numblocks*blocksize / 1024) / (time.clock() - start))) + ' KB/s'
+            dp.update(percent,'','',speed)
+        except:
+            percent = 100
+            dp.update(percent)
+        if dp.iscanceled():
+            dp.close()
+            raise StopDownloading('Stopped Downloading')
+            
+    def clean_filename(s):
+        if not s:
+            return ''
+        badchars = '\\/:*?\"<>|\''
+        for c in badchars:
+            s = s.replace(c, '')
+        return s;            
+
     download_path = addon.getSetting('download_path')
     if download_path == '':
         try:
@@ -61,8 +84,28 @@ def downloadVideo(url, name):
         except:
             pass
     if download_path != '':
-        params = { "url": url, "download_path": download_path, "Title": name }
-        downloader.download(name+".mp4", params)
+        #params = { "url": url, "download_path": download_path, "Title": name }
+        #downloader.download(xbmc.makeLegalFilename(name+".mp4"), params)
+        dp = xbmcgui.DialogProgress()
+        dp.create("Ultimate Whitecream Download","Downloading File",name)
+        tmp_file = tempfile.mktemp(dir=download_path, suffix=".mp4")
+        tmp_file = xbmc.makeLegalFilename(tmp_file)        
+        start = time.clock()
+        try:
+            urllib.urlretrieve(url,tmp_file,lambda nb, bs, fs, url=url: _pbhook(nb,bs,fs,url,dp))
+            vidfile = xbmc.makeLegalFilename(download_path + clean_filename(name) + ".mp4")
+            try:
+              os.rename(tmp_file, vidfile)
+              return vidfile
+            except:
+              return tmp_file            
+        except:
+            while os.path.exists(tmp_file):
+                try:
+                    os.remove(tmp_file)
+                    break
+                except:
+                    pass            
     return ''
 
 def PLAYVIDEO(url, name, download=None):

@@ -1,5 +1,10 @@
+[B]Version 1.0.30[/B]
+Changed: New way of downloading video's, it's not in the background anymore...it should work better
+Fixed: Getting video's from PornAQ and Porn00, it also supports the videos hosted on docs.google.com
+
+
 [B]Version 1.0.29[/B]
-Added: 'Play from here' support for Beeg, now you can watch all 300 previews per page at once :)
+Added: 'Play from here' support for Beeg, now you can watch all 300 videos per page at once :)
 
 
 [B]Version 1.0.28[/B]
