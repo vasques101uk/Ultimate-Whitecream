@@ -7,7 +7,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.30"
+__version__ = "1.0.32"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -57,8 +57,18 @@ def downloadVideo(url, name):
     def _pbhook(numblocks, blocksize, filesize, url=None,dp=None):
         try:
             percent = min((numblocks*blocksize*100)/filesize, 100)
-            speed = str(int((numblocks*blocksize / 1024) / (time.clock() - start))) + ' KB/s'
-            dp.update(percent,'','',speed)
+            currently_downloaded = float(numblocks) * blocksize / (1024 * 1024)
+            kbps_speed = int((numblocks*blocksize) / (time.clock() - start))
+            if kbps_speed > 0:
+                eta = (filesize - numblocks * blocksize) / kbps_speed
+            else:
+                eta = 0
+            kbps_speed = kbps_speed / 1024
+            total = float(filesize) / (1024 * 1024)
+            mbs = '%.02f MB of %.02f MB' % (currently_downloaded, total)
+            e = 'Speed: %.02f Kb/s ' % kbps_speed
+            e += 'ETA: %02d:%02d' % divmod(eta, 60) 
+            dp.update(percent,'',mbs,e)
         except:
             percent = 100
             dp.update(percent)
@@ -87,7 +97,7 @@ def downloadVideo(url, name):
         #params = { "url": url, "download_path": download_path, "Title": name }
         #downloader.download(xbmc.makeLegalFilename(name+".mp4"), params)
         dp = xbmcgui.DialogProgress()
-        dp.create("Ultimate Whitecream Download","Downloading File",name)
+        dp.create("Ultimate Whitecream Download",name[:50])
         tmp_file = tempfile.mktemp(dir=download_path, suffix=".mp4")
         tmp_file = xbmc.makeLegalFilename(tmp_file)        
         start = time.clock()
@@ -105,8 +115,8 @@ def downloadVideo(url, name):
                     os.remove(tmp_file)
                     break
                 except:
-                    pass            
-    return ''
+                    pass
+
 
 def PLAYVIDEO(url, name, download=None):
     progress.create('Play video', 'Searching videofile.')

@@ -47,24 +47,26 @@ def WXFSearch(url):
     WXFList(searchUrl, 1)    
 
 
-def WXFList(url, page):
+def WXFList(url, page, onelist=None):
+    if onelist:
+        url = url.replace('/page/1/','/page/'+str(page)+'/')
     sort = getWXFSortMethod()
     if re.search('\?', url, re.DOTALL | re.IGNORECASE):
         url = url + '&filtre=' + sort + '&display=extract'
     else:
         url = url + '?filtre=' + sort + '&display=extract'
-    print url
     listhtml = utils.getHtml(url, '')
     match = re.compile('src="([^"]+)"[^<]+</noscript>.*?<a href="([^"]+)" title="([^"]+)".*?<p>([^<]+)</p>', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for img, videopage, name, desc in match:
         name = utils.cleantext(name)
         desc = utils.cleantext(desc)
         utils.addDownLink(name, videopage, 13, img, desc)
-    if re.search('<link rel="next"', listhtml, re.DOTALL | re.IGNORECASE):
-        npage = page + 1        
-        url = url.replace('/page/'+str(page)+'/','/page/'+str(npage)+'/')
-        utils.addDir('Next Page ('+str(npage)+')', url, 11, '', npage)
-    xbmcplugin.endOfDirectory(utils.addon_handle)
+    if not onelist:
+        if re.search('<link rel="next"', listhtml, re.DOTALL | re.IGNORECASE):
+            npage = page + 1        
+            url = url.replace('/page/'+str(page)+'/','/page/'+str(npage)+'/')
+            utils.addDir('Next Page ('+str(npage)+')', url, 11, '', npage)
+        xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def WXFVideo(url, name, download):

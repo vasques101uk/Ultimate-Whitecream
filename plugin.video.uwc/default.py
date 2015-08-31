@@ -1,7 +1,7 @@
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
-import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg
+import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn
 
 socket.setdefaulttimeout(60)
 
@@ -18,6 +18,7 @@ def INDEX():
     utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Scenes[/COLOR]','',2,'','')
     utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Movies[/COLOR]','',3,'','')
     utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Hentai[/COLOR]','http://www.hentaicraving.com/?genre=Uncensored',30,os.path.join(imgDir, 'hc.jpg'),'')
+    utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Tubes[/COLOR]','',6,'','')
     download_path = addon.getSetting('download_path')
     if download_path != '' and os.path.exists(download_path):
         utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Download Folder[/COLOR]',download_path,4,'','')
@@ -29,12 +30,29 @@ def INDEXS():
     utils.addDir('[COLOR yellow]PornAQ[/COLOR]','http://www.pornaq.com/page/1/',60,os.path.join(imgDir, 'paq.png'),'')
     utils.addDir('[COLOR yellow]Porn00[/COLOR]','http://www.porn00.com/page/1/',64,os.path.join(imgDir, 'p00.png'),'')
     utils.addDir('[COLOR yellow]Beeg[/COLOR]','http://beeg.com/page-1',80,os.path.join(imgDir, 'bg.png'),'')
+    utils.addDir('[COLOR yellow]One list, to watch them all[/COLOR]','',5,'',1)
+    xbmcplugin.endOfDirectory(utils.addon_handle)
 
 def INDEXM():    
     utils.addDir('[COLOR yellow]Xtheatre[/COLOR]','http://xtheatre.net/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
     utils.addDir('[COLOR yellow]Nudeflix[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,os.path.join(imgDir, 'nf.png'),'')
     utils.addDir('[COLOR yellow]PornHive[/COLOR]','http://www.pornhive.tv/en/movies/all',70,os.path.join(imgDir, 'ph.png'),'')
+    xbmcplugin.endOfDirectory(utils.addon_handle)
+    
+def INDEXT():    
+    utils.addDir('[COLOR yellow]TodayPorn[/COLOR]','http://www.todayporn.com/page1.html',90,os.path.join(imgDir, 'tp.png'),'')
+    xbmcplugin.endOfDirectory(utils.addon_handle)
 
+def ONELIST(page):
+    print page
+    watchxxxfree.WXFList('http://www.watchxxxfree.com/page/1/',page, True)
+    hdporn.PAQList('http://www.pornaq.com/page/1/',page, True)
+    hdporn.PAQList('http://www.porn00.org/page/1/',page, True)
+    porntrex.PTList('http://www.porntrex.com/videos?o=mr&page=1',page, True)
+    npage = page + 1
+    utils.addDir('[COLOR yellow]Next page ('+ str(npage) +')[/COLOR]','',5,'',npage)
+    xbmcplugin.endOfDirectory(utils.addon_handle)
+    
 
 def getParams():
     param = []
@@ -98,6 +116,10 @@ elif mode == 3:
 elif mode == 4:
     print url
     xbmc.executebuiltin('ActivateWindow(Videos, '+url+')')
+elif mode == 5:
+    ONELIST(page)
+elif mode == 6:
+    INDEXT()
     
 elif mode == 10:
     watchxxxfree.WXFMain()
@@ -170,8 +192,6 @@ elif mode == 63:
     hdporn.PCat(url)
 elif mode == 64:
     hdporn.P00Main()
-elif mode == 65:
-    hdporn.P00List(url, page)
 elif mode == 68:
     hdporn.PSearch(url)
     
@@ -195,7 +215,20 @@ elif mode == 82:
 elif mode == 83:
     beeg.BGCat(url)
 elif mode == 84:
-    beeg.BGSearch(url)       
+    beeg.BGSearch(url)
+
+elif mode == 90:
+    todayporn.TPMain()
+elif mode == 91:
+    todayporn.TPList(url,page)
+elif mode == 92:
+    todayporn.TPPlayvid(url, name, download)
+elif mode == 93:
+    todayporn.TPCat(url)
+elif mode == 94:
+    todayporn.TPSearch(url)
+elif mode == 95:
+    todayporn.TPPornstars(url, page)      
 
 
 xbmcplugin.endOfDirectory(utils.addon_handle)

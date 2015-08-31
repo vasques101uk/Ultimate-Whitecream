@@ -18,30 +18,20 @@ def P00Main():
     xbmcplugin.endOfDirectory(utils.addon_handle)    
 
 
-def PAQList(url, page):
+def PAQList(url, page, onelist=None):
+    if onelist:
+        url = url.replace('page/1/','page/'+str(page)+'/')    
     listhtml = utils.getHtml(url, '')
     match = re.compile('src="([^"]+)" class="attachment-primary-post-thumbnail wp-post-image".*?<a title="([^"]+)" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for img, name, videopage in match:
         name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 62, img, '')
-    if re.search("<span class='current'>\d+?</span><span>", listhtml, re.DOTALL | re.IGNORECASE):
-        npage = page + 1        
-        url = url.replace('page/'+str(page)+'/','page/'+str(npage)+'/')
-        utils.addDir('Next Page ('+str(npage)+')', url, 61, '', npage)
-    xbmcplugin.endOfDirectory(utils.addon_handle)
-
-
-def P00List(url, page):
-    listhtml = utils.getHtml(url, '')
-    match = re.compile('src="([^"]+)" class="attachment-primary-post-thumbnail wp-post-image".*?<a title="([^"]+)" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for img, name, videopage in match:
-        name = utils.cleantext(name)
-        utils.addDownLink(name, videopage, 62, img, '')
-    if re.search("<span class='current'>\d+?</span><span>", listhtml, re.DOTALL | re.IGNORECASE):
-        npage = page + 1        
-        url = url.replace('page/'+str(page)+'/','page/'+str(npage)+'/')
-        utils.addDir('Next Page ('+str(npage)+')', url, 65, '', npage)
-    xbmcplugin.endOfDirectory(utils.addon_handle)
+    if not onelist:
+        if re.search("<span class='current'>\d+?</span><span>", listhtml, re.DOTALL | re.IGNORECASE):
+            npage = page + 1        
+            url = url.replace('page/'+str(page)+'/','page/'+str(npage)+'/')
+            utils.addDir('Next Page ('+str(npage)+')', url, 61, '', npage)
+        xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def GetAlternative(url, alternative):
@@ -114,7 +104,7 @@ def PCat(url):
             utils.addDir(name, videolist, 61, '', 1)
         elif 'porn00' in url:
             videolist = videolist + "page/1/"
-            utils.addDir(name, videolist, 65, '', 1)            
+            utils.addDir(name, videolist, 61, '', 1)            
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -126,7 +116,4 @@ def PSearch(url):
     title = title.replace(' ','+')
     searchUrl = searchUrl + title
     print "Searching URL: " + searchUrl
-    if url.find('porn00'):
-        P00List(searchUrl, 1)
-    elif url.find('pornaq'):
-        PAQList(searchUrl, 1)
+    PAQList(searchUrl, 1)

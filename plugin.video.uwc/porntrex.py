@@ -10,7 +10,9 @@ def PTMain():
     PTList('http://www.porntrex.com/videos?o=mr&page=1',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
-def PTList(url, page):
+def PTList(url, page, onelist=None):
+    if onelist:
+        url = url.replace('page=1','page='+str(page))
     listhtml = utils.getHtml(url, '')
     match = re.compile(r'<img src="([^"]+)" title="([^"]+)".*?rotate_([^_]+)_[^>]+>(.*?)duration">[^\d]+([^\t\n\r]+)', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for img, name, urlid, hd, duration in match:
@@ -22,11 +24,12 @@ def PTList(url, page):
         videopage = "http://www.porntrex.com/media/nuevo/config.php?key=" + urlid + "-1-1"
         name = name + hd + "[COLOR blue]" + duration + "[/COLOR]"
         utils.addDownLink(name, videopage, 52, img, '')
-    if re.search('class="prevnext">&raquo;', listhtml, re.DOTALL | re.IGNORECASE):
-        npage = page + 1        
-        url = url.replace('page='+str(page),'page='+str(npage))
-        utils.addDir('Next Page ('+str(npage)+')', url, 51, '', npage)
-    xbmcplugin.endOfDirectory(utils.addon_handle)
+    if not onelist:
+        if re.search('class="prevnext">&raquo;', listhtml, re.DOTALL | re.IGNORECASE):
+            npage = page + 1        
+            url = url.replace('page='+str(page),'page='+str(npage))
+            utils.addDir('Next Page ('+str(npage)+')', url, 51, '', npage)
+        xbmcplugin.endOfDirectory(utils.addon_handle)
 
 def PTPlayvid(url, name, download=None):
     videopage = utils.getHtml(url, '')
