@@ -57,7 +57,7 @@ def PPlayvid(url, name, alternative=1, download=None):
     
     print url
     videopage = utils.getHtml(url, '')
-    if re.search('player/\?V', videopage, re.DOTALL | re.IGNORECASE):
+    if re.search('/\?V=', videopage, re.DOTALL | re.IGNORECASE):
         match = re.compile('<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
         iframepage = utils.getHtml(match[0], url)
         video720 = re.compile("_720 = '([^']+)'", re.DOTALL | re.IGNORECASE).findall(iframepage)

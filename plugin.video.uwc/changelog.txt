@@ -1,3 +1,7 @@
+[B]Version 1.0.33[/B]
+Fixed: Small fix for Porn00 and PornAQ
+
+
 [B]Version 1.0.32[/B]
 Added: A new 'Tubes' section, for tube-like sites. First one is todayporn.com
 
