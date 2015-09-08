@@ -7,13 +7,20 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.33"
+__version__ = "1.0.34"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
 headers = {'User-Agent': USER_AGENT,
            'Accept': '*/*',
            'Connection': 'keep-alive'}
+           
+openloadhdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+       'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+       'Accept-Encoding': 'none',
+       'Accept-Language': 'en-US,en;q=0.8',
+       'Connection': 'keep-alive'}           
 
 addon_handle = int(sys.argv[1])
 addon = xbmcaddon.Addon(id=__scriptid__)
@@ -170,13 +177,9 @@ def PLAYVIDEO(url, name, download=None):
     elif vidhost == 'OpenLoad':
         progress.update( 40, "", "Loading Openload", "" )
         openloadurl = re.compile('<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
-        openloadsrc = getHtml(openloadurl[0], url)
-        videourl = re.compile("""<source .*?src=(?:"|')([^"']+)(?:"|')""", re.DOTALL | re.IGNORECASE).findall(openloadsrc)
+        openloadsrc = getHtml(openloadurl[0], '', openloadhdr)
         progress.update( 80, "", "Getting video file", "" )
-        videourl = videourl[0].replace("\/","/")
-        openload302 = getVideoLink(videourl,openloadurl[0])
-        realurl = openload302.replace('https://','http://')
-        videourl = realurl
+        videourl = decodeOpenLoad(openloadsrc)
     elif vidhost == 'Streamin (beta)':
         progress.update( 40, "", "Loading Streamin", "" )
         streaminurl = re.compile('<iframe.*?src="(http://streamin\.to[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
@@ -208,8 +211,11 @@ def PLAYVIDEO(url, name, download=None):
         xbmc.Player().play(videourl, listitem)
 
 
-def getHtml(url, referer):
-    req = Request(url, '', headers)
+def getHtml(url, referer, hdr=None):
+    if not hdr:
+        req = Request(url, '', headers)
+    else:
+        req = Request(url, '', hdr)
     if len(referer) > 1:
         req.add_header('Referer', referer)
     response = urlopen(req, timeout=60)
@@ -301,4 +307,57 @@ def _get_keyboard(default="", heading="", hidden=False):
     keyboard.doModal()
     if keyboard.isConfirmed():
         return unicode(keyboard.getText(), "utf-8")
-    return default  
+    return default
+    
+def decodeOpenLoad(html):
+    try:
+        O = {
+            '___': 0,
+            '$$$$': "f",
+            '__$': 1,
+            '$_$_': "a",
+            '_$_': 2,
+            '$_$$': "b",
+            '$$_$': "d",
+            '_$$': 3,
+            '$$$_': "e",
+            '$__': 4,
+            '$_$': 5,
+            '$$__': "c",
+            '$$_': 6,
+            '$$$': 7,
+            '$___': 8,
+            '$__$': 9,
+            '$_': "constructor",
+            '$$': "return",
+            '_$': "o",
+            '_': "u",
+            '__': "t",
+        }
+
+        result = re.search('<script[^>]*>\s*(O=.*?)</script>', html, re.DOTALL).group(1)
+        result = re.search('O\.\$\(O\.\$\((.*?)\)\(\)\)\(\);', result)
+
+        s1 = result.group(1)
+        s1 = s1.replace(' ', '')
+        s1 = s1.replace('(![]+"")', 'false')
+        s3 = ''
+        for s2 in s1.split('+'):
+            if s2.startswith('O.'):
+                s3 += str(O[s2[2:]])
+            elif '[' in s2 and ']' in s2:
+                key = s2[s2.find('[') + 3:-1]
+                s3 += s2[O[key]]
+            else:
+                s3 += s2[1:-1]
+
+        s3 = s3.replace('\\\\', '\\')
+        s3 = s3.decode('unicode_escape')
+        s3 = s3.replace('\\/', '/')
+        s3 = s3.replace('\\\\"', '"')
+        s3 = s3.replace('\\"', '"')
+
+        url = re.search('<source\s+src="([^"]+)', s3).group(1)
+        return url
+    except:
+        return

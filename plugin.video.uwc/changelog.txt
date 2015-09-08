@@ -1,3 +1,7 @@
+[B]Version 1.0.34[/B]
+Fixed: Openload videos are working again
+
+
 [B]Version 1.0.33[/B]
 Fixed: Small fix for Porn00 and PornAQ
 
