@@ -1,3 +1,7 @@
+[B]Version 1.0.35[/B]
+Fixed: Another fix for OpenLoad
+
+
 [B]Version 1.0.34[/B]
 Fixed: Openload videos are working again
 

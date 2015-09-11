@@ -7,7 +7,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.34"
+__version__ = "1.0.35"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -334,13 +334,18 @@ def decodeOpenLoad(html):
             '_': "u",
             '__': "t",
         }
+        result = re.search('<video.*?<script[^>]*>(.*?)</script>.*?</video>', html, re.DOTALL).group(1)
 
-        result = re.search('<script[^>]*>\s*(O=.*?)</script>', html, re.DOTALL).group(1)
-        result = re.search('O\.\$\(O\.\$\((.*?)\)\(\)\)\(\);', result)
-
+        result = beautify(result)
+        result = re.search('O\.\$\(O\.\$\((.*?)\)\(\)\)\(\);', result, re.DOTALL | re.IGNORECASE)
+        
         s1 = result.group(1)
         s1 = s1.replace(' ', '')
+        s1 = s1.replace('\n', '')
+        s1 = s1.replace('\r', '')
+        s1 = s1.replace('\t', '')
         s1 = s1.replace('(![]+"")', 'false')
+        s1 = s1.replace('\\\\', '\\')
         s3 = ''
         for s2 in s1.split('+'):
             if s2.startswith('O.'):
@@ -356,7 +361,6 @@ def decodeOpenLoad(html):
         s3 = s3.replace('\\/', '/')
         s3 = s3.replace('\\\\"', '"')
         s3 = s3.replace('\\"', '"')
-
         url = re.search('<source\s+src="([^"]+)', s3).group(1)
         return url
     except:
