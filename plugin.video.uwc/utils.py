@@ -7,7 +7,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.35"
+__version__ = "1.0.36"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -101,8 +101,6 @@ def downloadVideo(url, name):
         except:
             pass
     if download_path != '':
-        #params = { "url": url, "download_path": download_path, "Title": name }
-        #downloader.download(xbmc.makeLegalFilename(name+".mp4"), params)
         dp = xbmcgui.DialogProgress()
         dp.create("Ultimate Whitecream Download",name[:50])
         tmp_file = tempfile.mktemp(dir=download_path, suffix=".mp4")
@@ -203,7 +201,10 @@ def PLAYVIDEO(url, name, download=None):
         videourl = videourl[0]
     progress.close()
     if download == 1:
-        downloadVideo(videourl, name)
+        if re.search('videomega', videourl, re.DOTALL | re.IGNORECASE):
+            dialog.ok('Downloader','You can\'t download from videomega')
+        else:
+            downloadVideo(videourl, name)
     else:
         iconimage = xbmc.getInfoImage("ListItem.Thumb")
         listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)

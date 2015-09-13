@@ -1,7 +1,7 @@
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
-import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn
+import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 
 socket.setdefaulttimeout(60)
 
@@ -41,6 +41,9 @@ def INDEXM():
     
 def INDEXT():    
     utils.addDir('[COLOR yellow]TodayPorn[/COLOR]','http://www.todayporn.com/page1.html',90,os.path.join(imgDir, 'tp.png'),'')
+    utils.addDir('[COLOR yellow]Poldertube.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.poldertube.nl/pornofilms/nieuw',100,os.path.join(imgDir, 'poldertube.png'),0)
+    utils.addDir('[COLOR yellow]Milf.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.milf.nl/videos/nieuw',100,os.path.join(imgDir, 'milfnl.png'),1)
+    utils.addDir('[COLOR yellow]Sextube.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.sextube.nl/videos/nieuw',100,os.path.join(imgDir, 'sextube.png'),2)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 def ONELIST(page):
@@ -228,7 +231,18 @@ elif mode == 93:
 elif mode == 94:
     todayporn.TPSearch(url)
 elif mode == 95:
-    todayporn.TPPornstars(url, page)      
+    todayporn.TPPornstars(url, page)
+
+elif mode == 100:
+    nltubes.NLTUBES(url, page)
+elif mode == 101:
+    nltubes.NLVIDEOLIST(url, page)
+elif mode == 102:
+    nltubes.NLPLAYVID(url, name, download)
+elif mode == 103:
+    nltubes.NLCAT(url, page)
+elif mode == 104:
+    nltubes.NLSEARCH(url, page)    
 
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
