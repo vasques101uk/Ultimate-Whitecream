@@ -2,12 +2,13 @@ import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 from jsbeautifier import beautify
+import jsunpack
 
 __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.36"
+__version__ = "1.0.37"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -336,11 +337,18 @@ def decodeOpenLoad(html):
             '__': "t",
         }
         result = re.search('<video.*?<script[^>]*>(.*?)</script>.*?</video>', html, re.DOTALL).group(1)
-
-        result = beautify(result)
+        result = result.replace(' ','')
+        
+        decodetest = re.search(r"decodeURIComponent\('([^']+)'\)", result, re.DOTALL).group(1)
+        decoderesult = "'" + urllib2.unquote(decodetest).decode('utf8') + "'"
+        
+        result = re.sub(r"(?si)decodeURIComponent\('[^']+'\)", decoderesult, result)
+        result = jsunpack.unpack(result)
         result = re.search('O\.\$\(O\.\$\((.*?)\)\(\)\)\(\);', result, re.DOTALL | re.IGNORECASE)
         
         s1 = result.group(1)
+
+        s1 = s1.replace('\'+\'', '')
         s1 = s1.replace(' ', '')
         s1 = s1.replace('\n', '')
         s1 = s1.replace('\r', '')
@@ -349,7 +357,7 @@ def decodeOpenLoad(html):
         s1 = s1.replace('\\\\', '\\')
         s3 = ''
         for s2 in s1.split('+'):
-            if s2.startswith('O.'):
+            if s2.startswith('o.'):
                 s3 += str(O[s2[2:]])
             elif '[' in s2 and ']' in s2:
                 key = s2[s2.find('[') + 3:-1]
@@ -362,7 +370,7 @@ def decodeOpenLoad(html):
         s3 = s3.replace('\\/', '/')
         s3 = s3.replace('\\\\"', '"')
         s3 = s3.replace('\\"', '"')
-        url = re.search('<source\s+src="([^"]+)', s3).group(1)
+        url = re.search('<source.*?src="([^"]+)', s3).group(1)
         return url
     except:
         return
