@@ -1,3 +1,7 @@
+[B]Version 1.0.40[/B]
+Oops, forgot to the unicode chars with utils.py
+
+
 [B]Version 1.0.39[/B]
 Fixed: PornTrex
 
