@@ -14,7 +14,7 @@ def PTList(url, page, onelist=None):
     if onelist:
         url = url.replace('page=1','page='+str(page))
     listhtml = utils.getHtml(url, '')
-    match = re.compile(r'<img src="([^"]+)" title="([^"]+)".*?rotate_([^_]+)_[^>]+>(.*?)duration">[^\d]+([^\t\n\r]+)', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile(r'data-original="([^"]+)" title="([^"]+)".*?rotate_([^_]+)_[^>]+>(.*?)duration">[^\d]+([^\t\n\r]+)', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for img, name, urlid, hd, duration in match:
         name = utils.cleantext(name)
         if hd.find('HD') > 0:
@@ -48,7 +48,7 @@ def PTPlayvid(url, name, download=None):
 
 def PTCat(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('c=([^"]+)".*?<img src="([^"]+)" title="([^"]+)".*?badge">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match = re.compile('c=([^"]+)".*?data-original="([^"]+)" title="([^"]+)".*?badge">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
     for catid, img, name, videos in match:
         img = "http://www.porntrex.com/" + img
         catpage = "http://www.porntrex.com/videos?c="+ catid + "&o=mr&page=1"
