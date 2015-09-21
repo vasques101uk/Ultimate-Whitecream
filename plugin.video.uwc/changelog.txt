@@ -1,3 +1,9 @@
+[B]Version 1.0.38[/B]
+Fixed: OpenLoad is fixed again (for how long?)
+Fixed: Porn00 playback
+Added: OpenLoad as supported host for Pornhive
+
+
 [B]Version 1.0.37[/B]
 Fixed: Yet another fix for OpenLoad
 

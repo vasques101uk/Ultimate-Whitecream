@@ -1,4 +1,5 @@
-import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile
+#-*- coding: utf-8 -*-
+import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile, string
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 from jsbeautifier import beautify
@@ -8,7 +9,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael"
-__version__ = "1.0.37"
+__version__ = "1.0.38"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -310,67 +311,37 @@ def _get_keyboard(default="", heading="", hidden=False):
     if keyboard.isConfirmed():
         return unicode(keyboard.getText(), "utf-8")
     return default
-    
+ 
+
 def decodeOpenLoad(html):
-    try:
-        O = {
-            '___': 0,
-            '$$$$': "f",
-            '__$': 1,
-            '$_$_': "a",
-            '_$_': 2,
-            '$_$$': "b",
-            '$$_$': "d",
-            '_$$': 3,
-            '$$$_': "e",
-            '$__': 4,
-            '$_$': 5,
-            '$$__': "c",
-            '$$_': 6,
-            '$$$': 7,
-            '$___': 8,
-            '$__$': 9,
-            '$_': "constructor",
-            '$$': "return",
-            '_$': "o",
-            '_': "u",
-            '__': "t",
-        }
-        result = re.search('<video.*?<script[^>]*>(.*?)</script>.*?</video>', html, re.DOTALL).group(1)
-        result = result.replace(' ','')
-        
-        decodetest = re.search(r"decodeURIComponent\('([^']+)'\)", result, re.DOTALL).group(1)
-        decoderesult = "'" + urllib2.unquote(decodetest).decode('utf8') + "'"
-        
-        result = re.sub(r"(?si)decodeURIComponent\('[^']+'\)", decoderesult, result)
-        result = jsunpack.unpack(result)
-        result = re.search('O\.\$\(O\.\$\((.*?)\)\(\)\)\(\);', result, re.DOTALL | re.IGNORECASE)
-        
-        s1 = result.group(1)
 
-        s1 = s1.replace('\'+\'', '')
-        s1 = s1.replace(' ', '')
-        s1 = s1.replace('\n', '')
-        s1 = s1.replace('\r', '')
-        s1 = s1.replace('\t', '')
-        s1 = s1.replace('(![]+"")', 'false')
-        s1 = s1.replace('\\\\', '\\')
-        s3 = ''
-        for s2 in s1.split('+'):
-            if s2.startswith('o.'):
-                s3 += str(O[s2[2:]])
-            elif '[' in s2 and ']' in s2:
-                key = s2[s2.find('[') + 3:-1]
-                s3 += s2[O[key]]
-            else:
-                s3 += s2[1:-1]
+    aastring = re.search(r"<video(?:.|\s)*?<script\s[^>]*?>((?:.|\s)*?)</script", html, re.DOTALL | re.IGNORECASE).group(1)
+    
+    aastring = aastring.replace("((???) + (???) + (?T?))", "9")
+    aastring = aastring.replace("((???) + (???))","8")
+    aastring = aastring.replace("((???) + (o^_^o))","7")
+    aastring = aastring.replace("((o^_^o) +(o^_^o))","6")
+    aastring = aastring.replace("((???) + (?T?))","5")
+    aastring = aastring.replace("(???)","4")
+    aastring = aastring.replace("((o^_^o) - (?T?))","2")
+    aastring = aastring.replace("(o^_^o)","3")
+    aastring = aastring.replace("(?T?)","1")
+    aastring = aastring.replace("(c^_^o)","0")
+    aastring = aastring.replace("(???)[?e?]","\\")
+    aastring = aastring.replace("(3 +3 +0)","6")
+    aastring = aastring.replace("(3 - 1 +0)","2")
 
-        s3 = s3.replace('\\\\', '\\')
-        s3 = s3.decode('unicode_escape')
-        s3 = s3.replace('\\/', '/')
-        s3 = s3.replace('\\\\"', '"')
-        s3 = s3.replace('\\"', '"')
-        url = re.search('<source.*?src="([^"]+)', s3).group(1)
-        return url
-    except:
-        return
+    decodestring = re.search(r"\\\+([^(]+)", aastring, re.DOTALL | re.IGNORECASE).group(1)
+    decodestring = "\\+"+ decodestring
+    decodestring = decodestring.replace("+","")
+    decodestring = decodestring.replace(" ","")
+    decodestring = decode(decodestring)
+    decodestring = decodestring.replace("\\/","/")
+    
+    videourl = re.search(r'src=\\"([^\\]+)', decodestring, re.DOTALL | re.IGNORECASE).group(1)
+    return videourl
+
+def decode(encoded):
+    for octc in (c for c in re.findall(r'\\(\d{2,3})', encoded)):
+        encoded = encoded.replace(r'\%s' % octc, chr(int(octc, 8)))
+    return encoded.decode('utf8')

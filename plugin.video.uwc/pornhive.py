@@ -70,6 +70,11 @@ def PHVideo(url, name, download=None):
     elif sitename == "FlashX":
         progress.update( 30, "", "Getting FlashX", "" )
         playurl = getFlashX(outurl)
+    elif sitename == "Openload":
+        progress.update( 30, "", "Getting Openload", "" )
+        progress.close()
+        utils.PLAYVIDEO(outurl, name)
+        return
     else:
         progress.close()
         utils.dialog.ok('Sorry','This host is not supported.')
