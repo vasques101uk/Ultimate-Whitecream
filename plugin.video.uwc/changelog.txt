@@ -1,3 +1,8 @@
+[B]Version 1.0.41[/B]
+Fixed: PornTrex, double listing
+Fixed: Porn00, video playback
+
+
 [B]Version 1.0.40[/B]
 Oops, forgot to the unicode chars with utils.py
 

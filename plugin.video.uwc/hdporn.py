@@ -57,9 +57,10 @@ def PPlayvid(url, name, alternative=1, download=None):
     
     videopage = utils.getHtml(url, '')
     if re.search('server/\?t=', videopage, re.DOTALL | re.IGNORECASE):
-        match = re.compile('-->\s+<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
-        iframepage = utils.getHtml(match[0], url)
-        video720 = re.compile("var zu = '([^']+)'", re.DOTALL | re.IGNORECASE).findall(iframepage)
+        match = re.compile(r'/server/\?t=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videopage)
+        match = "http://www.porn00.org/server/?t=" + match[0]
+        iframepage = utils.getHtml(match, url)
+        video720 = re.compile(r'file: "([^"]+)",\s+label: "7', re.DOTALL | re.IGNORECASE).findall(iframepage)
         if not video720:
             if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
                 alturl, nalternative = GetAlternative(url, alternative)
@@ -69,11 +70,11 @@ def PPlayvid(url, name, alternative=1, download=None):
         else:
             videourl = video720[0]
             playvid()    
-    if re.search('/\?V=', videopage, re.DOTALL | re.IGNORECASE):
+    elif re.search('/\?V=', videopage, re.DOTALL | re.IGNORECASE):
         try:
             match = re.compile('-->\s+<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
             iframepage = utils.getHtml(match[0], url)
-            video720 = re.compile("var zu = '([^']+)'", re.DOTALL | re.IGNORECASE).findall(iframepage)
+            video720 = re.compile(r'file: "([^"]+)",\s+label: "7', re.DOTALL | re.IGNORECASE).findall(iframepage)
             if not video720:
                 if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
                     alturl, nalternative = GetAlternative(url, alternative)
