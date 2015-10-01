@@ -1,3 +1,7 @@
+[B]Version 1.0.42[/B]
+Added: ElRayX (credits to Fr33m1nd)
+
+
 [B]Version 1.0.41[/B]
 Fixed: PornTrex, double listing
 Fixed: Porn00, video playback
