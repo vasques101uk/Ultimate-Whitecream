@@ -1,7 +1,7 @@
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
-import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
+import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes, elreyx
 
 socket.setdefaulttimeout(60)
 
@@ -30,6 +30,7 @@ def INDEXS():
     utils.addDir('[COLOR yellow]PornAQ[/COLOR]','http://www.pornaq.com/page/1/',60,os.path.join(imgDir, 'paq.png'),'')
     utils.addDir('[COLOR yellow]Porn00[/COLOR]','http://www.porn00.com/page/1/',64,os.path.join(imgDir, 'p00.png'),'')
     utils.addDir('[COLOR yellow]Beeg[/COLOR]','http://beeg.com/page-1',80,os.path.join(imgDir, 'bg.png'),'')
+    utils.addDir('[COLOR yellow]ElReyX[/COLOR]','http://elreyx.com/index1.html',110,os.path.join(imgDir, 'elreyx.png'),'')
     utils.addDir('[COLOR yellow]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -37,6 +38,7 @@ def INDEXM():
     utils.addDir('[COLOR yellow]Xtheatre[/COLOR]','http://xtheatre.net/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
     utils.addDir('[COLOR yellow]Nudeflix[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,os.path.join(imgDir, 'nf.png'),'')
     utils.addDir('[COLOR yellow]PornHive[/COLOR]','http://www.pornhive.tv/en/movies/all',70,os.path.join(imgDir, 'ph.png'),'')
+    utils.addDir('[COLOR yellow]ElReyX[/COLOR]','http://elreyx.com/index1.html',116,os.path.join(imgDir, 'elreyx.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXT():    
@@ -244,5 +246,21 @@ elif mode == 103:
 elif mode == 104:
     nltubes.NLSEARCH(url, page)    
 
+elif mode == 110:
+    elreyx.EXMain()
+elif mode == 111:
+    elreyx.EXList(url)
+elif mode == 112:
+    elreyx.EXPlayvid(url, name, download)
+elif mode == 113:
+    elreyx.EXCat(url)
+elif mode == 114:
+    elreyx.EXSearch(url)
+elif mode == 115:
+    elreyx.EXPornstars(url)
+elif mode == 116:
+    elreyx.EXMovies(url)
+elif mode == 117:
+    elreyx.EXMoviesList(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)

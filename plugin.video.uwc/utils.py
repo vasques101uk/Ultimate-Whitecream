@@ -157,6 +157,8 @@ def PLAYVIDEO(url, name, download=None):
             hashref = re.compile("""javascript["']>ref=['"]([^'"]+)""", re.DOTALL | re.IGNORECASE).findall(videosource)
         elif re.search("videomega.tv/iframe.php", videosource, re.DOTALL | re.IGNORECASE):
             hashref = re.compile(r"iframe\.php\?ref=([^&]+)&", re.DOTALL | re.IGNORECASE).findall(videosource)
+        elif re.search("videomega.tv/view.php", videosource, re.DOTALL | re.IGNORECASE):
+            hashref = re.compile(r'view\.php\?ref=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)
         else:
             hashkey = re.compile("""hashkey=([^"']+)""", re.DOTALL | re.IGNORECASE).findall(videosource)
             if len(hashkey) > 1:
