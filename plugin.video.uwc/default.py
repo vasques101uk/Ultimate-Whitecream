@@ -1,7 +1,8 @@
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
-import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes, elreyx
+import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes, \
+    elreyx, libogski
 
 socket.setdefaulttimeout(60)
 
@@ -31,6 +32,7 @@ def INDEXS():
     utils.addDir('[COLOR yellow]Porn00[/COLOR]','http://www.porn00.com/page/1/',64,os.path.join(imgDir, 'p00.png'),'')
     utils.addDir('[COLOR yellow]Beeg[/COLOR]','http://beeg.com/page-1',80,os.path.join(imgDir, 'bg.png'),'')
     utils.addDir('[COLOR yellow]ElReyX[/COLOR]','http://elreyx.com/index1.html',110,os.path.join(imgDir, 'elreyx.png'),'')
+    utils.addDir('[COLOR yellow]Libogski[/COLOR]','http://libogski.com/category/videos/',120,os.path.join(imgDir, 'libogski.png'),'')
     utils.addDir('[COLOR yellow]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -39,6 +41,7 @@ def INDEXM():
     utils.addDir('[COLOR yellow]Nudeflix[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,os.path.join(imgDir, 'nf.png'),'')
     utils.addDir('[COLOR yellow]PornHive[/COLOR]','http://www.pornhive.tv/en/movies/all',70,os.path.join(imgDir, 'ph.png'),'')
     utils.addDir('[COLOR yellow]ElReyX[/COLOR]','http://elreyx.com/index1.html',116,os.path.join(imgDir, 'elreyx.png'),'')
+    utils.addDir('[COLOR yellow]Libogski[/COLOR]','http://libogski.com/category/movies/',125,os.path.join(imgDir, 'libogski.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXT():    
@@ -262,5 +265,22 @@ elif mode == 116:
     elreyx.EXMovies(url)
 elif mode == 117:
     elreyx.EXMoviesList(url)
+
+elif mode == 120:
+    libogski.LIBMain(url)
+elif mode == 121:
+    libogski.LIBList(url)
+elif mode == 122:
+    libogski.LIBPlayvid(url, name, download)
+elif mode == 123:
+    libogski.LIBCat(url, 1)
+elif mode == 124:
+    libogski.LIBSearch(url)
+elif mode == 125:
+    libogski.LIBMainMovies(url)
+elif mode == 126:
+    libogski.LIBCat(url, 0)
+elif mode == 127:
+    libogski.LIBSearchList(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)

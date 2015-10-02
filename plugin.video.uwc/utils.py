@@ -178,9 +178,9 @@ def PLAYVIDEO(url, name, download=None):
         videourl = videourl[0]
     elif vidhost == 'OpenLoad':
         progress.update( 40, "", "Loading Openload", "" )
-        openloadurl = re.compile('<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
-        openloadsrc = getHtml(openloadurl[0], '', openloadhdr)
-        progress.update( 80, "", "Getting video file", "" )
+        openloadurl = re.compile('<iframe.*?src="(((http|https?):\/\/)?(?:www\.)?openload[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
+        openloadsrc = getHtml(openloadurl[0][0], '', openloadhdr)
+        progress.update( 80, "", "Getting video file", "")
         videourl = decodeOpenLoad(openloadsrc)
     elif vidhost == 'Streamin (beta)':
         progress.update( 40, "", "Loading Streamin", "" )
