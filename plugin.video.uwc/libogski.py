@@ -1,4 +1,3 @@
-import os.path
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
@@ -27,7 +26,7 @@ def LIBList(url):
     listhtml = utils.getHtml(url, '')
     match = re.compile('class="peli">.*?<img src="([^"]+)" alt="([^"]+)".*?href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for img, name, videopage in match:
-        name = name.replace("&#8211;", "-")
+        name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 122, img, '')
     try:
         nextp=re.compile("previouspostslink' href='([^']+)'>Next", re.DOTALL | re.IGNORECASE).findall(listhtml)
@@ -52,7 +51,7 @@ def LIBSearchList(url):
     listhtml = utils.getHtml(url, '')
     match = re.compile('class="search_vid">.*?<a href="([^"]+)".*?src="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, img, name in match:
-        name = name.replace("&#8211;", "-")
+        name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 122, img, '')
     try:
         nextp=re.compile("previouspostslink' href='([^']+)'>Next", re.DOTALL | re.IGNORECASE).findall(listhtml)

@@ -1,4 +1,3 @@
-import os.path
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 

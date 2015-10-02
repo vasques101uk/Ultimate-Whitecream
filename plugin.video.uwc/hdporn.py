@@ -69,7 +69,31 @@ def PPlayvid(url, name, alternative=1, download=None):
                 utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
         else:
             videourl = video720[0]
-            playvid()    
+            playvid()
+    elif re.search('video_ext.php\?', videopage, re.DOTALL | re.IGNORECASE):
+        match = re.compile('<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
+        vkpage = utils.getHtml(match[0], url)
+        
+        link = re.search('script.setAttribute\(\'src\',\s\'(.*?access_token=)(.*?)&callback', vkpage)
+        if link:
+            token = link.group(2).decode('string-escape')
+            link = link.group(1) + token + '&callback=callbackFunc'
+        vkpage2 = utils.getHtml(link, match[0])
+        if 'Too many requests per second' in vkpage2:
+            utils.dialog.ok('Try again in a few seconds','Too many requests per second, try again in a couple of seconds')
+        else:
+            videolink = re.findall(r'mp4_\d+":"([^"]+)"', vkpage2)
+            if videolink:
+                videolink = videolink[-1].replace('\/','/')
+            if not videolink:
+                if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
+                    alturl, nalternative = GetAlternative(url, alternative)
+                    PPlayvid(alturl, name, nalternative, download)
+                else:
+                    utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
+            else:
+                videourl = videolink
+                playvid()              
     elif re.search('/\?V=', videopage, re.DOTALL | re.IGNORECASE):
         try:
             match = re.compile('-->\s+<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
@@ -103,7 +127,7 @@ def PPlayvid(url, name, alternative=1, download=None):
                 utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
         else:
             videourl = video720[0]
-            playvid()            
+            playvid()
     elif re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
         alturl, nalternative = GetAlternative(url, alternative)
         PPlayvid(alturl, name, nalternative, download)
