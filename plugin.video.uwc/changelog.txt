@@ -1,3 +1,7 @@
+[B]Version 1.0.44[/B]
+Fixed: FlashX video playback
+
+
 [B]Version 1.0.43[/B]
 Added: Libogski (credits to Fr33m1nd)
 Added: Support for VK videohost for Pornaq and Porn00
