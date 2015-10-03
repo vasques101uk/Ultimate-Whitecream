@@ -14,9 +14,11 @@ def Main():
 
 def List(url):
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<section class="pst-cn.*?<figure><a href="([^"]+)".*?data-original="([^"]+)".*?alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for videopage, img, name in match:
+    match = re.compile('<figure><a href="([^"]+)".*?data-original="([^"]+)".*?alt="([^"]+)">(?:<span>)?([^<]+)?(?:</span>)?</a>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for videopage, img, name, runtime in match:
         name = utils.cleantext(name[7:])
+        if runtime:
+            name = name + ' [COLOR blue]' + runtime + '[/COLOR]'
         utils.addDownLink(name, videopage, 132, img, '')
     try:
         nextp=re.compile('<a class="nextpostslink" rel="next" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
@@ -38,9 +40,10 @@ def Search(url):
 
 def Categories(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('<figure class="ctg-img.*?<a href="([^"]+)".*?alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(cathtml)
-    for catpage, name in match:
-        utils.addDir(name, catpage, 131, '')
+    match = re.compile('data-original="([^"]+)".*?href="([^"]+)">([^<]+)<.*?strong>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    for img, catpage, name, videos in match:
+        name = name + ' [COLOR blue]' + videos + ' videos[/COLOR]'
+        utils.addDir(name, catpage, 131, img)
     xbmcplugin.endOfDirectory(utils.addon_handle)   
 
 

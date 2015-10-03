@@ -3,6 +3,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils
 
+progress = utils.progress
 
 def PAQMain():
     utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.pornaq.com',63,'','')
@@ -35,6 +36,7 @@ def PAQList(url, page, onelist=None):
 
 
 def GetAlternative(url, alternative):
+    progress.update( 70, "", "Loading alternative page", "" )
     if alternative == 1:
         nalternative = 2
         url = url + str(nalternative)
@@ -47,6 +49,7 @@ def GetAlternative(url, alternative):
 def PPlayvid(url, name, alternative=1, download=None):
 
     def playvid():
+        progress.close()
         if download == 1:
             utils.downloadVideo(videourl, name)
         else:
@@ -55,10 +58,14 @@ def PPlayvid(url, name, alternative=1, download=None):
             listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
             xbmc.Player().play(videourl, listitem)    
     
+    progress.create('Play video', 'Searching videofile.')
+    progress.update( 25, "", "Loading video page", "" )
+    
     videopage = utils.getHtml(url, '')
     if re.search('server/\?t=', videopage, re.DOTALL | re.IGNORECASE):
         match = re.compile(r'/server/\?t=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videopage)
         match = "http://www.porn00.org/server/?t=" + match[0]
+        progress.update( 50, "", "Opening porn00 video page", "" )
         iframepage = utils.getHtml(match, url)
         video720 = re.compile(r'file: "([^"]+)",\s+label: "7', re.DOTALL | re.IGNORECASE).findall(iframepage)
         if not video720:
@@ -66,37 +73,46 @@ def PPlayvid(url, name, alternative=1, download=None):
                 alturl, nalternative = GetAlternative(url, alternative)
                 PPlayvid(alturl, name, nalternative, download)
             else:
+                progress.close()
                 utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
         else:
             videourl = video720[0]
             playvid()
     elif re.search('video_ext.php\?', videopage, re.DOTALL | re.IGNORECASE):
         match = re.compile('<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
+        progress.update( 30, "", "Opening VK video page", "" )
         vkpage = utils.getHtml(match[0], url)
         
         link = re.search('script.setAttribute\(\'src\',\s\'(.*?access_token=)(.*?)&callback', vkpage)
+        
         if link:
             token = link.group(2).decode('string-escape')
             link = link.group(1) + token + '&callback=callbackFunc'
-        vkpage2 = utils.getHtml(link, match[0])
-        if 'Too many requests per second' in vkpage2:
-            utils.dialog.ok('Try again in a few seconds','Too many requests per second, try again in a couple of seconds')
-        else:
-            videolink = re.findall(r'mp4_\d+":"([^"]+)"', vkpage2)
-            if videolink:
-                videolink = videolink[-1].replace('\/','/')
-            if not videolink:
-                if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
-                    alturl, nalternative = GetAlternative(url, alternative)
-                    PPlayvid(alturl, name, nalternative, download)
-                else:
-                    utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
+        i = 30
+        while 1:
+            if i < 98:
+                i += 1
+            progress.update( i, "", "Trying to load video from VK", "" )
+            vkpage2 = utils.getHtml(link, '')
+            if not 'Too many requests per second' in vkpage2:
+                break
+        videolink = re.findall(r'mp4_\d+":"([^"]+)"', vkpage2)
+        if videolink:
+            videolink = videolink[-1].replace('\/','/')
+        if not videolink:
+            if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
+                alturl, nalternative = GetAlternative(url, alternative)
+                PPlayvid(alturl, name, nalternative, download)
             else:
-                videourl = videolink
-                playvid()              
+                progress.close()
+                utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
+        else:
+            videourl = videolink
+            playvid()              
     elif re.search('/\?V=', videopage, re.DOTALL | re.IGNORECASE):
         try:
             match = re.compile('-->\s+<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
+            progress.update( 50, "", "Opening porn00/pornAQ video page", "" )
             iframepage = utils.getHtml(match[0], url)
             video720 = re.compile(r'file: "([^"]+)",\s+label: "7', re.DOTALL | re.IGNORECASE).findall(iframepage)
             if not video720:
@@ -104,6 +120,7 @@ def PPlayvid(url, name, alternative=1, download=None):
                     alturl, nalternative = GetAlternative(url, alternative)
                     PPlayvid(alturl, name, nalternative, download)
                 else:
+                    progress.close()
                     utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
             else:
                 videourl = video720[0]
@@ -113,10 +130,12 @@ def PPlayvid(url, name, alternative=1, download=None):
                 alturl, nalternative = GetAlternative(url, alternative)
                 PPlayvid(alturl, name, nalternative, download)
             else:
+                progress.close()
                 utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')        
     elif re.search('google.com/file', videopage, re.DOTALL | re.IGNORECASE):
         match = re.compile('file/d/([^/]+)/', re.DOTALL | re.IGNORECASE).findall(videopage)
         googleurl = "https://docs.google.com/uc?id="+match[0]+"&export=download"
+        progress.update( 50, "", "Opening Google docs video page", "" )
         googlepage = utils.getHtml(googleurl, '')
         video720 = re.compile('"downloadUrl":"([^?]+)', re.DOTALL | re.IGNORECASE).findall(googlepage)
         if not video720:
@@ -124,6 +143,7 @@ def PPlayvid(url, name, alternative=1, download=None):
                 alturl, nalternative = GetAlternative(url, alternative)
                 PPlayvid(alturl, name, nalternative, download)
             else:
+                progress.close()
                 utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
         else:
             videourl = video720[0]
@@ -132,6 +152,7 @@ def PPlayvid(url, name, alternative=1, download=None):
         alturl, nalternative = GetAlternative(url, alternative)
         PPlayvid(alturl, name, nalternative, download)
     else:
+        progress.close()
         utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
 
 
