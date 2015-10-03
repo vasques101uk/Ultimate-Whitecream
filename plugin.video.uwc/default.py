@@ -1,8 +1,8 @@
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
-import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes, \
-    elreyx, libogski, xvideospanish, pelisxporno
+import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
+import elreyx, libogski, xvideospanish, pelisxporno, hqporner
 
 socket.setdefaulttimeout(60)
 
@@ -34,6 +34,7 @@ def INDEXS():
     utils.addDir('[COLOR yellow]ElReyX[/COLOR]','http://elreyx.com/index1.html',110,os.path.join(imgDir, 'elreyx.png'),'')
     utils.addDir('[COLOR yellow]Libogski[/COLOR]','http://libogski.com/category/videos/',120,os.path.join(imgDir, 'libogski.png'),'')
     utils.addDir('[COLOR yellow]XvideoSpanish[/COLOR]','http://www.xvideospanish.com/',130,os.path.join(imgDir, 'xvideospanish.png'),'')
+    utils.addDir('[COLOR yellow]HQPorner[/COLOR]','http://hqporner.com/hdporn/1',150,os.path.join(imgDir, 'hqporner.png'),'')
     utils.addDir('[COLOR yellow]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -306,5 +307,20 @@ elif mode == 143:
     pelisxporno.Categories(url)
 elif mode == 144:
     pelisxporno.Search(url)
+
+elif mode == 150:
+    hqporner.HQMAIN()
+elif mode == 151:
+    hqporner.HQLIST(url)
+elif mode == 152:
+    hqporner.HQPLAY(url, name, download)
+elif mode == 153:
+    hqporner.HQCAT(url)
+elif mode == 154:
+    hqporner.HQSEARCH(url)
+elif mode == 155:
+    hqporner.HQSTUDIOS(url)
+elif mode == 156:
+    hqporner.HQGIRLS(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
