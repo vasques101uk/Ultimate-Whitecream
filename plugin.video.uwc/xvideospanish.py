@@ -16,7 +16,7 @@ def List(url):
     listhtml = utils.getHtml(url, '')
     match = re.compile('<section class="pst-cn.*?<figure><a href="([^"]+)".*?data-original="([^"]+)".*?alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, img, name in match:
-        name = utils.cleantext(name)
+        name = utils.cleantext(name[7:])
         utils.addDownLink(name, videopage, 132, img, '')
     try:
         nextp=re.compile('<a class="nextpostslink" rel="next" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
