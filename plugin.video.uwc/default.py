@@ -2,7 +2,7 @@ import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes, \
-    elreyx, libogski, xvideospanish
+    elreyx, libogski, xvideospanish, pelisxporno
 
 socket.setdefaulttimeout(60)
 
@@ -43,6 +43,7 @@ def INDEXM():
     utils.addDir('[COLOR yellow]PornHive[/COLOR]','http://www.pornhive.tv/en/movies/all',70,os.path.join(imgDir, 'ph.png'),'')
     utils.addDir('[COLOR yellow]ElReyX[/COLOR]','http://elreyx.com/index1.html',116,os.path.join(imgDir, 'elreyx.png'),'')
     utils.addDir('[COLOR yellow]Libogski[/COLOR]','http://libogski.com/category/movies/',125,os.path.join(imgDir, 'libogski.png'),'')
+    utils.addDir('[COLOR yellow]PelisxPorno[/COLOR]','http://www.pelisxporno.com/',140,os.path.join(imgDir, ''),'')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXT():    
@@ -294,5 +295,16 @@ elif mode == 133:
     xvideospanish.Categories(url)
 elif mode == 134:
     xvideospanish.Search(url)
+
+elif mode == 140:
+    pelisxporno.Main()
+elif mode == 141:
+    pelisxporno.List(url)
+elif mode == 142:
+    pelisxporno.Playvid(url, name, download)
+elif mode == 143:
+    pelisxporno.Categories(url)
+elif mode == 144:
+    pelisxporno.Search(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
