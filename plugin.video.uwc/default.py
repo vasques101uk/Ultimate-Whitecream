@@ -2,7 +2,7 @@ import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes, \
-    elreyx, libogski
+    elreyx, libogski, xvideospanish
 
 socket.setdefaulttimeout(60)
 
@@ -33,6 +33,7 @@ def INDEXS():
     utils.addDir('[COLOR yellow]Beeg[/COLOR]','http://beeg.com/page-1',80,os.path.join(imgDir, 'bg.png'),'')
     utils.addDir('[COLOR yellow]ElReyX[/COLOR]','http://elreyx.com/index1.html',110,os.path.join(imgDir, 'elreyx.png'),'')
     utils.addDir('[COLOR yellow]Libogski[/COLOR]','http://libogski.com/category/videos/',120,os.path.join(imgDir, 'libogski.png'),'')
+    utils.addDir('[COLOR yellow]XvideoSpanish[/COLOR]','http://www.xvideospanish.com/',130,os.path.join(imgDir, 'xvideospanish.png'),'')
     utils.addDir('[COLOR yellow]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -282,5 +283,16 @@ elif mode == 126:
     libogski.LIBCat(url, 0)
 elif mode == 127:
     libogski.LIBSearchList(url)
+
+elif mode == 130:
+    xvideospanish.Main()
+elif mode == 131:
+    xvideospanish.List(url)
+elif mode == 132:
+    xvideospanish.Playvid(url, name, download)
+elif mode == 133:
+    xvideospanish.Categories(url)
+elif mode == 134:
+    xvideospanish.Search(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
