@@ -2,7 +2,7 @@ import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
-import elreyx, libogski, xvideospanish, pelisxporno, hqporner, videomegaporn
+import elreyx, libogski, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx
 
 socket.setdefaulttimeout(60)
 
@@ -36,6 +36,7 @@ def INDEXS():
     utils.addDir('[COLOR yellow]XvideoSpanish[/COLOR]','http://www.xvideospanish.com/',130,os.path.join(imgDir, 'xvideospanish.png'),'')
     utils.addDir('[COLOR yellow]HQPorner[/COLOR]','http://hqporner.com/hdporn/1',150,os.path.join(imgDir, 'hqporner.png'),'')
     utils.addDir('[COLOR yellow]VideoMegaPorn[/COLOR]','http://www.videomegaporn.com/index.html',160,os.path.join(imgDir, 'videomegaporn.png'),'')
+    utils.addDir('[COLOR yellow]StreamXXX[/COLOR]','http://streamxxx.tv/category/clips/',170,os.path.join(imgDir, 'streamxxx.png'),'')
     utils.addDir('[COLOR yellow]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -46,6 +47,7 @@ def INDEXM():
     utils.addDir('[COLOR yellow]ElReyX[/COLOR]','http://elreyx.com/index1.html',116,os.path.join(imgDir, 'elreyx.png'),'')
     utils.addDir('[COLOR yellow]Libogski[/COLOR]','http://libogski.com/category/movies/',125,os.path.join(imgDir, 'libogski.png'),'')
     utils.addDir('[COLOR yellow]PelisxPorno[/COLOR]','http://www.pelisxporno.com/',140,os.path.join(imgDir, 'pelisxporno.png'),'')
+    utils.addDir('[COLOR yellow]StreamXXX[/COLOR]','http://streamxxx.tv/category/movies/',175,os.path.join(imgDir, 'streamxxx.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXT():    
@@ -334,5 +336,23 @@ elif mode == 163:
     videomegaporn.Categories(url)
 elif mode == 164:
     videomegaporn.Search(url)
+
+
+elif mode == 170:
+    streamxxx.Main()
+elif mode == 171:
+    streamxxx.List(url)
+elif mode == 172:
+    streamxxx.Playvid(url, name, download)
+elif mode == 173:
+    streamxxx.Tags(url)
+elif mode == 174:
+    streamxxx.Search(url)
+elif mode == 175:
+    streamxxx.MainMovies()
+elif mode == 176:
+    streamxxx.MainInternationalMovies()
+elif mode == 177:
+    streamxxx.Categories(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
