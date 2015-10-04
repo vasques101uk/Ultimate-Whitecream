@@ -70,6 +70,9 @@ def PHVideo(url, name, download=None):
     elif sitename == "FlashX":
         progress.update( 30, "", "Getting FlashX", "" )
         playurl = getFlashX(outurl)
+    elif sitename == "NowVideo":
+        progress.update( 30, "", "Getting NowVideo", "" )
+        playurl = getNowVideo(outurl)        
     elif sitename == "Openload":
         progress.update( 30, "", "Getting Openload", "" )
         progress.close()
@@ -88,7 +91,8 @@ def PHVideo(url, name, download=None):
         listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
         xbmc.Player().play(playurl, listitem)
-    
+
+
 def getFlashX(url):
     phpage = utils.getHtml(url, '')
     progress.update( 50, "", "Opening FlashX page", "" )
@@ -104,7 +108,7 @@ def getFlashX(url):
     progress.update( 80, "", "Returning video file", "" )
     videourl = videourl[0]
     return videourl
-    
+
 
 def getStreamCloud(url):
     progress.update( 40, "", "Opening Streamcloud", "" )
@@ -120,3 +124,22 @@ def getStreamCloud(url):
     videourl = re.compile('file: "(.+?)",', re.DOTALL | re.IGNORECASE).findall(newscpage)
     progress.update( 80, "", "Returning video file", "" )  
     return videourl[0]
+
+
+def getNowVideo(url):
+    progress.update( 50, "", "Opening NowVideo page", "" )
+    videopage = utils.getHtml(url, '')
+    fileid=re.compile('flashvars.file="(.+?)";').findall(videopage)[0]
+    codeid=re.compile('flashvars.cid="(.+?)";').findall(videopage)
+    if(len(codeid) > 0):
+         codeid=codeid[0]
+    else:
+         codeid=""
+    keycode=re.compile('flashvars.filekey=(.+?);').findall(videopage)[0]
+    keycode=re.compile('var\s*'+keycode+'="(.+?)";').findall(videopage)[0]
+    videolink = "http://www.nowvideo.sx/api/player.api.php?codes="+urllib.quote_plus(codeid) + "&key="+urllib.quote_plus(keycode) + "&file=" + urllib.quote_plus(fileid)
+    progress.update( 60, "", "Grabbing video file", "" ) 
+    vidcontent = utils.getHtml(videolink, '')
+    videourl = re.compile('url=(.+?)\&').findall(vidcontent)[0]
+    progress.update( 80, "", "Returning video file", "" )      
+    return videourl

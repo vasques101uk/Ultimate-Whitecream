@@ -6,8 +6,8 @@ import utils
 
 def HQMAIN():
     utils.addDir('[COLOR yellow]Categories[/COLOR]','http://hqporner.com/porn-categories.php',153,'','')
-    utils.addDir('[COLOR yellow]Studios[/COLOR]','http://hqporner.com/porn-studios.php',155,'','')
-    utils.addDir('[COLOR yellow]Girls[/COLOR]','http://hqporner.com/porn-actress.php',156,'','')
+    utils.addDir('[COLOR yellow]Studios[/COLOR]','http://hqporner.com/porn-studios.php',153,'','')
+    utils.addDir('[COLOR yellow]Girls[/COLOR]','http://hqporner.com/porn-actress.php',153,'','')
     utils.addDir('[COLOR yellow]Search[/COLOR]','http://hqporner.com/?s=',154,'','')
     HQLIST('http://hqporner.com/hdporn/1')
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -34,26 +34,6 @@ def HQCAT(url):
     for caturl, catimg, catname in tags:
         caturl = "http://www.hqporner.com" + caturl
         catimg = "http://www.hqporner.com" + catimg        
-        utils.addDir(catname,caturl,151,catimg)
-    xbmcplugin.endOfDirectory(utils.addon_handle)
-
-
-def HQSTUDIOS(url):
-    link = utils.getHtml(url, '')
-    tags = re.compile('<a href="([^"]+)"[^<]+<img src="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(link)
-    for caturl, catimg, catname in tags:
-        caturl = "http://www.hqporner.com" + caturl
-        catimg = "http://www.hqporner.com" + catimg        
-        utils.addDir(catname,caturl,151,catimg)
-    xbmcplugin.endOfDirectory(utils.addon_handle)
-
-
-def HQGIRLS(url):
-    link = utils.getHtml(url, '')
-    tags = re.compile('<a href="([^"]+)"[^<]+<img src="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(link)
-    for caturl, catimg, catname in tags:
-        caturl = "http://www.hqporner.com" + caturl
-        catimg = "http://www.hqporner.com" + catimg
         utils.addDir(catname,caturl,151,catimg)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -91,6 +71,9 @@ def HQPLAY(url, name, download=None):
     elif re.search('5\.79', iframeurl[0], re.DOTALL | re.IGNORECASE):
         videourl = getIP(iframeurl[0])
         playvid()
+    elif re.search('flyflv', iframeurl[0], re.DOTALL | re.IGNORECASE):
+        videourl = getFly(iframeurl[0])
+        playvid()        
     else:
         utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
 
@@ -104,5 +87,11 @@ def getBMW(url):
 def getIP(url):
     videopage = utils.getHtml(url, '')
     videos = re.compile('file": "([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
+    videourl = videos[-1]
+    return videourl
+
+def getFly(url):
+    videopage = utils.getHtml(url, '')
+    videos = re.compile('file: "([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
     videourl = videos[-1]
     return videourl

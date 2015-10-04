@@ -9,7 +9,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd"
-__version__ = "1.0.46"
+__version__ = "1.0.47"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -134,9 +134,9 @@ def PLAYVIDEO(url, name, download=None):
 
 def playvideo(videosource, name, download=None):
     hosts = []
-    if re.search('videomega', videosource, re.DOTALL | re.IGNORECASE):
+    if re.search('videomega\.', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('VideoMega')
-    if re.search('openload', videosource, re.DOTALL | re.IGNORECASE):
+    if re.search('openload\.', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('OpenLoad')
     if re.search('streamin.to', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('Streamin (beta)')          

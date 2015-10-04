@@ -321,10 +321,6 @@ elif mode == 153:
     hqporner.HQCAT(url)
 elif mode == 154:
     hqporner.HQSEARCH(url)
-elif mode == 155:
-    hqporner.HQSTUDIOS(url)
-elif mode == 156:
-    hqporner.HQGIRLS(url)
 
 elif mode == 160:
     videomegaporn.Main()
@@ -336,7 +332,6 @@ elif mode == 163:
     videomegaporn.Categories(url)
 elif mode == 164:
     videomegaporn.Search(url)
-
 
 elif mode == 170:
     streamxxx.Main()
