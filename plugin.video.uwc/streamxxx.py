@@ -8,7 +8,7 @@ progress = utils.progress
 def Main():
     utils.addDir('[COLOR yellow]Categories[/COLOR]','http://streamxxx.tv/', 177, '', '')
     utils.addDir('[COLOR yellow]Tags[/COLOR]','http://streamxxx.tv/', 173, '', '')
-    utils.addDir('[COLOR yellow]Search Overall[/COLOR]','http://streamxxx.tv/&s=', 174, '', '')
+    utils.addDir('[COLOR yellow]Search Overall[/COLOR]','http://streamxxx.tv/?s=', 174, '', '')
     utils.addDir('[COLOR yellow]Search Scenes[/COLOR]','http://streamxxx.tv/?cat=1981&s=', 174, '', '')
     utils.addDir('[COLOR yellow]Movies[/COLOR]','http://streamxxx.tv/category/movies/', 175, '', '')
     utils.addDir('[COLOR yellow]International Movies[/COLOR]','http://streamxxx.tv/category/movies/international-movies/', 176, '', '')
