@@ -139,7 +139,7 @@ def playvideo(videosource, name, download=None):
     if re.search('openload\.', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('OpenLoad')
     if re.search('streamin.to', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Streamin (beta)')          
+        hosts.append('Streamin')          
     if re.search('www.flashx.tv', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('FlashX')        
     if len(hosts) == 0:
@@ -198,11 +198,8 @@ def playvideo(videosource, name, download=None):
         progress.update( 40, "", "Loading FlashX", "" )
         flashxurl = re.compile('<iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
         flashxsrc = utils.getHtml2(flashxurl[0])
-        progress.update( 60, "", "Grabbing video file", "" )
-        flashxurl2 = re.compile('<a href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(flashxsrc)
-        flashxsrc2 = utils.getHtml2(flashxurl2[0])
-        progress.update( 70, "", "Grabbing video file", "" ) 
-        flashxjs = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(flashxsrc2)
+        progress.update( 70, "", "Grabbing video file", "" )
+        flashxjs = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(flashxsrc)
         progress.update( 80, "", "Getting video file", "" )
         flashxujs = beautify(flashxjs[0])
         videourl = re.compile(r'\[{\s+file: "([^"]+)",', re.DOTALL | re.IGNORECASE).findall(flashxujs)
