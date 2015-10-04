@@ -2,7 +2,7 @@ import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
-import elreyx, libogski, xvideospanish, pelisxporno, hqporner
+import elreyx, libogski, xvideospanish, pelisxporno, hqporner, videomegaporn
 
 socket.setdefaulttimeout(60)
 
@@ -24,7 +24,7 @@ def INDEX():
     if download_path != '' and os.path.exists(download_path):
         utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Download Folder[/COLOR]',download_path,4,'','')
     xbmcplugin.endOfDirectory(utils.addon_handle)
-    
+
 def INDEXS():
     utils.addDir('[COLOR yellow]WatchXXXFree[/COLOR]','http://www.watchxxxfree.com/page/1/',10,os.path.join(imgDir, 'wxf.png'),'')
     utils.addDir('[COLOR yellow]PornTrex[/COLOR]','http://www.porntrex.com/videos?o=mr&page=1',50,os.path.join(imgDir, 'pt.png'),'')
@@ -35,6 +35,7 @@ def INDEXS():
     utils.addDir('[COLOR yellow]Libogski[/COLOR]','http://libogski.com/category/videos/',120,os.path.join(imgDir, 'libogski.png'),'')
     utils.addDir('[COLOR yellow]XvideoSpanish[/COLOR]','http://www.xvideospanish.com/',130,os.path.join(imgDir, 'xvideospanish.png'),'')
     utils.addDir('[COLOR yellow]HQPorner[/COLOR]','http://hqporner.com/hdporn/1',150,os.path.join(imgDir, 'hqporner.png'),'')
+    utils.addDir('[COLOR yellow]VideoMegaPorn[/COLOR]','http://www.videomegaporn.com/index.html',160,os.path.join(imgDir, 'videomegaporn.png'),'')
     utils.addDir('[COLOR yellow]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -322,5 +323,16 @@ elif mode == 155:
     hqporner.HQSTUDIOS(url)
 elif mode == 156:
     hqporner.HQGIRLS(url)
+
+elif mode == 160:
+    videomegaporn.Main()
+elif mode == 161:
+    videomegaporn.List(url)
+elif mode == 162:
+    videomegaporn.Playvid(url, name, download)
+elif mode == 163:
+    videomegaporn.Categories(url)
+elif mode == 164:
+    videomegaporn.Search(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
