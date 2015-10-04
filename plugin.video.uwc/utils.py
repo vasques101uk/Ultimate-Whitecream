@@ -128,8 +128,12 @@ def downloadVideo(url, name):
 def PLAYVIDEO(url, name, download=None):
     progress.create('Play video', 'Searching videofile.')
     progress.update( 10, "", "Loading video page", "" )
-    hosts = []
     videosource = getHtml(url, url)
+    playvideo(videosource, name, download)
+
+
+def playvideo(videosource, name, download=None):
+    hosts = []
     if re.search('videomega', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('VideoMega')
     if re.search('openload', videosource, re.DOTALL | re.IGNORECASE):
