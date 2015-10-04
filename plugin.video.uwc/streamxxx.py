@@ -8,7 +8,8 @@ progress = utils.progress
 def Main():
     utils.addDir('[COLOR yellow]Categories[/COLOR]','http://streamxxx.tv/', 177, '', '')
     utils.addDir('[COLOR yellow]Tags[/COLOR]','http://streamxxx.tv/', 173, '', '')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://streamxxx.tv/?s=', 174, '', '')
+    utils.addDir('[COLOR yellow]Search Overall[/COLOR]','http://streamxxx.tv/&s=', 174, '', '')
+    utils.addDir('[COLOR yellow]Search Scenes[/COLOR]','http://streamxxx.tv/?cat=1981&s=', 174, '', '')
     utils.addDir('[COLOR yellow]Movies[/COLOR]','http://streamxxx.tv/category/movies/', 175, '', '')
     utils.addDir('[COLOR yellow]International Movies[/COLOR]','http://streamxxx.tv/category/movies/international-movies/', 176, '', '')
     List('http://streamxxx.tv/category/clips/')
@@ -17,7 +18,8 @@ def Main():
 
 def MainMovies():
     utils.addDir('[COLOR yellow]Tags[/COLOR]','http://streamxxx.tv/', 173, '', '')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://streamxxx.tv/?s=', 174, '', '')
+    utils.addDir('[COLOR yellow]Search Overall[/COLOR]','http://streamxxx.tv/&s=', 174, '', '')
+    utils.addDir('[COLOR yellow]Search Movies[/COLOR]','http://streamxxx.tv/?cat=41&s=', 174, '', '')
     utils.addDir('[COLOR yellow]International Movies[/COLOR]','http://streamxxx.tv/category/movies/international-movies/', 176, '', '')
     utils.addDir('[COLOR yellow]Scenes[/COLOR]','http://streamxxx.tv/category/clips/', 170, '', '')
     List('http://streamxxx.tv/category/movies/')
@@ -26,7 +28,8 @@ def MainMovies():
 
 def MainInternationalMovies():
     utils.addDir('[COLOR yellow]Tags[/COLOR]','http://streamxxx.tv/', 173, '', '')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://streamxxx.tv/?s=', 174, '', '')
+    utils.addDir('[COLOR yellow]Search Overall[/COLOR]','http://streamxxx.tv/&s=', 174, '', '')
+    utils.addDir('[COLOR yellow]Search International Movies[/COLOR]','http://streamxxx.tv/?cat=9&s=', 174, '', '')
     utils.addDir('[COLOR yellow]Movies[/COLOR]','http://streamxxx.tv/category/movies/', 175, '', '')
     utils.addDir('[COLOR yellow]Scenes[/COLOR]','http://streamxxx.tv/category/clips/', 170, '', '')
     List('http://streamxxx.tv/category/movies/international-movies/')
