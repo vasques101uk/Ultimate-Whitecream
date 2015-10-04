@@ -59,7 +59,7 @@ def Search(url):
 
 def Categories(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('Clips</a><ul class="sub-menu">(.*?)</ul>', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match = re.compile('Clips</a>.+<ul class="sub-menu">(.*?)</ul>', re.DOTALL | re.IGNORECASE).findall(cathtml)
     match1 = re.compile('href="([^"]+)[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[0])
     for catpage, name in match1:
         utils.addDir(name, catpage, 161, '')
@@ -69,7 +69,7 @@ def Categories(url):
 def Tags(url):
     html = utils.getHtml(url, '')
     match = re.compile('<div class="tagcloud">(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(html)
-    match1 = re.compile('href="([^"]+)[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[0])
+    match1 = re.compile("href='([^']+)[^>]+>([^<]+)<", re.DOTALL | re.IGNORECASE).findall(match[0])
     for catpage, name in match1:
         utils.addDir(name, catpage, 171, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
