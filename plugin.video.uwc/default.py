@@ -2,7 +2,7 @@ import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
-import elreyx, libogski, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx
+import elreyx, libogski, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline
 
 socket.setdefaulttimeout(60)
 
@@ -37,6 +37,7 @@ def INDEXS():
     utils.addDir('[COLOR yellow]HQPorner[/COLOR]','http://hqporner.com/hdporn/1',150,os.path.join(imgDir, 'hqporner.png'),'')
     utils.addDir('[COLOR yellow]VideoMegaPorn[/COLOR]','http://www.videomegaporn.com/index.html',160,os.path.join(imgDir, 'videomegaporn.png'),'')
     utils.addDir('[COLOR yellow]StreamXXX[/COLOR]','http://streamxxx.tv/category/clips/',170,os.path.join(imgDir, 'streamxxx.png'),'')
+    utils.addDir('[COLOR yellow]JavHDonline[/COLOR]','http://javhdonline.com/watch/category/jav-uncensored/',180,os.path.join(imgDir, 'javhdonline.png'),'')
     utils.addDir('[COLOR yellow]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -349,5 +350,17 @@ elif mode == 176:
     streamxxx.MainInternationalMovies()
 elif mode == 177:
     streamxxx.Categories(url)
+
+elif mode == 180:
+    javhdonline.Main()
+elif mode == 181:
+    javhdonline.List(url)
+elif mode == 182:
+    javhdonline.Playvid(url, name, download)
+elif mode == 183:
+    javhdonline.Tags(url)
+elif mode == 184:
+    javhdonline.Search(url)
+
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
