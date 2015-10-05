@@ -65,7 +65,7 @@ def Categories(url):
     match = re.compile('Clips</a>.+<ul class="sub-menu">(.*?)</ul>', re.DOTALL | re.IGNORECASE).findall(cathtml)
     match1 = re.compile('href="([^"]+)[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[0])
     for catpage, name in match1:
-        utils.addDir(name, catpage, 161, '')
+        utils.addDir(name, catpage, 171, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
