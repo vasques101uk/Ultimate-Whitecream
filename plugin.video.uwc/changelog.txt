@@ -1,5 +1,7 @@
 [B]Version 1.0.48[/B]
 Fixed: Videomega playback due to refactoring playvideo()
+Added: javHDonline (credits to Fr33m1nd)
+Added: YourFreeTube
 
 
 [B]Version 1.0.47[/B]

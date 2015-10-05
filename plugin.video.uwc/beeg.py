@@ -18,7 +18,7 @@ def BGMain():
 
 
 def BGList(url):
-    listhtml = utils.getHtml(url, '')
+    listhtml = utils.getHtml2(url)
     Ids = re.compile(r"tumb_id  =\[(.*?)\]", re.DOTALL | re.IGNORECASE).findall(listhtml)
     Names = re.compile(r"tumb_alt =\[(.*?)\]", re.DOTALL | re.IGNORECASE).findall(listhtml)
     
