@@ -165,8 +165,13 @@ def playvideo(videosource, name, download=None, url=None):
             hashref = re.compile(r'view\.php\?ref=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)
         elif re.search("videomega.tv/cdn.php", videosource, re.DOTALL | re.IGNORECASE):
             hashref = re.compile(r'cdn\.php\?ref=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)
+        elif re.search("videomega.tv/\?ref=", videosource, re.DOTALL | re.IGNORECASE):
+            hashref = re.compile(r'tv/\?ref=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)
         else:
             hashkey = re.compile("""hashkey=([^"']+)""", re.DOTALL | re.IGNORECASE).findall(videosource)
+            if not hashkey:
+                dialog.ok('Oh oh','Couldn\'t find playable videomega link')
+                return
             if len(hashkey) > 1:
                 i = 1
                 hashlist = []
