@@ -28,7 +28,7 @@ def MainMovies():
 
 def MainInternationalMovies():
     utils.addDir('[COLOR yellow]Tags[/COLOR]','http://streamxxx.tv/', 173, '', '')
-    utils.addDir('[COLOR yellow]Search Overall[/COLOR]','http://streamxxx.tv/&s=', 174, '', '')
+    utils.addDir('[COLOR yellow]Search Overall[/COLOR]','http://streamxxx.tv/?s=', 174, '', '')
     utils.addDir('[COLOR yellow]Search International Movies[/COLOR]','http://streamxxx.tv/?cat=9&s=', 174, '', '')
     utils.addDir('[COLOR yellow]Movies[/COLOR]','http://streamxxx.tv/category/movies/', 175, '', '')
     utils.addDir('[COLOR yellow]Scenes[/COLOR]','http://streamxxx.tv/category/clips/', 170, '', '')
@@ -44,7 +44,8 @@ def List(url):
         utils.addDownLink(name, videopage, 172, img, '')
     try:
         nextp=re.compile('<a class="nextpostslink" rel="next" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-        utils.addDir('Next Page', nextp[0], 171,'')
+        nextp = nextp[0].replace("&#038;", "&")
+        utils.addDir('Next Page', nextp, 171,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
