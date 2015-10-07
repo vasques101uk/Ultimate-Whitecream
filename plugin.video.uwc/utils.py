@@ -165,8 +165,13 @@ def playvideo(videosource, name, download=None, url=None):
             hashref = re.compile(r'view\.php\?ref=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)
         elif re.search("videomega.tv/cdn.php", videosource, re.DOTALL | re.IGNORECASE):
             hashref = re.compile(r'cdn\.php\?ref=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)
+        elif re.search("videomega.tv/\?ref=", videosource, re.DOTALL | re.IGNORECASE):
+            hashref = re.compile(r'videomega.tv/\?ref=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)
         else:
             hashkey = re.compile("""hashkey=([^"']+)""", re.DOTALL | re.IGNORECASE).findall(videosource)
+            if not hashkey:
+                dialog.ok('Oh oh','Couldn\'t find playable videomega link')
+                return
             if len(hashkey) > 1:
                 i = 1
                 hashlist = []
@@ -199,10 +204,10 @@ def playvideo(videosource, name, download=None, url=None):
     elif vidhost == 'FlashX':
         progress.update( 40, "", "Loading FlashX", "" )
         flashxurl = re.compile('<iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
-        flashxsrc = utils.getHtml2(flashxurl[0])
+        flashxsrc = getHtml2(flashxurl[0])
         progress.update( 60, "", "Grabbing video file", "" )
         flashxurl2 = re.compile('<a href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(flashxsrc)
-        flashxsrc2 = utils.getHtml2(flashxurl2[0])
+        flashxsrc2 = getHtml2(flashxurl2[0])
         progress.update( 70, "", "Grabbing video file", "" ) 
         flashxjs = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(flashxsrc2)
         progress.update( 80, "", "Getting video file", "" )
@@ -210,11 +215,12 @@ def playvideo(videosource, name, download=None, url=None):
         videourl = re.compile(r'\[{\s+file: "([^"]+)",', re.DOTALL | re.IGNORECASE).findall(flashxujs)
         videourl = videourl[0]
     progress.close()
+    playvid(videourl, name, download)
+
+
+def playvid(videourl, name, download=None):
     if download == 1:
-        if re.search('videomega', videourl, re.DOTALL | re.IGNORECASE):
-            dialog.ok('Downloader','You can\'t download from videomega')
-        else:
-            downloadVideo(videourl, name)
+        downloadVideo(videourl, name)
     else:
         iconimage = xbmc.getInfoImage("ListItem.Thumb")
         listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
@@ -234,6 +240,7 @@ def getHtml(url, referer, hdr=None):
     cj.save(cookiePath)
     response.close()
     return data
+
     
 def postHtml(url, form_data={}, headers={}, compression=True):
     _user_agent = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.1 ' + \

@@ -50,32 +50,20 @@ def HQSEARCH(url):
 
 
 def HQPLAY(url, name, download=None):
-
-    def playvid():
-        if download == 1:
-            utils.downloadVideo(videourl, name)
-        else:
-            iconimage = xbmc.getInfoImage("ListItem.Thumb")
-            listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-            listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-            xbmc.Player().play(videourl, listitem) 
-            
     videopage = utils.getHtml(url, '')
     iframeurl = re.compile(r'<iframe\swidth="\d+"\sheight="\d+"\ssrc="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
     #if re.search('hqporner', iframeurl[0], re.DOTALL | re.IGNORECASE):
     #    videourl = getHQ(iframeurl[0])
-    #    playvid()
     if re.search('bemywife', iframeurl[0], re.DOTALL | re.IGNORECASE):
         videourl = getBMW(iframeurl[0])
-        playvid()
     elif re.search('5\.79', iframeurl[0], re.DOTALL | re.IGNORECASE):
         videourl = getIP(iframeurl[0])
-        playvid()
     elif re.search('flyflv', iframeurl[0], re.DOTALL | re.IGNORECASE):
         videourl = getFly(iframeurl[0])
-        playvid()        
     else:
         utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
+        return
+    utils.playvid(videourl, name, download)
 
 
 def getBMW(url):

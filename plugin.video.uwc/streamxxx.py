@@ -28,7 +28,7 @@ def MainMovies():
 
 def MainInternationalMovies():
     utils.addDir('[COLOR yellow]Tags[/COLOR]','http://streamxxx.tv/', 173, '', '')
-    utils.addDir('[COLOR yellow]Search Overall[/COLOR]','http://streamxxx.tv/&s=', 174, '', '')
+    utils.addDir('[COLOR yellow]Search Overall[/COLOR]','http://streamxxx.tv/?s=', 174, '', '')
     utils.addDir('[COLOR yellow]Search International Movies[/COLOR]','http://streamxxx.tv/?cat=9&s=', 174, '', '')
     utils.addDir('[COLOR yellow]Movies[/COLOR]','http://streamxxx.tv/category/movies/', 175, '', '')
     utils.addDir('[COLOR yellow]Scenes[/COLOR]','http://streamxxx.tv/category/clips/', 170, '', '')
@@ -44,7 +44,8 @@ def List(url):
         utils.addDownLink(name, videopage, 172, img, '')
     try:
         nextp=re.compile('<a class="nextpostslink" rel="next" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-        utils.addDir('Next Page', nextp[0], 171,'')
+        nextp = nextp[0].replace("&#038;", "&")
+        utils.addDir('Next Page', nextp, 171,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -82,5 +83,12 @@ def Playvid(url, name, download=None):
     progress.create('Play video', 'Searching videofile.')
     progress.update( 25, "", "Loading video page", "" )
     html = utils.getHtml(url, '')
-    videosource = re.compile('<div class="webwarez">(.*?)</iframe>', re.DOTALL | re.IGNORECASE).findall(html)
-    utils.playvideo(videosource[0], name, download)
+    if re.search("keeplinks.eu", html, re.DOTALL | re.IGNORECASE):
+        videosource = re.compile('<div class="webwarez">(.*?)</iframe>', re.DOTALL | re.IGNORECASE).findall(html)
+        if not videosource:
+            utils.dialog.ok('Oh oh','Links are encrypted.')
+            return
+        utils.playvideo(videosource[0], name, download, url)
+    videosource = re.compile('<div class="webwarez">(.*?)</body>', re.DOTALL | re.IGNORECASE).findall(html)
+    html = videosource[0].replace("http://linkshrink.net/zCOH=", "")
+    utils.playvideo(html, name, download, url)
