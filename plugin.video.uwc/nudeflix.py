@@ -6,7 +6,7 @@ import utils
 
 def NFMain():
     utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.nudeflix.com/browse',44,'','')
-    NFList('http://www.nudeflix.com/browse?order=released&page=1',1)
+    NFList('http://www.nudeflix.com/browse/cover?order=released&page=1',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -36,20 +36,17 @@ def NFList(url,page):
 
 def NFScenes(url):
     scenehtml = utils.getHtml(url, '')
-    match = re.compile(r'class="scene">.*?href="([^"]+)"[^(]+?\(([^)]+)\).*?<div class="description">[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(scenehtml)
+    match = re.compile('class="scene">.*?<img class="poster" src="([^"]+)".*?data-src="([^"]+)".*?<div class="description">[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(scenehtml)
     scenecount = 1
-    for sceneurl, img, desc in match:
+    for img, sceneurl, desc in match:
         name = 'Scene ' + str(scenecount)
         scenecount = scenecount + 1
-        sceneurl = 'http://www.nudeflix.com' + sceneurl
         utils.addDownLink(name, sceneurl, 43, img, desc)        
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def NFPlayvid(url, name, download=None):
-    videopage = utils.getHtml(url, '')
-    match = re.compile('<source src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
-    videourl = match[0]
+    videourl = url
     if download == 1:
         utils.downloadVideo(videourl, name)
     else:

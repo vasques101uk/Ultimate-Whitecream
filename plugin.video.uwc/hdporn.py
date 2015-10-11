@@ -1,6 +1,8 @@
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
+import urlparse, json
+
 import utils
 
 progress = utils.progress
@@ -81,25 +83,8 @@ def PPlayvid(url, name, alternative=1, download=None):
     elif re.search('video_ext.php\?', videopage, re.DOTALL | re.IGNORECASE):
         match = re.compile('<iframe.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
         progress.update( 30, "", "Opening VK video page", "" )
-        vkpage = utils.getHtml(match[0], url)
-        
-        link = re.search('script.setAttribute\(\'src\',\s\'(.*?access_token=)(.*?)&callback', vkpage)
-        
-        if link:
-            token = link.group(2).decode('string-escape')
-            link = link.group(1) + token + '&callback=callbackFunc'
-        i = 30
-        while 1:
-            if i < 98:
-                i += 1
-            progress.update( i, "", "Trying to load video from VK", "" )
-            vkpage2 = utils.getHtml(link, '')
-            if not 'Too many requests per second' in vkpage2:
-                break
-        videolink = re.findall(r'mp4_\d+":"([^"]+)"', vkpage2)
-        if videolink:
-            videolink = videolink[-1].replace('\/','/')
-        if not videolink:
+        videourl = getVK(match[0])
+        if not videourl:
             if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
                 alturl, nalternative = GetAlternative(url, alternative)
                 PPlayvid(alturl, name, nalternative, download)
@@ -107,7 +92,6 @@ def PPlayvid(url, name, alternative=1, download=None):
                 progress.close()
                 utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
         else:
-            videourl = videolink
             playvid()              
     elif re.search('/\?V=', videopage, re.DOTALL | re.IGNORECASE):
         try:
@@ -182,3 +166,46 @@ def PSearch(url):
     searchUrl = searchUrl + title
     print "Searching URL: " + searchUrl
     PAQList(searchUrl, 1)
+
+
+def getVK(url):
+
+    def __get_private(oid, video_id):
+        private_url = 'http://vk.com/al_video.php?act=show_inline&al=1&video=%s_%s' % (oid, video_id)
+        html = utils.getHtml(private_url,'')
+        html = re.sub(r'[^\x00-\x7F]+', ' ', html)
+        match = re.search('var\s+vars\s*=\s*({.+?});', html)
+        try: return json.loads(match.group(1))
+        except: return {}
+        return {}
+    
+    query = url.split('?', 1)[-1]
+    query = urlparse.parse_qs(query)
+    api_url = 'http://api.vk.com/method/video.getEmbed?oid=%s&video_id=%s&embed_hash=%s' % (query['oid'][0], query['id'][0], query['hash'][0])
+    progress.update( 40, "", "Opening VK video page", "" )
+    html = utils.getHtml(api_url,'')
+    html = re.sub(r'[^\x00-\x7F]+', ' ', html)
+    
+    try: result = json.loads(html)['response']
+    except: result = __get_private(query['oid'][0], query['id'][0])
+    
+    quality_list = []
+    link_list = []
+    best_link = ''
+    for quality in ['url240', 'url360', 'url480', 'url540', 'url720']:
+        if quality in result:
+            quality_list.append(quality[3:])
+            link_list.append(result[quality])
+            best_link = result[quality]
+    
+    if quality_list:
+        if len(quality_list) > 1:
+            result = xbmcgui.Dialog().select('Choose the quality', quality_list)
+            if result == -1:
+                utils.dialog.ok('Oh oh','No video selected')
+            else:
+                return link_list[result] + '|User-Agent=%s' % (utils.USER_AGENT)
+        else:
+            return link_list[0] + '|User-Agent=%s' % (utils.USER_AGENT)
+    return
+

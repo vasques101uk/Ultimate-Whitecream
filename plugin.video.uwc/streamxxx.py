@@ -80,15 +80,4 @@ def Tags(url):
 
 
 def Playvid(url, name, download=None):
-    progress.create('Play video', 'Searching videofile.')
-    progress.update( 25, "", "Loading video page", "" )
-    html = utils.getHtml(url, '')
-    if re.search("keeplinks.eu", html, re.DOTALL | re.IGNORECASE):
-        videosource = re.compile('<div class="webwarez">(.*?)</iframe>', re.DOTALL | re.IGNORECASE).findall(html)
-        if not videosource:
-            utils.dialog.ok('Oh oh','Links are encrypted.')
-            return
-        utils.playvideo(videosource[0], name, download, url)
-    videosource = re.compile('<div class="webwarez">(.*?)</body>', re.DOTALL | re.IGNORECASE).findall(html)
-    html = videosource[0].replace("http://linkshrink.net/zCOH=", "")
-    utils.playvideo(html, name, download, url)
+    utils.PLAYVIDEO(url, name, download)

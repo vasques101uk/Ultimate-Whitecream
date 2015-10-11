@@ -9,7 +9,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd"
-__version__ = "1.0.49"
+__version__ = "1.0.50"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -189,8 +189,21 @@ def playvideo(videosource, name, download=None, url=None):
         videourl = videourl[0]
     elif vidhost == 'OpenLoad':
         progress.update( 40, "", "Loading Openload", "" )
-        openloadurl = re.compile(r'<iframe.*?src="((?:https?://)?(?:www\.)?openload[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
-        openloadsrc = getHtml(openloadurl[0], '', openloadhdr)
+        #openloadurl = re.compile(r'<iframe.*?src="((?:https?://)?(?:www\.)?openload[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
+        openloadurl = re.compile(r"//(?:www\.)?openload\.(?:co|io)?/(?:embed|f)/([0-9a-zA-Z-_]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
+        if len(openloadurl) > 1:
+            i = 1
+            hashlist = []
+            openloadlist = list(set(openloadurl))
+            for x in openloadlist:
+                hashlist.append('Video ' + str(i))
+                i += 1
+            olvideo = dialog.select('Multiple parts found', hashlist)
+            openloadurl = openloadlist[olvideo]
+        else: openloadurl = openloadurl[0]
+        
+        openloadurl = 'https://openload.co/embed/%s/' % openloadurl
+        openloadsrc = getHtml(openloadurl, '', openloadhdr)
         progress.update( 80, "", "Getting video file", "")
         videourl = decodeOpenLoad(openloadsrc)
     elif vidhost == 'Streamin':

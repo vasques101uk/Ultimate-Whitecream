@@ -30,7 +30,7 @@ def INDEXS():
     utils.addDir('[COLOR yellow]PornTrex[/COLOR]','http://www.porntrex.com/videos?o=mr&page=1',50,os.path.join(imgDir, 'pt.png'),'')
     utils.addDir('[COLOR yellow]PornAQ[/COLOR]','http://www.pornaq.com/page/1/',60,os.path.join(imgDir, 'paq.png'),'')
     utils.addDir('[COLOR yellow]Porn00[/COLOR]','http://www.porn00.com/page/1/',64,os.path.join(imgDir, 'p00.png'),'')
-    #utils.addDir('[COLOR yellow]Beeg[/COLOR]','http://beeg.com/page-1',80,os.path.join(imgDir, 'bg.png'),'')
+    utils.addDir('[COLOR yellow]Beeg[/COLOR]','http://beeg.com/page-1',80,os.path.join(imgDir, 'bg.png'),'')
     utils.addDir('[COLOR yellow]ElReyX[/COLOR]','http://elreyx.com/index1.html',110,os.path.join(imgDir, 'elreyx.png'),'')
     utils.addDir('[COLOR yellow]Libogski[/COLOR]','http://libogski.com/category/videos/',120,os.path.join(imgDir, 'libogski.png'),'')
     utils.addDir('[COLOR yellow]XvideoSpanish[/COLOR]','http://www.xvideospanish.com/',130,os.path.join(imgDir, 'xvideospanish.png'),'')
@@ -44,7 +44,7 @@ def INDEXS():
 
 def INDEXM():    
     utils.addDir('[COLOR yellow]Xtheatre[/COLOR]','http://xtheatre.net/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
-    #utils.addDir('[COLOR yellow]Nudeflix[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,os.path.join(imgDir, 'nf.png'),'')
+    utils.addDir('[COLOR yellow]Nudeflix[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,os.path.join(imgDir, 'nf.png'),'')
     utils.addDir('[COLOR yellow]PornHive[/COLOR]','http://www.pornhive.tv/en/movies/all',70,os.path.join(imgDir, 'ph.png'),'')
     utils.addDir('[COLOR yellow]ElReyX[/COLOR]','http://elreyx.com/index1.html',116,os.path.join(imgDir, 'elreyx.png'),'')
     utils.addDir('[COLOR yellow]Libogski[/COLOR]','http://libogski.com/category/movies/',125,os.path.join(imgDir, 'libogski.png'),'')

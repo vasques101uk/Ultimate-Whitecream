@@ -1,6 +1,8 @@
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
+import json
+
 import utils
 
 # 80 BGMain
@@ -10,72 +12,70 @@ import utils
 # 84 BGSearch
 
 def BGMain():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.beeg.com',83,'','')
-    utils.addDir('[COLOR yellow]Long videos[/COLOR]','http://beeg.com/tag/long+videos/',81,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://beeg.com/search?q=',84,'','')
-    BGList('http://beeg.com/')
+    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://beeg.com/api/v1/index/main/0/pc',83,'','')
+    utils.addDir('[COLOR yellow]Search[/COLOR]','http://beeg.com/api/v1/index/search/0/pc?query=',84,'','')
+    BGList('http://beeg.com/api/v1/index/main/0/pc')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def BGList(url):
-    listhtml = utils.getHtml2(url)
-    Ids = re.compile(r"tumb_id  =\[(.*?)\]", re.DOTALL | re.IGNORECASE).findall(listhtml)
-    Names = re.compile(r"tumb_alt =\[(.*?)\]", re.DOTALL | re.IGNORECASE).findall(listhtml)
-    
-    SplitIds = re.split('\,+', Ids[0])
-    Names[0] = Names[0].lstrip('\'')
-    Names[0] = Names[0].rstrip('\'')
-    SplitNames = re.split('\'\,\'+', Names[0])
-    
-    for id, name in zip(SplitIds, SplitNames):
-        name = utils.cleantext(name)
-        name = name.replace('\\\'','\'')
-        videopage = 'http://www.beeg.com/' + id
-        img = 'http://img.beeg.com/236x177/' + id + '.jpg'
+    listjson = utils.getHtml2(url)
+    jsondata = json.loads(listjson)
+
+    for videos in jsondata["videos"]:
+        img = "http://img.beeg.com/236x177/" + videos["id"] +  ".jpg"
+        videopage = "http://beeg.com/api/v1/video/" + videos["id"]
+        name = videos["title"].encode("utf8")
         utils.addDownLink(name, videopage, 82, img, '')
-    
     try:
-        nextp=re.compile('<a href="([^"]+)" target="_self" id="paging_next"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-        nextp = 'http://www.beeg.com' + nextp[0]
-        utils.addDir('Next Page', nextp,81,'')
+        page=re.compile('http://beeg.com/api/v1/index/[^/]+/([0-9]+)/pc', re.DOTALL | re.IGNORECASE).findall(url)
+        if jsondata["pages"] > page:
+            nextp = url.replace("/"+str(page)+"/", "/"+str(page+1)+"/")
+            utils.addDir('Next Page', nextp,81,'')
     except: pass
-    
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def BGPlayvid(url, name, download=None):
-    videopage = utils.getHtml(url, '')
-    match = re.compile("'720p': '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
-    if not match:
-        match = re.compile("'480p': '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
-    if not match:
-        match = re.compile("'240p': '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
-    if match:    
-        videourl = match[0]
-        if download == 1:
-            utils.downloadVideo(videourl, name)
-        else:
-            iconimage = xbmc.getInfoImage("ListItem.Thumb")
-            listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-            listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-            listitem.setProperty("IsPlayable","true")
-            if int(sys.argv[1]) == -1:
-                pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-                pl.clear()
-                pl.add(videourl, listitem)
-                xbmc.Player().play(pl)
-                #xbmc.Player().play(videourl, listitem)
-            else:
-                listitem.setPath(str(videourl))
-                xbmcplugin.setResolvedUrl(utils.addon_handle, True, listitem)
+    videopage = utils.getHtml2(url)
+    videopage = json.loads(videopage)
+    
+    if not videopage["240p"] == None:
+        url = videopage["240p"].encode("utf8")
+    if not videopage["480p"] == None:
+        url = videopage["480p"].encode("utf8")
+    if not videopage["720p"] == None:
+        url = videopage["720p"].encode("utf8")
 
+    url = url.replace("{DATA_MARKERS}","data=pc.XX")
+    if not url.startswith("http:"): url = "http:" + url
+    videourl = url
+
+    if download == 1:
+        utils.downloadVideo(videourl, name)
+    else:
+        iconimage = xbmc.getInfoImage("ListItem.Thumb")
+        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+        listitem.setProperty("IsPlayable","true")
+        if int(sys.argv[1]) == -1:
+            pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+            pl.clear()
+            pl.add(videourl, listitem)
+            xbmc.Player().play(pl)
+        else:
+            listitem.setPath(str(videourl))
+            xbmcplugin.setResolvedUrl(utils.addon_handle, True, listitem)
 
 
 def BGCat(url):
-    caturl = utils.getHtml(url, '')
-    match = re.compile(r'<li><a target="_self" href="([^"]+)"\s+title="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(caturl)
-    for videolist, name in match:
-        videolist = "http://www.beeg.com" + videolist
+    caturl = utils.getHtml2(url)
+    catjson = json.loads(caturl)
+    
+    for tag in catjson["tags"]["popular"]:
+        videolist = "http://beeg.com/api/v1/index/tag/0/pc?tag=" + tag.encode("utf8")
+        name = tag.encode("utf8")
+        name = name[:1].upper() + name[1:]
         utils.addDir(name, videolist, 81, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

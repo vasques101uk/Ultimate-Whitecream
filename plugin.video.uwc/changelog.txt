@@ -1,3 +1,11 @@
+[B]Version 1.0.50[/B]
+Fixed: StreamXXX fix from Fr33m1nd
+Fixed: Pornaq video's from VK
+Fixed: Beeq
+Fixed: Nudeflix
+Changed: Multiple Openload video's support for StreamXXX
+
+
 [B]Version 1.0.49[/B]
 Changed: oops, forgot to include another bug fix
 Changed: New logo
