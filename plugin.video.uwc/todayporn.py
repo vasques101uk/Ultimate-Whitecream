@@ -38,7 +38,7 @@ def TPList(url, page):
 
 def TPPlayvid(url, name, download=None):
     videopage = utils.getHtml(url, '')
-    match = re.compile("url: '([^']+flv)'", re.DOTALL | re.IGNORECASE).findall(videopage)
+    match = re.compile("url: '([^']+(?:flv|mp4))'", re.DOTALL | re.IGNORECASE).findall(videopage)
     if match:
         videourl = match[0]
         if download == 1:

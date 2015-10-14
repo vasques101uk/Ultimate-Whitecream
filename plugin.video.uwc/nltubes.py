@@ -16,11 +16,11 @@ sitelist = ['http://www.poldertube.nl', 'http://www.milf.nl', 'http://www.sextub
 
 def NLTUBES(url, site):
     siteurl = sitelist[site]
-    utils.addDir('Categories', siteurl + '/categorieen',103,'', site)
+    utils.addDir('[COLOR yellow]Categories[/COLOR]', siteurl + '/categorieen',103,'', site)
     if site == 0:
-        utils.addDir('Search', siteurl + '/pornofilms/zoeken/',104,'', site)
+        utils.addDir('[COLOR yellow]Search[/COLOR]', siteurl + '/pornofilms/zoeken/',104,'', site)
     else:
-        utils.addDir('Search', siteurl + '/videos/zoeken/',104,'', site)
+        utils.addDir('[COLOR yellow]Search[/COLOR]', siteurl + '/videos/zoeken/',104,'', site)
     NLVIDEOLIST(url, site)
 
 

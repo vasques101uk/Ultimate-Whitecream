@@ -3,6 +3,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, libogski, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
+import xtasie, streampleasure
 
 socket.setdefaulttimeout(60)
 
@@ -38,7 +39,9 @@ def INDEXS():
     utils.addDir('[COLOR yellow]VideoMegaPorn[/COLOR]','http://www.videomegaporn.com/index.html',160,os.path.join(imgDir, 'videomegaporn.png'),'')
     utils.addDir('[COLOR yellow]StreamXXX[/COLOR]','http://streamxxx.tv/category/clips/',170,os.path.join(imgDir, 'streamxxx.png'),'')
     utils.addDir('[COLOR yellow]JavHDonline[/COLOR]','http://javhdonline.com/watch/category/jav-uncensored/',180,os.path.join(imgDir, 'javhdonline.png'),'')
-    utils.addDir('[COLOR yellow]YourFreeTube[/COLOR]','http://www.yourfreetube.net/newvideos.html',190,'','')    
+    utils.addDir('[COLOR yellow]YourFreeTube[/COLOR]','http://www.yourfreetube.net/newvideos.html',190,'','')
+    utils.addDir('[COLOR yellow]Xtasie[/COLOR]','http://xtasie.com/porn-video-list/page/1/',200,os.path.join(imgDir, 'xtasie.png'),'')
+    utils.addDir('[COLOR yellow]StreamPleasure[/COLOR]','http://streampleasure.com/newest-videos/page/1/?orderby=date',210,os.path.join(imgDir, 'streampleasure.png'),'')    
     utils.addDir('[COLOR yellow]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -65,6 +68,7 @@ def ONELIST(page):
     hdporn.PAQList('http://www.pornaq.com/page/1/',page, True)
     hdporn.PAQList('http://www.porn00.org/page/1/',page, True)
     porntrex.PTList('http://www.porntrex.com/videos?o=mr&page=1',page, True)
+    streampleasure.SPList('http://streampleasure.com/newest-videos/page/1/?orderby=date',page, True)
     npage = page + 1
     utils.addDir('[COLOR yellow]Next page ('+ str(npage) +')[/COLOR]','',5,'',npage)
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -362,7 +366,7 @@ elif mode == 183:
     javhdonline.Tags(url)
 elif mode == 184:
     javhdonline.Search(url)
-    
+
 elif mode == 190:
     yourfreetube.YFTMain()
 elif mode == 191:
@@ -373,7 +377,26 @@ elif mode == 193:
     yourfreetube.YFTCat(url)
 elif mode == 194:
     yourfreetube.YFTSearch(url)
-    
+
+elif mode == 200:
+    xtasie.XTCMain()
+elif mode == 201:
+    xtasie.XTCList(url)
+elif mode == 202:
+    xtasie.XTCPlayvid(url, name, download)
+elif mode == 203:
+    xtasie.XTCCat(url)
+elif mode == 204:
+    xtasie.XTCSearch(url)
+
+elif mode == 210:
+    streampleasure.SPMain()
+elif mode == 211:
+    streampleasure.SPList(url,page)
+elif mode == 212:
+    streampleasure.SPPlayvid(url, name, download)
+elif mode == 213:
+    streampleasure.SPSearch(url)
 
 
 xbmcplugin.endOfDirectory(utils.addon_handle)

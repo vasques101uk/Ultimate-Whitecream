@@ -9,7 +9,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd"
-__version__ = "1.0.50"
+__version__ = "1.0.51"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -189,12 +189,11 @@ def playvideo(videosource, name, download=None, url=None):
         videourl = videourl[0]
     elif vidhost == 'OpenLoad':
         progress.update( 40, "", "Loading Openload", "" )
-        #openloadurl = re.compile(r'<iframe.*?src="((?:https?://)?(?:www\.)?openload[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
         openloadurl = re.compile(r"//(?:www\.)?openload\.(?:co|io)?/(?:embed|f)/([0-9a-zA-Z-_]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        if len(openloadurl) > 1:
+        openloadlist = list(set(openloadurl))
+        if len(openloadlist) > 1:
             i = 1
             hashlist = []
-            openloadlist = list(set(openloadurl))
             for x in openloadlist:
                 hashlist.append('Video ' + str(i))
                 i += 1
@@ -359,11 +358,13 @@ def decodeOpenLoad(html):
     aastring = aastring.replace("(ﾟДﾟ)[ﾟεﾟ]","\\")
     aastring = aastring.replace("(3 +3 +0)","6")
     aastring = aastring.replace("(3 - 1 +0)","2")
+    aastring = aastring.replace("(1 -0)","1")
 
     decodestring = re.search(r"\\\+([^(]+)", aastring, re.DOTALL | re.IGNORECASE).group(1)
     decodestring = "\\+"+ decodestring
     decodestring = decodestring.replace("+","")
     decodestring = decodestring.replace(" ","")
+    
     decodestring = decode(decodestring)
     decodestring = decodestring.replace("\\/","/")
     

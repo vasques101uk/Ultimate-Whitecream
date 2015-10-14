@@ -12,11 +12,10 @@ def NFMain():
 
 def NFCat(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('<select name="category[^>]+>(.*?)</select>', re.DOTALL | re.IGNORECASE).findall(cathtml)
-    match1 = re.compile('<option value="([^"]+)">([^<]+)</', re.DOTALL | re.IGNORECASE).findall(match[0])
-    for catpage, name in match1:
+    match = re.compile(r'<li>\s+<a href="/browse/category/([^"]+)">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    for catpage, name in match:
         catpage = catpage.replace(' ','%20')
-        catpage = 'http://www.nudeflix.com/browse/category/' + catpage + '?order=released&page=1'
+        catpage = 'http://www.nudeflix.com/browse/category/' + catpage + '/cover?order=released&page=1'
         utils.addDir(name, catpage, 41, '', 1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

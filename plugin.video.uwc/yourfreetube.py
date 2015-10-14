@@ -16,6 +16,7 @@ def YFTList(url):
     listhtml = utils.getHtml(url, '')
     match = re.compile('<a href="([^"]+)"[^<]+<[^<]+<img src="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, img, name in match:
+        name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 192, img, '')
     try:
         nextp=re.compile('<a href="([^"]+)">&raquo;', re.DOTALL | re.IGNORECASE).findall(listhtml)

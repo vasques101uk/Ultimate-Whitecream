@@ -26,6 +26,12 @@ def create_zip_file(addon_dir):
       for file_path in files:
         if file_path.endswith('.zip'):
           continue
+        if file_path.endswith('.bak'):
+          continue  
+        if file_path.endswith('.pyo'):
+          continue         
+        if file_path.endswith('.pyc'):
+          continue          
         print "adding %s" % os.path.join(root, file_path) 
         addonzip.write(os.path.join(root, file_path))
     addonzip.close()

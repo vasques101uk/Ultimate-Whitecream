@@ -1,3 +1,11 @@
+[B]Version 1.0.51[/B]
+Added: Xtasie
+Added: StreamPleasure (it's also in the One List)
+Fixed: TodayPorn
+Fixed: OpenLoad playback
+Fixed: Nudeflix Categories
+
+
 [B]Version 1.0.50[/B]
 Fixed: StreamXXX fix from Fr33m1nd
 Fixed: Pornaq video's from VK
