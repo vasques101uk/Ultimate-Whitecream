@@ -8,7 +8,7 @@ progress = utils.progress
 
 def SPMain():
     utils.addDir('[COLOR yellow]Search[/COLOR]','http://streampleasure.com/page/1/?s=',213,'','')
-    SPList('http://streampleasure.com/newest-videos/page/1/?orderby=date',1)
+    SPList('http://streampleasure.com/page/1/?filtre=date&cat=0',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -16,9 +16,9 @@ def SPList(url, page, onelist=None):
     if onelist:
         url = url.replace('/page/1/','/page/'+str(page)+'/')
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<div id="main">(.*?)#content', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    match1 = re.compile('thumb">.*?href="([^"]+)">.*?<img.*?src="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(match[0])
-    for videopage, img, name in match1:
+    match = re.compile('<div id="content">(.*?)<div class="pagination">', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match1 = re.compile(r'src="([^"]+)".*?<a href="([^"]+)" title="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(match[0])
+    for img, videopage, name in match1:
         name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 212, img, '')
     if not onelist:

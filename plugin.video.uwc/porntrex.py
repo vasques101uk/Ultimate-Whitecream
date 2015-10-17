@@ -14,7 +14,7 @@ def PTList(url, page, onelist=None):
     if onelist:
         url = url.replace('page=1','page='+str(page))
     listhtml = utils.getHtml(url, '')
-    match = re.compile(r'<div class="visible-xs">\s+<img src=.*?data-original="([^"]+)" title="([^"]+)".*?rotate_([^_]+)_[^>]+>(.*?)duration">[^\d]+([^\t\n\r]+)', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile(r'<div class="(?:visible-xs|thumb-overlay)+">\s+<img src=.*?data-original="([^"]+)" title="([^"]+)".*?rotate_([^_]+)_[^>]+>(.*?)duration">[^\d]+([^\t\n\r]+)', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for img, name, urlid, hd, duration in match:
         name = utils.cleantext(name)
         if hd.find('HD') > 0:
@@ -25,7 +25,7 @@ def PTList(url, page, onelist=None):
         name = name + hd + "[COLOR blue]" + duration + "[/COLOR]"
         utils.addDownLink(name, videopage, 52, img, '')
     if not onelist:
-        if re.search('class="prevnext">&raquo;', listhtml, re.DOTALL | re.IGNORECASE):
+        if re.search('class="prevnext">Next', listhtml, re.DOTALL | re.IGNORECASE):
             npage = page + 1        
             url = url.replace('page='+str(page),'page='+str(npage))
             utils.addDir('Next Page ('+str(npage)+')', url, 51, '', npage)

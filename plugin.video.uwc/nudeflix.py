@@ -6,6 +6,7 @@ import utils
 
 def NFMain():
     utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.nudeflix.com/browse',44,'','')
+    utils.addDir('[COLOR yellow]HD[/COLOR]','http://www.nudeflix.com/browse/cover?order=hd&page=1',41,'',1)
     NFList('http://www.nudeflix.com/browse/cover?order=released&page=1',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

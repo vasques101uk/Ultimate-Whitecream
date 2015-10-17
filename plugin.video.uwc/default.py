@@ -3,7 +3,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, libogski, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
-import xtasie, streampleasure
+import xtasie, streampleasure, chaturbate
 
 socket.setdefaulttimeout(60)
 
@@ -21,6 +21,7 @@ def INDEX():
     utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Movies[/COLOR]','',3,'','')
     utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Hentai[/COLOR]','http://www.hentaicraving.com/?genre=Uncensored',30,os.path.join(imgDir, 'hc.jpg'),'')
     utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Tubes[/COLOR]','',6,'','')
+    utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Webcams & Streams[/COLOR]','',7,'','')
     download_path = addon.getSetting('download_path')
     if download_path != '' and os.path.exists(download_path):
         utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Download Folder[/COLOR]',download_path,4,'','')
@@ -41,7 +42,7 @@ def INDEXS():
     utils.addDir('[COLOR yellow]JavHDonline[/COLOR]','http://javhdonline.com/watch/category/jav-uncensored/',180,os.path.join(imgDir, 'javhdonline.png'),'')
     utils.addDir('[COLOR yellow]YourFreeTube[/COLOR]','http://www.yourfreetube.net/newvideos.html',190,'','')
     utils.addDir('[COLOR yellow]Xtasie[/COLOR]','http://xtasie.com/porn-video-list/page/1/',200,os.path.join(imgDir, 'xtasie.png'),'')
-    utils.addDir('[COLOR yellow]StreamPleasure[/COLOR]','http://streampleasure.com/newest-videos/page/1/?orderby=date',210,os.path.join(imgDir, 'streampleasure.png'),'')    
+    utils.addDir('[COLOR yellow]StreamPleasure[/COLOR]','http://streampleasure.com/page/1/?filtre=date&cat=0',210,os.path.join(imgDir, 'streampleasure.png'),'')    
     utils.addDir('[COLOR yellow]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -61,6 +62,11 @@ def INDEXT():
     utils.addDir('[COLOR yellow]Milf.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.milf.nl/videos/nieuw',100,os.path.join(imgDir, 'milfnl.png'),1)
     utils.addDir('[COLOR yellow]Sextube.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.sextube.nl/videos/nieuw',100,os.path.join(imgDir, 'sextube.png'),2)
     xbmcplugin.endOfDirectory(utils.addon_handle)
+    
+def INDEXW():
+    utils.addDir('[COLOR yellow]Chaturbate[/COLOR]','https://chaturbate.com/?page=1',220,os.path.join(imgDir, 'chaturbate.png'),'')
+    xbmcplugin.endOfDirectory(utils.addon_handle)
+
 
 def ONELIST(page):
     print page
@@ -68,7 +74,7 @@ def ONELIST(page):
     hdporn.PAQList('http://www.pornaq.com/page/1/',page, True)
     hdporn.PAQList('http://www.porn00.org/page/1/',page, True)
     porntrex.PTList('http://www.porntrex.com/videos?o=mr&page=1',page, True)
-    streampleasure.SPList('http://streampleasure.com/newest-videos/page/1/?orderby=date',page, True)
+    streampleasure.SPList('http://streampleasure.com/page/1/?filtre=date&cat=0',page, True)
     npage = page + 1
     utils.addDir('[COLOR yellow]Next page ('+ str(npage) +')[/COLOR]','',5,'',npage)
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -140,6 +146,8 @@ elif mode == 5:
     ONELIST(page)
 elif mode == 6:
     INDEXT()
+elif mode == 7:
+    INDEXW()
     
 elif mode == 10:
     watchxxxfree.WXFMain()
@@ -397,6 +405,13 @@ elif mode == 212:
     streampleasure.SPPlayvid(url, name, download)
 elif mode == 213:
     streampleasure.SPSearch(url)
+
+elif mode == 220:
+    chaturbate.Main()
+elif mode == 221:
+    chaturbate.List(url)
+elif mode == 222:
+    chaturbate.Playvid(url, name)
 
 
 xbmcplugin.endOfDirectory(utils.addon_handle)

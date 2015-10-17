@@ -68,8 +68,10 @@ def HQPLAY(url, name, download=None):
 
 def getBMW(url):
     videopage = utils.getHtml(url, '')
+    redirecturl = utils.getVideoLink(url, '')
+    videodomain = re.compile("http://([^/]+)/", re.DOTALL | re.IGNORECASE).findall(redirecturl)[0]
     videos = re.compile('file: "([^"]+mp4)"', re.DOTALL | re.IGNORECASE).findall(videopage)
-    videourl = "http://bemywife.cc" + videos[-1]
+    videourl = "http://" + videodomain + videos[-1]
     return videourl
 
 def getIP(url):

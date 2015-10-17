@@ -9,7 +9,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd"
-__version__ = "1.0.51"
+__version__ = "1.0.52"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -183,7 +183,7 @@ def playvideo(videosource, name, download=None, url=None):
             else: hashkey = hashkey[0]
             hashpage = getHtml('http://videomega.tv/validatehash.php?hashkey='+hashkey, url)
             hashref = re.compile('ref="([^"]+)', re.DOTALL | re.IGNORECASE).findall(hashpage)
-        progress.update( 80, "", "Getting video file", "" )
+        progress.update( 80, "", "Getting video file from Videomega", "" )
         videopage = getHtml('http://videomega.tv/view.php?ref='+hashref[0], url)
         videourl = re.compile('<source src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
         videourl = videourl[0]
@@ -203,7 +203,7 @@ def playvideo(videosource, name, download=None, url=None):
         
         openloadurl = 'https://openload.co/embed/%s/' % openloadurl
         openloadsrc = getHtml(openloadurl, '', openloadhdr)
-        progress.update( 80, "", "Getting video file", "")
+        progress.update( 80, "", "Getting video file from OpenLoad", "")
         videourl = decodeOpenLoad(openloadsrc)
     elif vidhost == 'Streamin':
         progress.update( 40, "", "Loading Streamin", "" )
@@ -211,7 +211,7 @@ def playvideo(videosource, name, download=None, url=None):
         streaminsrc = getHtml2(streaminurl[0])
         videohash = re.compile('h=([^"]+)', re.DOTALL | re.IGNORECASE).findall(streaminsrc)
         videourl = re.compile('image: "(http://[^/]+/)', re.DOTALL | re.IGNORECASE).findall(streaminsrc)
-        progress.update( 80, "", "Getting video file", "" )
+        progress.update( 80, "", "Getting video file from Streamin", "" )
         videourl = videourl[0] + videohash[0] + "/v.mp4"
     elif vidhost == 'FlashX':
         progress.update( 40, "", "Loading FlashX", "" )
@@ -222,7 +222,7 @@ def playvideo(videosource, name, download=None, url=None):
         flashxsrc2 = getHtml2(flashxurl2[0])
         progress.update( 70, "", "Grabbing video file", "" ) 
         flashxjs = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(flashxsrc2)
-        progress.update( 80, "", "Getting video file", "" )
+        progress.update( 80, "", "Getting video file from FlashX", "" )
         flashxujs = beautify(flashxjs[0])
         videourl = re.compile(r'\[{\s+file: "([^"]+)",', re.DOTALL | re.IGNORECASE).findall(flashxujs)
         videourl = videourl[0]
