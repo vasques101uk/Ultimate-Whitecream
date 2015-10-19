@@ -64,7 +64,16 @@ def INDEXT():
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXW():
-    utils.addDir('[COLOR yellow]Chaturbate[/COLOR]','https://chaturbate.com/?page=1',220,os.path.join(imgDir, 'chaturbate.png'),'')
+    utils.addDir('[COLOR yellow]Chaturbate[/COLOR] - webcams','https://chaturbate.com/?page=1',220,os.path.join(imgDir, 'chaturbate.png'),'')
+    utils.addDir('[COLOR yellow]Streams[/COLOR] - beta','',8,'','')
+    xbmcplugin.endOfDirectory(utils.addon_handle)
+    
+def STREAMS():
+    streamurl = 'https://github.com/whitecream01/WhiteCream-V0.0.1/raw/master/plugin.video.uwc/streamlist.m3u'
+    streamlist = utils.getHtml(streamurl, '')
+    match = re.compile('#.+,(.+?)\n(.+?)\n').findall(streamlist)
+    for name, url in match:
+        utils.addDownLink(name, url, 9, '', '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -148,6 +157,10 @@ elif mode == 6:
     INDEXT()
 elif mode == 7:
     INDEXW()
+elif mode == 8:
+    STREAMS()
+elif mode == 9:
+    utils.PlayStream(name, url)
     
 elif mode == 10:
     watchxxxfree.WXFMain()

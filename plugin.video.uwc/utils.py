@@ -9,7 +9,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd"
-__version__ = "1.0.53"
+__version__ = "1.0.54"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -36,6 +36,7 @@ if rootDir[-1] == ';':
 rootDir = xbmc.translatePath(rootDir)
 resDir = os.path.join(rootDir, 'resources')
 imgDir = os.path.join(resDir, 'images')
+streams = xbmc.translatePath(os.path.join(rootDir, 'streamlist.m3u'))
 
 profileDir = addon.getAddonInfo('profile')
 profileDir = xbmc.translatePath(profileDir).decode("utf-8")
@@ -240,6 +241,12 @@ def playvid(videourl, name, download=None):
         xbmc.Player().play(videourl, listitem)
 
 
+def PlayStream(name, url):
+    item = xbmcgui.ListItem(name, path = url)
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+    return
+
+
 def getHtml(url, referer, hdr=None):
     if not hdr:
         req = Request(url, '', headers)
@@ -311,6 +318,7 @@ def addDownLink(name, url, mode, iconimage, desc):
          "&name=" + urllib.quote_plus(name))         
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+    liz.setProperty('IsPlayable', 'true')
     if len(desc) < 1:
         liz.setInfo(type="Video", infoLabels={"Title": name})
     else:
@@ -359,6 +367,7 @@ def decodeOpenLoad(html):
     aastring = aastring.replace("(3 +3 +0)","6")
     aastring = aastring.replace("(3 - 1 +0)","2")
     aastring = aastring.replace("(1 -0)","1")
+    aastring = aastring.replace("(4 -0)","4")
 
     decodestring = re.search(r"\\\+([^(]+)", aastring, re.DOTALL | re.IGNORECASE).group(1)
     decodestring = "\\+"+ decodestring

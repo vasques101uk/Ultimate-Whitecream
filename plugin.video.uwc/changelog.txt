@@ -1,3 +1,8 @@
+[B]Version 1.0.54[/B]
+Fixed: OpenLoad playback
+Added: Streams (beta), a lot of streams from all around the internet, some work...some not.
+
+
 [B]Version 1.0.53[/B]
 Changed: Addon logo to png, and a smaller size
 
