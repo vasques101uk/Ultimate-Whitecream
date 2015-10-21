@@ -73,7 +73,7 @@ def STREAMS():
     streamlist = utils.getHtml(streamurl, '')
     match = re.compile('#.+,(.+?)\n(.+?)\n').findall(streamlist)
     for name, url in match:
-        utils.addDownLink(name, url, 9, '', '')
+        utils.addDownLink(name, url, 9, '', '', True)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
