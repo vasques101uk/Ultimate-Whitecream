@@ -1,3 +1,21 @@
+'''
+    Ultimate Whitecream
+    Copyright (C) 2015 mortael
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
@@ -38,7 +56,7 @@ def TPList(url, page):
 
 def TPPlayvid(url, name, download=None):
     videopage = utils.getHtml(url, '')
-    match = re.compile("url: '([^']+(?:flv|mp4))'", re.DOTALL | re.IGNORECASE).findall(videopage)
+    match = re.compile(r"url: '([^']+)',\s+f", re.DOTALL | re.IGNORECASE).findall(videopage)
     if match:
         videourl = match[0]
         if download == 1:
