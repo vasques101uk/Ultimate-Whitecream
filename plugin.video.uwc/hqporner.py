@@ -68,7 +68,7 @@ def HQSEARCH(url):
 
 
 def HQPLAY(url, name, download=None):
-    videopage = utils.getHtml(url, '')
+    videopage = utils.getHtml(url, url)
     iframeurl = re.compile(r'<iframe\swidth="\d+"\sheight="\d+"\ssrc="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
     #if re.search('hqporner', iframeurl[0], re.DOTALL | re.IGNORECASE):
     #    videourl = getHQ(iframeurl[0])

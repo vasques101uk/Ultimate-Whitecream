@@ -27,7 +27,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd"
-__version__ = "1.0.56"
+__version__ = "1.0.57"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -153,7 +153,7 @@ def PLAYVIDEO(url, name, download=None):
 
 def playvideo(videosource, name, download=None, url=None):
     hosts = []
-    if re.search('videomega\.', videosource, re.DOTALL | re.IGNORECASE):
+    if re.search('videomega\.tv/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('VideoMega')
     if re.search('openload\.', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('OpenLoad')
@@ -195,9 +195,9 @@ def playvideo(videosource, name, download=None, url=None):
                 i = 1
                 hashlist = []
                 for x in hashkey:
-                    hashlist.append('Part ' + str(i))
+                    hashlist.append('Video ' + str(i))
                     i += 1
-                vmvideo = dialog.select('Multiple parts found', hashlist)
+                vmvideo = dialog.select('Multiple videos found', hashlist)
                 hashkey = hashkey[vmvideo]
             else: hashkey = hashkey[0]
             hashpage = getHtml('http://videomega.tv/validatehash.php?hashkey='+hashkey, url)
@@ -216,7 +216,7 @@ def playvideo(videosource, name, download=None, url=None):
             for x in openloadlist:
                 hashlist.append('Video ' + str(i))
                 i += 1
-            olvideo = dialog.select('Multiple parts found', hashlist)
+            olvideo = dialog.select('Multiple videos found', hashlist)
             openloadurl = openloadlist[olvideo]
         else: openloadurl = openloadurl[0]
         

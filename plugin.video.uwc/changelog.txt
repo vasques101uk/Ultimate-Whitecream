@@ -1,3 +1,8 @@
+[B]Version 1.0.57[/B]
+Fixed: HQPorner, noticed it sometimes needed a referer
+Changed: Small improvement finding a working Videomega link
+
+
 [B]Version 1.0.56[/B]
 Fixed: HQPorner, Todayporn
 
