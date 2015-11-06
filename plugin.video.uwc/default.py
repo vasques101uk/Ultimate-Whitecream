@@ -21,7 +21,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, libogski, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
-import xtasie, streampleasure, chaturbate, playporn
+import xtasie, streampleasure, chaturbate, playporn, pornkino
 
 socket.setdefaulttimeout(60)
 
@@ -70,6 +70,7 @@ def INDEXM():
     utils.addDir('[COLOR yellow]Nudeflix[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,os.path.join(imgDir, 'nf.png'),'')
     utils.addDir('[COLOR yellow]PornHive[/COLOR]','http://www.pornhive.tv/en/movies/all',70,os.path.join(imgDir, 'ph.png'),'')
     utils.addDir('[COLOR yellow]PlayPorn[/COLOR]','http://playporn.to/category/xxx-movie-stream/',235,os.path.join(imgDir, 'playporn.png'),'')
+    utils.addDir('[COLOR yellow]PornKino[/COLOR]','http://pornkino.to/',255,os.path.join(imgDir, 'pornkino.png'),'')
     utils.addDir('[COLOR yellow]ElReyX[/COLOR]','http://elreyx.com/index1.html',116,os.path.join(imgDir, 'elreyx.png'),'')
     utils.addDir('[COLOR yellow]Libogski[/COLOR]','http://libogski.com/category/movies/',125,os.path.join(imgDir, 'libogski.png'),'')
     utils.addDir('[COLOR yellow]PelisxPorno[/COLOR]','http://www.pelisxporno.com/',140,os.path.join(imgDir, 'pelisxporno.png'),'')
@@ -457,5 +458,13 @@ elif mode == 234:
 elif mode == 235:
     playporn.MainMovies()
 
+elif mode == 251:
+    pornkino.List(url)
+elif mode == 252:
+    pornkino.Playvid(url, name, download)
+elif mode == 254:
+    pornkino.Search(url)
+elif mode == 255:
+    pornkino.MainMovies()
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
