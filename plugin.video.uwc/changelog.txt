@@ -1,3 +1,9 @@
+[B]Version 1.0.59[/B]
+Fixed: libogski.com, rebranded to thepornation.com (Fr33m1nd)
+Added: Playporn & Pornkino (Fr33m1nd)
+Added: Justporn.to (anton40)
+
+
 [B]Version 1.0.58[/B]
 Fixed: OpenLoad
 
