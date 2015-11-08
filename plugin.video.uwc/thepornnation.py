@@ -25,37 +25,37 @@ import utils
 progress = utils.progress
 
 
-def LIBMain(url):
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://libogski.com/',123,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://libogski.com/?s=',124,'','')
-    utils.addDir('[COLOR yellow]Movies[/COLOR]','http://libogski.com/category/movies/',125,'','')
-    LIBList(url)
+def TPNMain(url):
+    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://thepornnation.com/',123,'','')
+    utils.addDir('[COLOR yellow]Search[/COLOR]','http://thepornnation.com/?s=',124,'','')
+    utils.addDir('[COLOR yellow]Movies[/COLOR]','http://thepornnation.com/category/movies/',125,'','')
+    TPNList(url)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def LIBMainMovies(url):
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://libogski.com/',126,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://libogski.com/?s=',124,'','')
-    utils.addDir('[COLOR yellow]Scenes[/COLOR]','http://libogski.com/category/videos/',120,'','')
-    LIBList(url)
+def TPNMainMovies(url):
+    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://thepornnation.com/',126,'','')
+    utils.addDir('[COLOR yellow]Search[/COLOR]','http://thepornnation.com/?s=',124,'','')
+    utils.addDir('[COLOR yellow]Scenes[/COLOR]','http://thepornnation.com/category/videos/',120,'','')
+    TPNList(url)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def LIBList(url):
+def TPNList(url):
     listhtml = utils.getHtml(url, '')
-    match = re.compile('class="peli">.*?<img src="([^"]+)" alt="([^"]+)".*?href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for img, name, videopage in match:
+    match = re.compile('class="item">.*?<a href="([^"]+)".*?img src="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for videopage, img, name in match:
         name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 122, img, '')
     try:
-        nextp=re.compile("previouspostslink' href='([^']+)'>Next", re.DOTALL | re.IGNORECASE).findall(listhtml)
+        nextp=re.compile('link rel="next" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
         next = nextp[0]
         utils.addDir('Next Page', os.path.split(url)[0] + '/' + next, 121,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
     
-def LIBSearch(url):
+def TPNSearch(url):
     searchUrl = url
     vq = utils._get_keyboard(heading="Searching for...")
     if (not vq): return False, 0
@@ -63,31 +63,31 @@ def LIBSearch(url):
     title = title.replace(' ','+')
     searchUrl = searchUrl + title
     print "Searching URL: " + searchUrl
-    LIBSearchList(searchUrl)
+    TPNSearchList(searchUrl)
 
 
-def LIBSearchList(url):
+def TPNSearchList(url):
     listhtml = utils.getHtml(url, '')
-    match = re.compile('class="search_vid">.*?<a href="([^"]+)".*?src="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile('class="item">.*?<a href="([^"]+)".*?src="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, img, name in match:
         name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 122, img, '')
     try:
-        nextp=re.compile("previouspostslink' href='([^']+)'>Next", re.DOTALL | re.IGNORECASE).findall(listhtml)
+        nextp=re.compile('link rel="next" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
         next = nextp[0]
         utils.addDir('Next Page', next, 127,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def LIBCat(url, index):
+def TPNCat(url, index):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('<div class="categorias">(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match = re.compile('<ul class="scrolling cat(.*?)</ul>', re.DOTALL | re.IGNORECASE).findall(cathtml)
     match1 = re.compile('href="([^"]+)[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[index])
     for catpage, name in match1:
         utils.addDir(name, catpage, 121, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def LIBPlayvid(url, name, download=None):
+def TPNPlayvid(url, name, download=None):
     utils.PLAYVIDEO(url, name, download)

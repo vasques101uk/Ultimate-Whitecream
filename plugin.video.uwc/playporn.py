@@ -25,14 +25,16 @@ import utils
 progress = utils.progress
 
 def Main():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://playporn.to/?s=', 234, '', '')
-    utils.addDir('[COLOR yellow]Movies[/COLOR]','http://playporn.to/category/xxx-movie-stream/', 235, '', '')
+    utils.addDir('[COLOR yellow]Search[/COLOR]','http://playporn.to/?submit=Search&s=', 234, '', '')
+    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://playporn.to/', 235, '', '')
+    utils.addDir('[COLOR yellow]Movies[/COLOR]','http://playporn.to/category/xxx-movie-stream/', 231, '', '')
     List('http://playporn.to/category/xxx-clips-scenes-stream/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def MainMovies():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://playporn.to/?s=', 234, '', '')
+    utils.addDir('[COLOR yellow]Search[/COLOR]','http://playporn.to/?submit=Search&s=', 234, '', '')
+    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://playporn.to/', 236, '', '')
     utils.addDir('[COLOR yellow]Scenes[/COLOR]','http://playporn.to/category/xxx-clips-scenes-stream/', 230, '', '')
     List('http://playporn.to/category/xxx-movie-stream/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -40,14 +42,14 @@ def MainMovies():
 
 def List(url):
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<div class="photo-thumb-imag.+?"><a href="(.+?)" title="(.+?)" class="thumb">\n?<img .+?src="(.+?)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile('<div class="photo-thumb-image.*?href="([^"]+)".*?title="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, name, img in match:
         name = utils.cleantext(name)
-        utils.addDownLink(name, videopage, 232, img, '')
+        utils.addDownLink(name, videopage, 233, img, '')
     try:
-        nextp=re.compile('<a class="nextpostslink" rel="next" href="(.+?)">', re.DOTALL | re.IGNORECASE).findall(listhtml)
-        nextp = nextp[0]
-        utils.addDir('Next Page', nextp, 231,'')
+        nextp=re.compile('<a class="nextpostslink" rel="next" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+        nextp = nextp[0].replace("&#038;", "&")
+        utils.addDir('Next Page', nextp, 232,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -61,6 +63,15 @@ def Search(url):
     searchUrl = searchUrl + title
     print "Searching URL: " + searchUrl
     List(searchUrl)
+
+
+def Categories(url, index=0):
+    cathtml = utils.getHtml(url, '')
+    match = re.compile("<ul class='children'>(.*?)</ul>", re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match1 = re.compile('href="([^"]+)[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[index])
+    for catpage, name in match1:
+        utils.addDir(name, catpage, 232, '')
+    xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def Playvid(url, name, download=None):

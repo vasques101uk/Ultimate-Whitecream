@@ -24,22 +24,23 @@ import utils
 
 progress = utils.progress
 
-def MainMovies():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://pornkino.to/?s=', 254, '', '')
+def Main():
+    utils.addDir('[COLOR yellow]Search[/COLOR]','http://pornkino.to/?s=', 333, '', '')
+    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://pornkino.to/', 334, '', '')
     List('http://pornkino.to/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def List(url):
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<a href="(.+?)" title="(.+?)"><img class="cover" src="(.+?)" width').findall(listhtml)
-    for videopage, name, img in match:
+    match = re.compile('<article id=.*?class="cover" src="([^"]+)".*?alt="([^"]+)".*?href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for img, name, videopage in match:
         name = utils.cleantext(name)
-        utils.addDownLink(name, videopage, 252, img, '')
+        utils.addDownLink(name, videopage, 332, img, '')
     try:
-        nextp=re.compile('<li><a class="next page-numbers" href="(.+?)"><i class="icon-angle-right"></i></a></li>', re.DOTALL | re.IGNORECASE).findall(listhtml)
-        nextp = nextp[0]
-        utils.addDir('Next Page', nextp, 251,'')
+        nextp=re.compile('<a class="next page-numbers" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+        nextp = nextp[0].replace("&#038;", "&")
+        utils.addDir('Next Page', nextp, 331,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -53,6 +54,15 @@ def Search(url):
     searchUrl = searchUrl + title
     print "Searching URL: " + searchUrl
     List(searchUrl)
+
+
+def Categories(url):
+    cathtml = utils.getHtml(url, '')
+    match = re.compile("Kategorien</span>.*?<ul>(.*?)</ul>", re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match1 = re.compile('href="([^"]+)"[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[0])
+    for catpage, name in match1:
+        utils.addDir(name, catpage, 331, '')
+    xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def Playvid(url, name, download=None):

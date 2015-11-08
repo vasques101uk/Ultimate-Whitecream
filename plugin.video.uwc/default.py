@@ -20,8 +20,8 @@ import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
-import elreyx, libogski, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
-import xtasie, streampleasure, chaturbate, playporn, justporn, pornkino
+import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
+import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn
 
 socket.setdefaulttimeout(60)
 
@@ -52,17 +52,17 @@ def INDEXS():
     utils.addDir('[COLOR yellow]Porn00[/COLOR]','http://www.porn00.com/page/1/',64,os.path.join(imgDir, 'p00.png'),'')
     utils.addDir('[COLOR yellow]Beeg[/COLOR]','http://beeg.com/page-1',80,os.path.join(imgDir, 'bg.png'),'')
     utils.addDir('[COLOR yellow]ElReyX[/COLOR]','http://elreyx.com/index1.html',110,os.path.join(imgDir, 'elreyx.png'),'')
-    utils.addDir('[COLOR yellow]Libogski[/COLOR]','http://libogski.com/category/videos/',120,os.path.join(imgDir, 'libogski.png'),'')
+    utils.addDir('[COLOR yellow]Thepornnation[/COLOR]','http://thepornnation.com/category/videos/',120,os.path.join(imgDir, 'thepornnation.png'),'')
     utils.addDir('[COLOR yellow]XvideoSpanish[/COLOR]','http://www.xvideospanish.com/',130,os.path.join(imgDir, 'xvideospanish.png'),'')
     utils.addDir('[COLOR yellow]HQPorner[/COLOR]','http://hqporner.com/hdporn/1',150,os.path.join(imgDir, 'hqporner.png'),'')
     utils.addDir('[COLOR yellow]VideoMegaPorn[/COLOR]','http://www.videomegaporn.com/index.html',160,os.path.join(imgDir, 'videomegaporn.png'),'')
     utils.addDir('[COLOR yellow]StreamXXX[/COLOR]','http://streamxxx.tv/category/clips/',170,os.path.join(imgDir, 'streamxxx.png'),'')
-    utils.addDir('[COLOR yellow]PlayPorn[/COLOR]','http://playporn.to/category/xxx-clips-scenes-stream/',230,os.path.join(imgDir, 'playporn.png'),'')
     utils.addDir('[COLOR yellow]JustPorn[/COLOR]','http://justporn.to/category/scenes/',240,os.path.join(imgDir, 'justporn.png'),'')
     utils.addDir('[COLOR yellow]JavHDonline[/COLOR]','http://javhdonline.com/watch/category/jav-uncensored/',180,os.path.join(imgDir, 'javhdonline.png'),'')
     utils.addDir('[COLOR yellow]YourFreeTube[/COLOR]','http://www.yourfreetube.net/newvideos.html',190,'','')
     utils.addDir('[COLOR yellow]Xtasie[/COLOR]','http://xtasie.com/porn-video-list/page/1/',200,os.path.join(imgDir, 'xtasie.png'),'')
     utils.addDir('[COLOR yellow]StreamPleasure[/COLOR]','http://streampleasure.com/page/1/?filtre=date&cat=0',210,os.path.join(imgDir, 'streampleasure.png'),'')    
+    utils.addDir('[COLOR yellow]Playporn[/COLOR]','http://playporn.to/category/xxx-clips-scenes-stream/',230,os.path.join(imgDir, 'playporn.png'),'')
     utils.addDir('[COLOR yellow]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -70,13 +70,13 @@ def INDEXM():
     utils.addDir('[COLOR yellow]Xtheatre[/COLOR]','http://xtheatre.net/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
     utils.addDir('[COLOR yellow]Nudeflix[/COLOR]','http://www.nudeflix.com/browse?order=released&page=1',40,os.path.join(imgDir, 'nf.png'),'')
     utils.addDir('[COLOR yellow]PornHive[/COLOR]','http://www.pornhive.tv/en/movies/all',70,os.path.join(imgDir, 'ph.png'),'')
-    utils.addDir('[COLOR yellow]PlayPorn[/COLOR]','http://playporn.to/category/xxx-movie-stream/',235,os.path.join(imgDir, 'playporn.png'),'')
     utils.addDir('[COLOR yellow]JustPorn[/COLOR]','http://justporn.to/category/dvdrips-full-movies/',245,os.path.join(imgDir, 'justporn.png'),'')
-    utils.addDir('[COLOR yellow]PornKino[/COLOR]','http://pornkino.to/',255,os.path.join(imgDir, 'pornkino.png'),'')
     utils.addDir('[COLOR yellow]ElReyX[/COLOR]','http://elreyx.com/index1.html',116,os.path.join(imgDir, 'elreyx.png'),'')
-    utils.addDir('[COLOR yellow]Libogski[/COLOR]','http://libogski.com/category/movies/',125,os.path.join(imgDir, 'libogski.png'),'')
+    utils.addDir('[COLOR yellow]Thepornnation[/COLOR]','http://thepornnation.com//category/movies/',125,os.path.join(imgDir, 'thepornnation.png'),'')
     utils.addDir('[COLOR yellow]PelisxPorno[/COLOR]','http://www.pelisxporno.com/',140,os.path.join(imgDir, 'pelisxporno.png'),'')
     utils.addDir('[COLOR yellow]StreamXXX[/COLOR]','http://streamxxx.tv/category/movies/',175,os.path.join(imgDir, 'streamxxx.png'),'')
+    utils.addDir('[COLOR yellow]Playporn[/COLOR]','http://playporn.to/category/xxx-movie-stream/',231,os.path.join(imgDir, 'playporn.png'),'')
+    utils.addDir('[COLOR yellow]Pornkino[/COLOR]','http://pornkino.to/',330,os.path.join(imgDir, 'pornkino.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXT():    
@@ -323,21 +323,21 @@ elif mode == 117:
     elreyx.EXMoviesList(url)
 
 elif mode == 120:
-    libogski.LIBMain(url)
+    thepornnation.TPNMain(url)
 elif mode == 121:
-    libogski.LIBList(url)
+    thepornnation.TPNList(url)
 elif mode == 122:
-    libogski.LIBPlayvid(url, name, download)
+    thepornnation.TPNPlayvid(url, name, download)
 elif mode == 123:
-    libogski.LIBCat(url, 1)
+    thepornnation.TPNCat(url, 1)
 elif mode == 124:
-    libogski.LIBSearch(url)
+    thepornnation.TPNSearch(url)
 elif mode == 125:
-    libogski.LIBMainMovies(url)
+    thepornnation.TPNMainMovies(url)
 elif mode == 126:
-    libogski.LIBCat(url, 0)
+    thepornnation.TPNCat(url, 0)
 elif mode == 127:
-    libogski.LIBSearchList(url)
+    thepornnation.TPNSearchList(url)
 
 elif mode == 130:
     xvideospanish.Main()
@@ -449,17 +449,6 @@ elif mode == 221:
 elif mode == 222:
     chaturbate.Playvid(url, name)
 
-elif mode == 230:
-    playporn.Main()
-elif mode == 231:
-    playporn.List(url)
-elif mode == 232:
-    playporn.Playvid(url, name, download)
-elif mode == 234:
-    playporn.Search(url)
-elif mode == 235:
-    playporn.MainMovies()
-
 elif mode == 240:
     justporn.Main()
 elif mode == 241:
@@ -471,13 +460,30 @@ elif mode == 244:
 elif mode == 245:
     justporn.MainMovies()
 
-elif mode == 251:
+elif mode == 230:
+    playporn.Main()
+elif mode == 231:
+    playporn.MainMovies()
+elif mode == 232:
+    playporn.List(url)
+elif mode == 233:
+    playporn.Playvid(url, name, download)
+elif mode == 234:
+    playporn.Search(url)
+elif mode == 235:
+    playporn.Categories(url, 0)
+elif mode == 236:
+    playporn.Categories(url, 1)
+
+elif mode == 330:
+    pornkino.Main()
+elif mode == 331:
     pornkino.List(url)
-elif mode == 252:
+elif mode == 332:
     pornkino.Playvid(url, name, download)
-elif mode == 254:
+elif mode == 333:
     pornkino.Search(url)
-elif mode == 255:
-    pornkino.MainMovies()
+elif mode == 334:
+    pornkino.Categories(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
