@@ -1,3 +1,8 @@
+[B]Version 1.0.61[/B]
+Changed: Improved FlashX url detection, so FlashX videos from PornKino works
+Changed: Alternative/fallback way for getting OpenLoad videos
+
+
 [B]Version 1.0.60[/B]
 Fixed: Better handling when the cookie file gets corrupted
 Changed: Again, the logo...this is the last time for a while :)

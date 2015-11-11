@@ -130,7 +130,7 @@ def getParams():
 
     return param
 
-   
+
 params = getParams()
 url = None
 name = None
@@ -162,328 +162,157 @@ except:
 try:
     download = int(params["download"])
 except:
-    pass    
+    pass
 
-if mode is None:
-    INDEX()
-    
-elif mode == 2:
-    INDEXS()
-elif mode == 3:
-    INDEXM()
-elif mode == 4:
-    print url
-    xbmc.executebuiltin('ActivateWindow(Videos, '+url+')')
-elif mode == 5:
-    ONELIST(page)
-elif mode == 6:
-    INDEXT()
-elif mode == 7:
-    INDEXW()
-elif mode == 8:
-    STREAMS()
-elif mode == 9:
-    utils.PlayStream(name, url)
-    
-elif mode == 10:
-    watchxxxfree.WXFMain()
-elif mode == 11:
-    watchxxxfree.WXFList(url, page)
-elif mode == 12:
-    watchxxxfree.WXFCat(url)
-elif mode == 13:
-    watchxxxfree.WXFVideo(url, name, download)
-elif mode == 14:
-    watchxxxfree.WXFSearch(url) 
-elif mode == 15:
-    watchxxxfree.WXFTPS(url)  
+if mode is None: INDEX()
+elif mode == 2: INDEXS()
+elif mode == 3: INDEXM()
+elif mode == 4: xbmc.executebuiltin('ActivateWindow(Videos, '+url+')')
+elif mode == 5: ONELIST(page)
+elif mode == 6: INDEXT()
+elif mode == 7: INDEXW()
+elif mode == 8: STREAMS()
+elif mode == 9: utils.PlayStream(name, url)
+elif mode == 10: watchxxxfree.WXFMain()
+elif mode == 11: watchxxxfree.WXFList(url, page)
+elif mode == 12: watchxxxfree.WXFCat(url)
+elif mode == 13: watchxxxfree.WXFVideo(url, name, download)
+elif mode == 14: watchxxxfree.WXFSearch(url) 
+elif mode == 15: watchxxxfree.WXFTPS(url)
 elif mode == 16:
     addon.openSettings()
-    watchxxxfree.WXFMain()    
-    
-elif mode == 20:
-    xtheatre.XTMain()
-elif mode == 21:
-    xtheatre.XTList(url, page)
-elif mode == 22:
-    xtheatre.XTCat(url)
-elif mode == 23:
-    xtheatre.XTVideo(url, name, download)
-elif mode == 24:
-    xtheatre.XTSearch(url)  
+    watchxxxfree.WXFMain()
+elif mode == 20: xtheatre.XTMain()
+elif mode == 21: xtheatre.XTList(url, page)
+elif mode == 22: xtheatre.XTCat(url)
+elif mode == 23: xtheatre.XTVideo(url, name, download)
+elif mode == 24: xtheatre.XTSearch(url)
 elif mode == 25:
     addon.openSettings()
-    xtheatre.XTMain()    
-
-elif mode == 30:
-    hentaicraving.HCList(url)
-elif mode == 31:
-    hentaicraving.HCEpisodes(url, name, img)
-elif mode == 32:
-    hentaicraving.HCPlayvid(url, name, download)
-elif mode == 33:
-    hentaicraving.HCA2Z(url) 
-
-elif mode == 40:
-    nudeflix.NFMain()
-elif mode == 41:
-    nudeflix.NFList(url, page)
-elif mode == 42:
-    nudeflix.NFScenes(url)
-elif mode == 43:
-    nudeflix.NFPlayvid(url, name, download)
-elif mode == 44:
-    nudeflix.NFCat(url)
-
-elif mode == 50:
-    porntrex.PTMain()
-elif mode == 51:
-    porntrex.PTList(url, page)
-elif mode == 52:
-    porntrex.PTPlayvid(url, name, download)
-elif mode == 53:
-    porntrex.PTCat(url)
-elif mode == 54:
-    porntrex.PTSearch(url)
-
-elif mode == 60:
-    hdporn.PAQMain()
-elif mode == 61:
-    hdporn.PAQList(url, page)
-elif mode == 62:
-    hdporn.PPlayvid(url, name, 1, download)
-elif mode == 63:
-    hdporn.PCat(url)
-elif mode == 64:
-    hdporn.P00Main()
-elif mode == 68:
-    hdporn.PSearch(url)
-    
-elif mode == 70:
-    pornhive.PHMain()
-elif mode == 71:
-    pornhive.PHList(url)
-elif mode == 72:
-    pornhive.PHVideo(url, name, download)
-elif mode == 73:
-    pornhive.PHCat(url)
-elif mode == 74:
-    pornhive.PHSearch(url)
-
-elif mode == 80:
-    beeg.BGMain()
-elif mode == 81:
-    beeg.BGList(url)
-elif mode == 82:
-    beeg.BGPlayvid(url, name, download)
-elif mode == 83:
-    beeg.BGCat(url)
-elif mode == 84:
-    beeg.BGSearch(url)
-
-elif mode == 90:
-    todayporn.TPMain()
-elif mode == 91:
-    todayporn.TPList(url,page)
-elif mode == 92:
-    todayporn.TPPlayvid(url, name, download)
-elif mode == 93:
-    todayporn.TPCat(url)
-elif mode == 94:
-    todayporn.TPSearch(url)
-elif mode == 95:
-    todayporn.TPPornstars(url, page)
-
-elif mode == 100:
-    nltubes.NLTUBES(url, page)
-elif mode == 101:
-    nltubes.NLVIDEOLIST(url, page)
-elif mode == 102:
-    nltubes.NLPLAYVID(url, name, download)
-elif mode == 103:
-    nltubes.NLCAT(url, page)
-elif mode == 104:
-    nltubes.NLSEARCH(url, page)    
-
-elif mode == 110:
-    elreyx.EXMain()
-elif mode == 111:
-    elreyx.EXList(url)
-elif mode == 112:
-    elreyx.EXPlayvid(url, name, download)
-elif mode == 113:
-    elreyx.EXCat(url)
-elif mode == 114:
-    elreyx.EXSearch(url)
-elif mode == 115:
-    elreyx.EXPornstars(url)
-elif mode == 116:
-    elreyx.EXMovies(url)
-elif mode == 117:
-    elreyx.EXMoviesList(url)
-
-elif mode == 120:
-    thepornnation.TPNMain(url)
-elif mode == 121:
-    thepornnation.TPNList(url)
-elif mode == 122:
-    thepornnation.TPNPlayvid(url, name, download)
-elif mode == 123:
-    thepornnation.TPNCat(url, 1)
-elif mode == 124:
-    thepornnation.TPNSearch(url)
-elif mode == 125:
-    thepornnation.TPNMainMovies(url)
-elif mode == 126:
-    thepornnation.TPNCat(url, 0)
-elif mode == 127:
-    thepornnation.TPNSearchList(url)
-
-elif mode == 130:
-    xvideospanish.Main()
-elif mode == 131:
-    xvideospanish.List(url)
-elif mode == 132:
-    xvideospanish.Playvid(url, name, download)
-elif mode == 133:
-    xvideospanish.Categories(url)
-elif mode == 134:
-    xvideospanish.Search(url)
-
-elif mode == 140:
-    pelisxporno.Main()
-elif mode == 141:
-    pelisxporno.List(url)
-elif mode == 142:
-    pelisxporno.Playvid(url, name, download)
-elif mode == 143:
-    pelisxporno.Categories(url)
-elif mode == 144:
-    pelisxporno.Search(url)
-
-elif mode == 150:
-    hqporner.HQMAIN()
-elif mode == 151:
-    hqporner.HQLIST(url)
-elif mode == 152:
-    hqporner.HQPLAY(url, name, download)
-elif mode == 153:
-    hqporner.HQCAT(url)
-elif mode == 154:
-    hqporner.HQSEARCH(url)
-
-elif mode == 160:
-    videomegaporn.Main()
-elif mode == 161:
-    videomegaporn.List(url)
-elif mode == 162:
-    videomegaporn.Playvid(url, name, download)
-elif mode == 163:
-    videomegaporn.Categories(url)
-elif mode == 164:
-    videomegaporn.Search(url)
-
-elif mode == 170:
-    streamxxx.Main()
-elif mode == 171:
-    streamxxx.List(url)
-elif mode == 172:
-    streamxxx.Playvid(url, name, download)
-elif mode == 173:
-    streamxxx.Tags(url)
-elif mode == 174:
-    streamxxx.Search(url)
-elif mode == 175:
-    streamxxx.MainMovies()
-elif mode == 176:
-    streamxxx.MainInternationalMovies()
-elif mode == 177:
-    streamxxx.Categories(url)
-
-elif mode == 180:
-    javhdonline.Main()
-elif mode == 181:
-    javhdonline.List(url)
-elif mode == 182:
-    javhdonline.Playvid(url, name, download)
-elif mode == 183:
-    javhdonline.Tags(url)
-elif mode == 184:
-    javhdonline.Search(url)
-
-elif mode == 190:
-    yourfreetube.YFTMain()
-elif mode == 191:
-    yourfreetube.YFTList(url)
-elif mode == 192:
-    yourfreetube.YFTPlayvid(url, name, download)
-elif mode == 193:
-    yourfreetube.YFTCat(url)
-elif mode == 194:
-    yourfreetube.YFTSearch(url)
-
-elif mode == 200:
-    xtasie.XTCMain()
-elif mode == 201:
-    xtasie.XTCList(url)
-elif mode == 202:
-    xtasie.XTCPlayvid(url, name, download)
-elif mode == 203:
-    xtasie.XTCCat(url)
-elif mode == 204:
-    xtasie.XTCSearch(url)
-
-elif mode == 210:
-    streampleasure.SPMain()
-elif mode == 211:
-    streampleasure.SPList(url,page)
-elif mode == 212:
-    streampleasure.SPPlayvid(url, name, download)
-elif mode == 213:
-    streampleasure.SPSearch(url)
-
-elif mode == 220:
-    chaturbate.Main()
-elif mode == 221:
-    chaturbate.List(url)
-elif mode == 222:
-    chaturbate.Playvid(url, name)
-
-elif mode == 240:
-    justporn.Main()
-elif mode == 241:
-    justporn.List(url)
-elif mode == 242:
-    justporn.Playvid(url, name, download)
-elif mode == 244:
-    justporn.Search(url)
-elif mode == 245:
-    justporn.MainMovies()
-
-elif mode == 230:
-    playporn.Main()
-elif mode == 231:
-    playporn.MainMovies()
-elif mode == 232:
-    playporn.List(url)
-elif mode == 233:
-    playporn.Playvid(url, name, download)
-elif mode == 234:
-    playporn.Search(url)
-elif mode == 235:
-    playporn.Categories(url, 0)
-elif mode == 236:
-    playporn.Categories(url, 1)
-
-elif mode == 330:
-    pornkino.Main()
-elif mode == 331:
-    pornkino.List(url)
-elif mode == 332:
-    pornkino.Playvid(url, name, download)
-elif mode == 333:
-    pornkino.Search(url)
-elif mode == 334:
-    pornkino.Categories(url)
+    xtheatre.XTMain()
+elif mode == 30: hentaicraving.HCList(url)
+elif mode == 31: hentaicraving.HCEpisodes(url, name, img)
+elif mode == 32: hentaicraving.HCPlayvid(url, name, download)
+elif mode == 33: hentaicraving.HCA2Z(url)
+elif mode == 40: nudeflix.NFMain()
+elif mode == 41: nudeflix.NFList(url, page)
+elif mode == 42: nudeflix.NFScenes(url)
+elif mode == 43: nudeflix.NFPlayvid(url, name, download)
+elif mode == 44: nudeflix.NFCat(url)
+elif mode == 50: porntrex.PTMain()
+elif mode == 51: porntrex.PTList(url, page)
+elif mode == 52: porntrex.PTPlayvid(url, name, download)
+elif mode == 53: porntrex.PTCat(url)
+elif mode == 54: porntrex.PTSearch(url)
+elif mode == 60: hdporn.PAQMain()
+elif mode == 61: hdporn.PAQList(url, page)
+elif mode == 62: hdporn.PPlayvid(url, name, 1, download)
+elif mode == 63: hdporn.PCat(url)
+elif mode == 64: hdporn.P00Main()
+elif mode == 68: hdporn.PSearch(url)
+elif mode == 70: pornhive.PHMain()
+elif mode == 71: pornhive.PHList(url)
+elif mode == 72: pornhive.PHVideo(url, name, download)
+elif mode == 73: pornhive.PHCat(url)
+elif mode == 74: pornhive.PHSearch(url)
+elif mode == 80: beeg.BGMain()
+elif mode == 81: beeg.BGList(url)
+elif mode == 82: beeg.BGPlayvid(url, name, download)
+elif mode == 83: beeg.BGCat(url)
+elif mode == 84: beeg.BGSearch(url)
+elif mode == 90: todayporn.TPMain()
+elif mode == 91: todayporn.TPList(url,page)
+elif mode == 92: todayporn.TPPlayvid(url, name, download)
+elif mode == 93: todayporn.TPCat(url)
+elif mode == 94: todayporn.TPSearch(url)
+elif mode == 95: todayporn.TPPornstars(url, page)
+elif mode == 100: nltubes.NLTUBES(url, page)
+elif mode == 101: nltubes.NLVIDEOLIST(url, page)
+elif mode == 102: nltubes.NLPLAYVID(url, name, download)
+elif mode == 103: nltubes.NLCAT(url, page)
+elif mode == 104: nltubes.NLSEARCH(url, page)
+elif mode == 110: elreyx.EXMain()
+elif mode == 111: elreyx.EXList(url)
+elif mode == 112: elreyx.EXPlayvid(url, name, download)
+elif mode == 113: elreyx.EXCat(url)
+elif mode == 114: elreyx.EXSearch(url)
+elif mode == 115: elreyx.EXPornstars(url)
+elif mode == 116: elreyx.EXMovies(url)
+elif mode == 117: elreyx.EXMoviesList(url)
+elif mode == 120: thepornnation.TPNMain(url)
+elif mode == 121: thepornnation.TPNList(url)
+elif mode == 122: thepornnation.TPNPlayvid(url, name, download)
+elif mode == 123: thepornnation.TPNCat(url, 1)
+elif mode == 124: thepornnation.TPNSearch(url)
+elif mode == 125: thepornnation.TPNMainMovies(url)
+elif mode == 126: thepornnation.TPNCat(url, 0)
+elif mode == 127: thepornnation.TPNSearchList(url)
+elif mode == 130: xvideospanish.Main()
+elif mode == 131: xvideospanish.List(url)
+elif mode == 132: xvideospanish.Playvid(url, name, download)
+elif mode == 133: xvideospanish.Categories(url)
+elif mode == 134: xvideospanish.Search(url)
+elif mode == 140: pelisxporno.Main()
+elif mode == 141: pelisxporno.List(url)
+elif mode == 142: pelisxporno.Playvid(url, name, download)
+elif mode == 143: pelisxporno.Categories(url)
+elif mode == 144: pelisxporno.Search(url)
+elif mode == 150: hqporner.HQMAIN()
+elif mode == 151: hqporner.HQLIST(url)
+elif mode == 152: hqporner.HQPLAY(url, name, download)
+elif mode == 153: hqporner.HQCAT(url)
+elif mode == 154: hqporner.HQSEARCH(url)
+elif mode == 160: videomegaporn.Main()
+elif mode == 161: videomegaporn.List(url)
+elif mode == 162: videomegaporn.Playvid(url, name, download)
+elif mode == 163: videomegaporn.Categories(url)
+elif mode == 164: videomegaporn.Search(url)
+elif mode == 170: streamxxx.Main()
+elif mode == 171: streamxxx.List(url)
+elif mode == 172: streamxxx.Playvid(url, name, download)
+elif mode == 173: streamxxx.Tags(url)
+elif mode == 174: streamxxx.Search(url)
+elif mode == 175: streamxxx.MainMovies()
+elif mode == 176: streamxxx.MainInternationalMovies()
+elif mode == 177: streamxxx.Categories(url)
+elif mode == 180: javhdonline.Main()
+elif mode == 181: javhdonline.List(url)
+elif mode == 182: javhdonline.Playvid(url, name, download)
+elif mode == 183: javhdonline.Tags(url)
+elif mode == 184: javhdonline.Search(url)
+elif mode == 190: yourfreetube.YFTMain()
+elif mode == 191: yourfreetube.YFTList(url)
+elif mode == 192: yourfreetube.YFTPlayvid(url, name, download)
+elif mode == 193: yourfreetube.YFTCat(url)
+elif mode == 194: yourfreetube.YFTSearch(url)
+elif mode == 200: xtasie.XTCMain()
+elif mode == 201: xtasie.XTCList(url)
+elif mode == 202: xtasie.XTCPlayvid(url, name, download)
+elif mode == 203: xtasie.XTCCat(url)
+elif mode == 204: xtasie.XTCSearch(url)
+elif mode == 210: streampleasure.SPMain()
+elif mode == 211: streampleasure.SPList(url,page)
+elif mode == 212: streampleasure.SPPlayvid(url, name, download)
+elif mode == 213: streampleasure.SPSearch(url)
+elif mode == 220: chaturbate.Main()
+elif mode == 221: chaturbate.List(url)
+elif mode == 222: chaturbate.Playvid(url, name)
+elif mode == 230: playporn.Main()
+elif mode == 231: playporn.MainMovies()
+elif mode == 232: playporn.List(url)
+elif mode == 233: playporn.Playvid(url, name, download)
+elif mode == 234: playporn.Search(url)
+elif mode == 235: playporn.Categories(url, 0)
+elif mode == 236: playporn.Categories(url, 1)
+elif mode == 240: justporn.Main()
+elif mode == 241: justporn.List(url)
+elif mode == 242: justporn.Playvid(url, name, download)
+elif mode == 244: justporn.Search(url)
+elif mode == 245: justporn.MainMovies()
+elif mode == 330: pornkino.Main()
+elif mode == 331: pornkino.List(url)
+elif mode == 332: pornkino.Playvid(url, name, download)
+elif mode == 333: pornkino.Search(url)
+elif mode == 334: pornkino.Categories(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)

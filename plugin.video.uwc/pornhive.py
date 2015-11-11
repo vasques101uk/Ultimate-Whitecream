@@ -114,8 +114,9 @@ def PHVideo(url, name, download=None):
 def getFlashX(url):
     phpage = utils.getHtml(url, '')
     progress.update( 50, "", "Opening FlashX page", "" )
-    flashxurl = re.compile('<iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(phpage)
-    flashxsrc = utils.getHtml2(flashxurl[0])
+    flashxurl = re.compile(r"//(?:www\.)?flashx\.tv/(?:embed-)?([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(phpage)
+    flashxurl = 'http://flashx.tv/embed-%s-670x400.html' % flashxurl[0]    
+    flashxsrc = utils.getHtml2(flashxurl)
     progress.update( 60, "", "Grabbing video file", "" )
     flashxurl2 = re.compile('<a href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(flashxsrc)
     flashxsrc2 = utils.getHtml2(flashxurl2[0])

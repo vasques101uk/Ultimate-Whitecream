@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile, string
+import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile, string, json
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 from jsbeautifier import beautify
@@ -27,7 +27,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.60"
+__version__ = "1.0.61"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -168,7 +168,7 @@ def playvideo(videosource, name, download=None, url=None):
     if re.search('streamin.to', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('Streamin')          
     if re.search('www.flashx.tv', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('FlashX')        
+        hosts.append('FlashX')
     if len(hosts) == 0:
         progress.close()
         dialog.ok('Oh oh','Couldn\'t find any video')
@@ -228,10 +228,18 @@ def playvideo(videosource, name, download=None, url=None):
             openloadurl = openloadlist[olvideo]
         else: openloadurl = openloadurl[0]
         
-        openloadurl = 'https://openload.co/embed/%s/' % openloadurl
-        openloadsrc = getHtml(openloadurl, '', openloadhdr)
-        progress.update( 80, "", "Getting video file from OpenLoad", "")
-        videourl = decodeOpenLoad(openloadsrc)
+        openloadurl1 = 'http://openload.co/embed/%s/' % openloadurl
+
+        try:
+            openloadsrc = getHtml(openloadurl1, '', openloadhdr)
+            progress.update( 80, "", "Getting video file from OpenLoad", "")
+            videourl = decodeOpenLoad(openloadsrc)
+        except:
+            try:
+                progress.update( 80, "", "Getting video file from OpenLoad", "")
+                videourl = getOpenLoad(openloadurl)
+            except:
+                dialog.ok('Oh oh','Couldn\'t find playable OpenLoad link')
     elif vidhost == 'Streamin':
         progress.update( 40, "", "Loading Streamin", "" )
         streaminurl = re.compile('<iframe.*?src="(http://streamin\.to[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
@@ -242,8 +250,9 @@ def playvideo(videosource, name, download=None, url=None):
         videourl = videourl[0] + videohash[0] + "/v.mp4"
     elif vidhost == 'FlashX':
         progress.update( 40, "", "Loading FlashX", "" )
-        flashxurl = re.compile('<iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
-        flashxsrc = getHtml2(flashxurl[0])
+        flashxurl = re.compile(r"//(?:www\.)?flashx\.tv/(?:embed-)?([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
+        flashxurl = 'http://flashx.tv/embed-%s-670x400.html' % flashxurl[0]
+        flashxsrc = getHtml2(flashxurl)
         progress.update( 60, "", "Grabbing video file", "" )
         flashxurl2 = re.compile('<a href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(flashxsrc)
         flashxsrc2 = getHtml2(flashxurl2[0])
@@ -412,3 +421,13 @@ def decode(encoded):
     for octc in (c for c in re.findall(r'\\(\d{2,3})', encoded)):
         encoded = encoded.replace(r'\%s' % octc, chr(int(octc, 8)))
     return encoded.decode('utf8')
+
+# to do
+def getOpenLoad(id):
+    openloadurl2 = 'https://api.openload.io/1/file/dlticket?file=%s' % id
+    openloadsrc = getHtml(openloadurl2, '', openloadhdr)
+    result = json.loads(result)
+    cap = result['result']['captcha_url']
+    
+
+    return

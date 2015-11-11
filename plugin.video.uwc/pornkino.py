@@ -59,8 +59,9 @@ def Search(url):
 def Categories(url):
     cathtml = utils.getHtml(url, '')
     match = re.compile("Kategorien</span>.*?<ul>(.*?)</ul>", re.DOTALL | re.IGNORECASE).findall(cathtml)
-    match1 = re.compile('href="([^"]+)"[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[0])
-    for catpage, name in match1:
+    match1 = re.compile(r'href="([^"]+)"[^>]+>([^<]+)</a> \((\d+)', re.DOTALL | re.IGNORECASE).findall(match[0])
+    for catpage, name, videos in match1:
+        name = name + ' [COLOR blue](%s)[/COLOR]' % videos
         utils.addDir(name, catpage, 331, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
