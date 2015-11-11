@@ -1,3 +1,8 @@
+[B]Version 1.0.60[/B]
+Fixed: Better handling when the cookie file gets corrupted
+Changed: Again, the logo...this is the last time for a while :)
+
+
 [B]Version 1.0.59[/B]
 Fixed: libogski.com, rebranded to thepornation.com (Fr33m1nd)
 Added: Playporn & Pornkino (Fr33m1nd)

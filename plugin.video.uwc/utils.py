@@ -27,7 +27,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.59"
+__version__ = "1.0.60"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -69,7 +69,15 @@ Request = urllib2.Request
 
 if cj != None:
     if os.path.isfile(xbmc.translatePath(cookiePath)):
-        cj.load(xbmc.translatePath(cookiePath))
+        try:
+            cj.load(xbmc.translatePath(cookiePath))
+        except:
+            try:
+                os.remove(xbmc.translatePath(cookiePath))
+                pass
+            except:
+                dialog.ok('Oh oh','The Cookie file is locked, please restart Kodi')
+                pass
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
 else:
     opener = urllib2.build_opener()
@@ -265,7 +273,7 @@ def PlayStream(name, url):
     return
 
 
-def getHtml(url, referer, hdr=None):
+def getHtml(url, referer, hdr=None, NoCookie=None):
     if not hdr:
         req = Request(url, '', headers)
     else:
@@ -274,7 +282,8 @@ def getHtml(url, referer, hdr=None):
         req.add_header('Referer', referer)
     response = urlopen(req, timeout=60)
     data = response.read()
-    cj.save(cookiePath)
+    if not NoCookie:
+        cj.save(cookiePath)
     response.close()
     return data
 
