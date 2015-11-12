@@ -1,4 +1,5 @@
 [B]Version 1.0.61[/B]
+Added: HDzog (anton40)
 Changed: Improved FlashX url detection, so FlashX videos from PornKino works
 Changed: Alternative/fallback way for getting OpenLoad videos
 

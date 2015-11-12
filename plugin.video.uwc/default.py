@@ -21,7 +21,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
-import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn
+import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog
 
 socket.setdefaulttimeout(60)
 
@@ -76,6 +76,7 @@ def INDEXM():
     utils.addDir('[COLOR yellow]PelisxPorno[/COLOR]','http://www.pelisxporno.com/',140,os.path.join(imgDir, 'pelisxporno.png'),'')
     utils.addDir('[COLOR yellow]StreamXXX[/COLOR]','http://streamxxx.tv/category/movies/',175,os.path.join(imgDir, 'streamxxx.png'),'')
     utils.addDir('[COLOR yellow]Playporn[/COLOR]','http://playporn.to/category/xxx-movie-stream/',231,os.path.join(imgDir, 'playporn.png'),'')
+    utils.addDir('[COLOR yellow]HD Zog[/COLOR]','http://www.hdzog.com/new/',340,os.path.join(imgDir, 'hdzog.png'),'')
     utils.addDir('[COLOR yellow]Pornkino[/COLOR]','http://pornkino.to/',330,os.path.join(imgDir, 'pornkino.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
@@ -314,5 +315,12 @@ elif mode == 331: pornkino.List(url)
 elif mode == 332: pornkino.Playvid(url, name, download)
 elif mode == 333: pornkino.Search(url)
 elif mode == 334: pornkino.Categories(url)
+elif mode == 340: hdzog.Main()
+elif mode == 341: hdzog.List(url)
+elif mode == 342: hdzog.Playvid(url, name, download)
+elif mode == 343: hdzog.Search(url)
+elif mode == 344: hdzog.Categories(url)
+elif mode == 345: hdzog.Channels(url)
+elif mode == 346: hdzog.Models(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
