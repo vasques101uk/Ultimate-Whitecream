@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile, string, json
+import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile, string
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 from jsbeautifier import beautify
@@ -235,11 +235,7 @@ def playvideo(videosource, name, download=None, url=None):
             progress.update( 80, "", "Getting video file from OpenLoad", "")
             videourl = decodeOpenLoad(openloadsrc)
         except:
-            try:
-                progress.update( 80, "", "Getting video file from OpenLoad", "")
-                videourl = getOpenLoad(openloadurl)
-            except:
-                dialog.ok('Oh oh','Couldn\'t find playable OpenLoad link')
+            dialog.ok('Oh oh','Couldn\'t find playable OpenLoad link')
     elif vidhost == 'Streamin':
         progress.update( 40, "", "Loading Streamin", "" )
         streaminurl = re.compile('<iframe.*?src="(http://streamin\.to[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
@@ -421,13 +417,3 @@ def decode(encoded):
     for octc in (c for c in re.findall(r'\\(\d{2,3})', encoded)):
         encoded = encoded.replace(r'\%s' % octc, chr(int(octc, 8)))
     return encoded.decode('utf8')
-
-# to do
-def getOpenLoad(id):
-    openloadurl2 = 'https://api.openload.io/1/file/dlticket?file=%s' % id
-    openloadsrc = getHtml(openloadurl2, '', openloadhdr)
-    result = json.loads(result)
-    cap = result['result']['captcha_url']
-    
-
-    return

@@ -1,7 +1,7 @@
 [B]Version 1.0.61[/B]
 Added: HDzog (anton40)
+Added: Cat3Movie (anton40)
 Changed: Improved FlashX url detection, so FlashX videos from PornKino works
-Changed: Alternative/fallback way for getting OpenLoad videos
 
 
 [B]Version 1.0.60[/B]
