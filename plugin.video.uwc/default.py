@@ -21,7 +21,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
-import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog
+import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie
 
 socket.setdefaulttimeout(60)
 
@@ -78,6 +78,7 @@ def INDEXM():
     utils.addDir('[COLOR yellow]Playporn[/COLOR]','http://playporn.to/category/xxx-movie-stream/',231,os.path.join(imgDir, 'playporn.png'),'')
     utils.addDir('[COLOR yellow]HD Zog[/COLOR]','http://www.hdzog.com/new/',340,os.path.join(imgDir, 'hdzog.png'),'')
     utils.addDir('[COLOR yellow]Pornkino[/COLOR]','http://pornkino.to/',330,os.path.join(imgDir, 'pornkino.png'),'')
+    utils.addDir('[COLOR yellow]Cat3Movie[/COLOR]','http://cat3movie.us',350,os.path.join(imgDir, 'cat3movie.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXT():    
@@ -322,5 +323,10 @@ elif mode == 343: hdzog.Search(url)
 elif mode == 344: hdzog.Categories(url)
 elif mode == 345: hdzog.Channels(url)
 elif mode == 346: hdzog.Models(url)
+elif mode == 350: cat3movie.Main()
+elif mode == 351: cat3movie.List(url)
+elif mode == 352: cat3movie.Playvid(url, name, download)
+elif mode == 353: cat3movie.Search(url)
+elif mode == 354: cat3movie.Categories(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
