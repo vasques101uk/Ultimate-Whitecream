@@ -17,7 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib, re
+import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils
@@ -111,3 +111,4 @@ def Playvid(url, name, download=None):
             xbmc.Player().play(pl)
         else:
             listitem.setPath(str(videourl))
+            xbmcplugin.setResolvedUrl(utils.addon_handle, True, listitem)
