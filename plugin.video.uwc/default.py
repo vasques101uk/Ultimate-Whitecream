@@ -21,7 +21,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
-import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie
+import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie, tubepornclassic
 
 socket.setdefaulttimeout(60)
 
@@ -63,6 +63,7 @@ def INDEXS():
     utils.addDir('[COLOR yellow]Xtasie[/COLOR]','http://xtasie.com/porn-video-list/page/1/',200,os.path.join(imgDir, 'xtasie.png'),'')
     utils.addDir('[COLOR yellow]StreamPleasure[/COLOR]','http://streampleasure.com/page/1/?filtre=date&cat=0',210,os.path.join(imgDir, 'streampleasure.png'),'')    
     utils.addDir('[COLOR yellow]Playporn[/COLOR]','http://playporn.to/category/xxx-clips-scenes-stream/',230,os.path.join(imgDir, 'playporn.png'),'')
+    utils.addDir('[COLOR yellow]HD Zog[/COLOR]','http://www.hdzog.com/new/',340,os.path.join(imgDir, 'hdzog.png'),'')    
     utils.addDir('[COLOR yellow]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -76,7 +77,6 @@ def INDEXM():
     utils.addDir('[COLOR yellow]PelisxPorno[/COLOR]','http://www.pelisxporno.com/',140,os.path.join(imgDir, 'pelisxporno.png'),'')
     utils.addDir('[COLOR yellow]StreamXXX[/COLOR]','http://streamxxx.tv/category/movies/',175,os.path.join(imgDir, 'streamxxx.png'),'')
     utils.addDir('[COLOR yellow]Playporn[/COLOR]','http://playporn.to/category/xxx-movie-stream/',231,os.path.join(imgDir, 'playporn.png'),'')
-    utils.addDir('[COLOR yellow]HD Zog[/COLOR]','http://www.hdzog.com/new/',340,os.path.join(imgDir, 'hdzog.png'),'')
     utils.addDir('[COLOR yellow]Pornkino[/COLOR]','http://pornkino.to/',330,os.path.join(imgDir, 'pornkino.png'),'')
     utils.addDir('[COLOR yellow]Cat3Movie[/COLOR]','http://cat3movie.us',350,os.path.join(imgDir, 'cat3movie.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -86,6 +86,7 @@ def INDEXT():
     utils.addDir('[COLOR yellow]Poldertube.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.poldertube.nl/pornofilms/nieuw',100,os.path.join(imgDir, 'poldertube.png'),0)
     utils.addDir('[COLOR yellow]Milf.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.milf.nl/videos/nieuw',100,os.path.join(imgDir, 'milfnl.png'),1)
     utils.addDir('[COLOR yellow]Sextube.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.sextube.nl/videos/nieuw',100,os.path.join(imgDir, 'sextube.png'),2)
+    utils.addDir('[COLOR yellow]TubePornClassic[/COLOR]','http://www.tubepornclassic.com/latest-updates/',360,os.path.join(imgDir, 'tubepornclassic.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXW():
@@ -328,5 +329,10 @@ elif mode == 351: cat3movie.List(url)
 elif mode == 352: cat3movie.Playvid(url, name, download)
 elif mode == 353: cat3movie.Search(url)
 elif mode == 354: cat3movie.Categories(url)
+elif mode == 360: tubepornclassic.Main()
+elif mode == 361: tubepornclassic.List(url)
+elif mode == 362: tubepornclassic.Playvid(url, name, download)
+elif mode == 363: tubepornclassic.Cat(url)
+elif mode == 364: tubepornclassic.Search(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
