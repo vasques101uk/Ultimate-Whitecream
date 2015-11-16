@@ -66,11 +66,10 @@ def PTPlayvid(url, name, download=None):
 
 def PTCat(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('c=([^"]+)".*?data-original="([^"]+)" title="([^"]+)".*?badge">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
-    for catid, img, name, videos in match:
+    match = re.compile('c=([^"]+)".*?original="([^"]+)" title="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    for catid, img, name in match:
         img = "http://www.porntrex.com/" + img
         catpage = "http://www.porntrex.com/videos?c="+ catid + "&o=mr&page=1"
-        name = name + ' [COLOR blue]' + videos + '[/COLOR]'
         utils.addDir(name, catpage, 51, img, 1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

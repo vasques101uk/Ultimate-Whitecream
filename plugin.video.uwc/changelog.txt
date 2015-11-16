@@ -1,4 +1,9 @@
-[B]Version 1.0.61[/B]
+[B]Version 1.0.63[/B]
+Added: ParadiseHill
+Fixed: PornTrex categories
+
+
+[B]Version 1.0.62[/B]
 Added: TubePornClassic (by request)
 Changed: Moved HDzog to scenes and 'Play from here' support for HDzog
 
