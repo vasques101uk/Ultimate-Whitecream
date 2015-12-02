@@ -1,3 +1,8 @@
+[B]Version 1.0.64[/B]
+Fixed: Videomega videos
+Fixed: Videomegaporn video listing
+
+
 [B]Version 1.0.63[/B]
 Added: ParadiseHill
 Fixed: PornTrex categories

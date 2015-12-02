@@ -27,7 +27,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.63"
+__version__ = "1.0.64"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -211,9 +211,13 @@ def playvideo(videosource, name, download=None, url=None):
             hashpage = getHtml('http://videomega.tv/validatehash.php?hashkey='+hashkey, url)
             hashref = re.compile('ref="([^"]+)', re.DOTALL | re.IGNORECASE).findall(hashpage)
         progress.update( 80, "", "Getting video file from Videomega", "" )
-        videopage = getHtml('http://videomega.tv/view.php?ref='+hashref[0], url)
-        videourl = re.compile('<source src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
+        vmhost = 'http://videomega.tv/view.php?ref=' + hashref[0]
+        videopage = getHtml(vmhost, url)
+        vmpacked = re.compile(r"(eval\(.*\))\s+</", re.DOTALL | re.IGNORECASE).findall(videopage)
+        vmunpacked = beautify(vmpacked[0])
+        videourl = re.compile('src", "([^"]+)', re.DOTALL | re.IGNORECASE).findall(vmunpacked)
         videourl = videourl[0]
+        videourl = videourl + '|Referer=' + vmhost + '&User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36'
     elif vidhost == 'OpenLoad':
         progress.update( 40, "", "Loading Openload", "" )
         openloadurl = re.compile(r"//(?:www\.)?openload\.(?:co|io)?/(?:embed|f)/([0-9a-zA-Z-_]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
@@ -335,6 +339,7 @@ def cleantext(text):
     text = text.replace('&quot;','"')
     text = text.replace('&#039;','`')
     text = text.replace('&amp;','&')
+    text = text.replace('&ntilde;','ñ')
     return text
 
 
