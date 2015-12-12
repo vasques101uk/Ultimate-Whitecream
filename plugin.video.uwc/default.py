@@ -22,6 +22,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
 import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
+import freeomovie, hclips
 
 socket.setdefaulttimeout(60)
 
@@ -80,6 +81,7 @@ def INDEXM():
     utils.addDir('[COLOR yellow]Pornkino[/COLOR]','http://pornkino.to/',330,os.path.join(imgDir, 'pornkino.png'),'')
     utils.addDir('[COLOR yellow]Cat3Movie[/COLOR]','http://cat3movie.us',350,os.path.join(imgDir, 'cat3movie.png'),'')
     utils.addDir('[COLOR yellow]ParadiseHill[/COLOR]','http://www.paradisehill.tv/en/',250,os.path.join(imgDir, 'paradisehill.png'),'')
+    utils.addDir('[COLOR yellow]FreeOMovie[/COLOR]','http://www.freeomovie.com/',370,os.path.join(imgDir, 'freeomovie.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXT():    
@@ -88,6 +90,7 @@ def INDEXT():
     utils.addDir('[COLOR yellow]Milf.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.milf.nl/videos/nieuw',100,os.path.join(imgDir, 'milfnl.png'),1)
     utils.addDir('[COLOR yellow]Sextube.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.sextube.nl/videos/nieuw',100,os.path.join(imgDir, 'sextube.png'),2)
     utils.addDir('[COLOR yellow]TubePornClassic[/COLOR]','http://www.tubepornclassic.com/latest-updates/',360,os.path.join(imgDir, 'tubepornclassic.png'),'')
+    utils.addDir('[COLOR yellow]HClips[/COLOR]','http://www.hclips.com/latest-updates/',380,os.path.join(imgDir, 'hclips.png'),'')    
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXW():
@@ -340,5 +343,17 @@ elif mode == 361: tubepornclassic.List(url)
 elif mode == 362: tubepornclassic.Playvid(url, name, download)
 elif mode == 363: tubepornclassic.Cat(url)
 elif mode == 364: tubepornclassic.Search(url)
+elif mode == 370: freeomovie.Main()
+elif mode == 371: freeomovie.List(url)
+elif mode == 372: freeomovie.Playvid(url, name, download)
+elif mode == 373: freeomovie.Cat(url)
+elif mode == 374: freeomovie.Search(url)
+elif mode == 380: hclips.Main()
+elif mode == 381: hclips.List(url)
+elif mode == 382: hclips.Playvid(url, name, download)
+elif mode == 383: hclips.Categories(url)
+elif mode == 384: hclips.Search(url)
+elif mode == 385: hclips.Channels(url)
+elif mode == 386: hclips.ChannelList(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
