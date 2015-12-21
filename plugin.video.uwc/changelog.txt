@@ -1,3 +1,7 @@
+[B]Version 1.0.66[/B]
+Fixed: Freeomovie (I should test the pull requests before releasing)
+
+
 [B]Version 1.0.65[/B]
 Added: Hclips (anton40)
 Added: Freeomovie (anton40)

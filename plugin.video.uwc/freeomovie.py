@@ -24,21 +24,22 @@ import utils
 
 progress = utils.progress
 
+
 def Main():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.tubepornclassic.com/categories/', 373, '', '')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.tubepornclassic.com/search/', 374, '', '')    
+    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.freeomovie.com/', 373, '', '')
+    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.freeomovie.com/?s=', 374, '', '')    
     List('http://www.freeomovie.com/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def List(url):
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<h2><a href="(.+?)" title="(.+?)">.+?<img src="(.+?)".+? width="225" height="329"', re.DOTALL).findall(listhtml)
+    match = re.compile('<h2><a href="([^"]+)".*?title="([^"]+)">.+?<img src="([^"]+)".+? width="', re.DOTALL).findall(listhtml)
     for videopage, name, img in match:
         name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 372, img, '')
     try:
-        nextp = re.compile('<span class=\'current\'>.+?</span><a class="page larger" href="(.+?)"').findall(listhtml)
+        nextp = re.compile('<span class=\'current\'>.+?</span><a class="page larger" href="([^"]+)"').findall(listhtml)
         utils.addDir('Next Page', nextp[0], 371,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -49,23 +50,19 @@ def Search(url):
     vq = utils._get_keyboard(heading="Searching for...")
     if (not vq): return False, 0
     title = urllib.quote_plus(vq)
-    title = title.replace(' ','%20')
-    searchUrl = searchUrl + title + "/"
+    title = title.replace(' ','+')
+    searchUrl = searchUrl + title
     print "Searching URL: " + searchUrl
     List(searchUrl)
 
 def Cat(url):
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<a class="item" href="([^"]+)" title="([^"]+)".*?thumb" src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for catpage, name, img in match:
+    match = re.compile('<li><a href="([^"]+)" rel="tag">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for catpage, name in match:
         name = utils.cleantext(name)
-        utils.addDir(name, catpage, 371, img, '')
+        utils.addDir(name, catpage, 371, '', '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def Playvid(url, name, download=None):
-    videopage = utils.getHtml(url, '')
-    videourl = re.compile("\?id=.+?&myURL\[\]=(.+?)\"").findall(videopage)
-    videourl = videourl[0]
-    print "freemovie: Playvid: " + videourl
-    utils.playvideo(videourl, name, download, url)
+    utils.PLAYVIDEO(url, name, download)
