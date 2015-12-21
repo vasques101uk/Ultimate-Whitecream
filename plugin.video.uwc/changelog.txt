@@ -1,3 +1,10 @@
+[B]Version 1.0.65[/B]
+Added: Hclips (anton40)
+Added: Freeomovie (anton40)
+Fixed: porn00
+Changed: temporary disabled watchxxxfree and beeg until fixed
+
+
 [B]Version 1.0.64[/B]
 Fixed: Videomega videos
 Fixed: Videomegaporn video listing
