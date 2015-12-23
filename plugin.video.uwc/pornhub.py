@@ -57,7 +57,10 @@ def Categories(url):
     cathtml = utils.getHtml(url, '')
     match = re.compile('<div class="category-wrapper">.+?<a href="(.+?)"  alt="(.+?)">.+?<img src="(.+?)"', re.DOTALL).findall(cathtml)
     for catpage, name, img, in sorted(match, key=lambda item: item[1]):
-        utils.addDir(name, 'http://www.pornhub.com' + catpage + "&o=cm", 391, img, '')
+        if '?' in catpage:
+            utils.addDir(name, 'http://www.pornhub.com' + catpage + "&o=cm", 391, img, '')
+        else:
+            utils.addDir(name, 'http://www.pornhub.com' + catpage + "?o=cm", 391, img, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def Playvid(url, name, download=None):

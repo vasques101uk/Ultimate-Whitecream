@@ -292,7 +292,10 @@ def getHtml(url, referer, hdr=None, NoCookie=None):
     response = urlopen(req, timeout=60)
     data = response.read()
     if not NoCookie:
-        cj.save(cookiePath)
+        # Cope with problematic timestamp values on RPi on OpenElec 4.2.1
+        try:
+            cj.save(cookiePath)
+        except: pass
     response.close()
     return data
 
