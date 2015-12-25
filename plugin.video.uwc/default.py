@@ -22,7 +22,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
 import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
-import freeomovie, hclips
+import freeomovie, hclips, pornhub
 
 socket.setdefaulttimeout(60)
 
@@ -91,6 +91,7 @@ def INDEXT():
     utils.addDir('[COLOR yellow]Sextube.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.sextube.nl/videos/nieuw',100,os.path.join(imgDir, 'sextube.png'),2)
     utils.addDir('[COLOR yellow]TubePornClassic[/COLOR]','http://www.tubepornclassic.com/latest-updates/',360,os.path.join(imgDir, 'tubepornclassic.png'),'')
     utils.addDir('[COLOR yellow]HClips[/COLOR]','http://www.hclips.com/latest-updates/',380,os.path.join(imgDir, 'hclips.png'),'')    
+    utils.addDir('[COLOR yellow]PornHub[/COLOR]','http://www.pornhub.com/newest.html',390,os.path.join(imgDir, 'pornhub.png'),'')    
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXW():
@@ -355,5 +356,10 @@ elif mode == 383: hclips.Categories(url)
 elif mode == 384: hclips.Search(url)
 elif mode == 385: hclips.Channels(url)
 elif mode == 386: hclips.ChannelList(url)
+elif mode == 390: pornhub.Main()
+elif mode == 391: pornhub.List(url)
+elif mode == 392: pornhub.Playvid(url, name, download)
+elif mode == 393: pornhub.Categories(url)
+elif mode == 394: pornhub.Search(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)

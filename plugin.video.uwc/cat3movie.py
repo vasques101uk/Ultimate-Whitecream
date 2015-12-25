@@ -64,10 +64,11 @@ def Categories(url):
 
 
 def Playvid(url, name, download=None):
+    print "cat3movie::playvid " + url
     progress.create('Play video', 'Searching videofile.')
     progress.update( 10, "", "Loading video page", "" )
     html = utils.getHtml(url, '')
-    embedLinks = re.compile('<p><a href="(.+?)" rel="nofollow" target="_blank">').findall(html)
+    embedLinks = re.compile('<a href="(.+?)" rel="nofollow" target="_blank">').findall(html)
     url = ''
     for link in embedLinks:
         html = utils.getHtml(link, '')
