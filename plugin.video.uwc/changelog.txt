@@ -1,3 +1,9 @@
+[B]Version 1.0.67[/B]
+Added: Pornhub (anton40)
+Fixed: Watchxxxfree
+Fixed: Some other small fixes from anton40
+
+
 [B]Version 1.0.66[/B]
 Fixed: Freeomovie (I should test the pull requests before releasing)
 

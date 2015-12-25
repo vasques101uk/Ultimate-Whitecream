@@ -33,9 +33,10 @@ def Main():
 def List(url):
     print "pornhub::List " + url
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<li class="videoblock".+?<a href="(.+?)" title="(.+?)".+?>.+?<img.+?data-mediumthumb="(.+?)"', re.DOTALL).findall(listhtml)
-    for videopage, name, img in match:
+    match = re.compile('<li class="videoblock".+?<a href="([^"]+)" title="([^"]+)".+?<var class="duration">([^<]+).*?data-mediumthumb="([^"]+)"', re.DOTALL).findall(listhtml)
+    for videopage, name, duration, img in match:
         name = utils.cleantext(name)
+        name = name + " [COLOR blue]" + duration + "[/COLOR]"
         utils.addDownLink(name, 'http://www.pornhub.com' + videopage, 392, img, '')
     try:
         nextp=re.compile('<li class="page_next"><a href="(.+?)" class="orangeButton">Next</a></li>', re.DOTALL).findall(listhtml)
@@ -65,8 +66,8 @@ def Categories(url):
     
 def Playvid(url, name, download=None):
     html = utils.getHtml(url, '')
-    videourl = re.compile("player_quality_.+? = '(.+?)'").findall(html)
-    videourl = videourl[0]
+    videourl = re.compile("var player_quality_.+? = '(.+?)'").findall(html)
+    videourl = videourl[-1]
     if download == 1:
         utils.downloadVideo(videourl, name)
     else:    
