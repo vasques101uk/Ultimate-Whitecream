@@ -30,7 +30,8 @@ def Main():
 
 
 def List(url, page):
-    url = url.replace('page=1','page='+str(page))
+    if page == 1:
+        url = url.replace('page=1','page='+str(page))
     listhtml = utils.getHtml(url, '')
     match = re.compile('</h\d+>(.*?)class="pagination', re.DOTALL | re.IGNORECASE).findall(listhtml)
     match1 = re.compile('link" href="([^"]+)".*?bci-title">([^<]+)<.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(match[0])

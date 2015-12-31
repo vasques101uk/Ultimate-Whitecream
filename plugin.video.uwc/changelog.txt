@@ -1,3 +1,8 @@
+[B]Version 1.0.68[/B]
+Fixed: Openload
+Fixed: ParadiseHill going to page 11
+Fixed: Hdclips Next page channels
+
 [B]Version 1.0.67[/B]
 Added: Pornhub (anton40)
 Fixed: Watchxxxfree

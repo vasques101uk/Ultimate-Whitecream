@@ -27,7 +27,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.67"
+__version__ = "1.0.68"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -418,7 +418,7 @@ def decodeOpenLoad(html):
     decodestring = decode(decodestring)
     decodestring = decodestring.replace("\\/","/")
     
-    videourl = re.search(r'vr="([^"]+)', decodestring, re.DOTALL | re.IGNORECASE).group(1)
+    videourl = re.search(r'vr\s?=\s?"([^"]+)', decodestring, re.DOTALL | re.IGNORECASE).group(1)
     return videourl
 
 def decode(encoded):

@@ -39,7 +39,7 @@ def List(url):
         name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 382, img, '')
     try:
-        nextp=re.compile('<li class="next">.+?<a href="(.+?)" title=".+?">Next</a>.+?</li>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+        nextp=re.compile('<li class="next">.+?<a href="(.+?)".*?>Next</a>', re.DOTALL | re.IGNORECASE).findall(listhtml)
         utils.addDir('Next Page', 'http://www.hclips.com' + nextp[0], 381,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -69,7 +69,7 @@ def Channels(url):
         name = utils.cleantext(name)
         utils.addDir(name, "http://hclips.com" + chanpage, 386, "http://hclips.com" + img, '')
     try:
-        nextp=re.compile('<li class="next">.+?<a href="(.+?)" title="Next Page">Next</a>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+        nextp=re.compile('<li class="next">.+?<a href="(.+?)".*?>Next</a>', re.DOTALL | re.IGNORECASE).findall(listhtml)
         utils.addDir('Next Page', 'http://www.hclips.com' + nextp[0], 385,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -82,8 +82,8 @@ def ChannelList(url):
         name = utils.cleantext(name)
         utils.addDownLink(name, 'http://www.hclips.com' + videopage, 382, img, '')
     try:
-        nextp=re.compile('<li class="next">.+?<a href="(.+?)" title=".+?">Next</a>.+?</li>', re.DOTALL | re.IGNORECASE).findall(listhtml)
-        utils.addDir('Next Page', 'http://www.hclips.com' + nextp[0], 381,'')
+        nextp=re.compile('<li class="next">.+?<a href="(.+?)".*?>Next</a>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+        utils.addDir('Next Page', 'http://www.hclips.com' + nextp[0], 386,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
