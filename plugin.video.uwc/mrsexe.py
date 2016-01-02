@@ -79,8 +79,9 @@ def Stars(url):
 
 
 def Playvid(url, name, download=None):
+    print "mrsexe::Playvid " + url
     html = utils.getHtml(url, '')
-    videourl = re.compile(r"src='(/inc/clic\.php\?video=.+?&cat=mrsexe)'").findall(html)
+    videourl = re.compile(r"src='(/inc/clic\.php\?video=.+?&cat=mrsex.+?)'").findall(html)
     html = utils.getHtml('http://www.mrsexe.com/' + videourl[0], '')
     videourls = re.compile(r"'file': \"(.+?)\",.+?'label': '(.+?)'", re.DOTALL).findall(html)
     videourls = sorted(videourls, key=lambda tup: tup[1], reverse=True)
