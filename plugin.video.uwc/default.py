@@ -22,7 +22,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
 import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
-import freeomovie, hclips, pornhub
+import freeomovie, hclips, pornhub, mrsexe
 
 socket.setdefaulttimeout(60)
 
@@ -65,6 +65,7 @@ def INDEXS():
     utils.addDir('[COLOR yellow]StreamPleasure[/COLOR]','http://streampleasure.com/page/1/?filtre=date&cat=0',210,os.path.join(imgDir, 'streampleasure.png'),'')    
     utils.addDir('[COLOR yellow]Playporn[/COLOR]','http://playporn.to/category/xxx-clips-scenes-stream/',230,os.path.join(imgDir, 'playporn.png'),'')
     utils.addDir('[COLOR yellow]HD Zog[/COLOR]','http://www.hdzog.com/new/',340,os.path.join(imgDir, 'hdzog.png'),'')    
+    utils.addDir('[COLOR yellow]Mr Sexe[/COLOR]','http://www.mrsexe.com/',400,os.path.join(imgDir, 'mrsexe.png'),'')    
     utils.addDir('[COLOR yellow]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -361,5 +362,11 @@ elif mode == 391: pornhub.List(url)
 elif mode == 392: pornhub.Playvid(url, name, download)
 elif mode == 393: pornhub.Categories(url)
 elif mode == 394: pornhub.Search(url)
+elif mode == 400: mrsexe.Main()
+elif mode == 401: mrsexe.List(url)
+elif mode == 402: mrsexe.Playvid(url, name, download)
+elif mode == 403: mrsexe.Categories(url)
+elif mode == 404: mrsexe.Search(url)
+elif mode == 405: mrsexe.Stars(url)
 
 xbmcplugin.endOfDirectory(utils.addon_handle)
