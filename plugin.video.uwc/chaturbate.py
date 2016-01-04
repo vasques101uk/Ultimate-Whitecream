@@ -19,7 +19,7 @@
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
-import utils
+import utils, sqlite3
 
 
 def Main():
@@ -28,13 +28,12 @@ def Main():
     utils.addDir('[COLOR yellow]Couple[/COLOR]','https://chaturbate.com/couple-cams/?page=1',221,'','')
     utils.addDir('[COLOR yellow]Male[/COLOR]','https://chaturbate.com/male-cams/?page=1',221,'','')
     utils.addDir('[COLOR yellow]Transsexual[/COLOR]','https://chaturbate.com/transsexual-cams/?page=1',221,'','')
+    utils.addDownLink('[COLOR red]Delete webcam images from Textures db (not advised)[/COLOR]','',223,'','')
     xbmcplugin.endOfDirectory(utils.addon_handle)
-
 
 
 def List(url):
     listhtml = utils.getHtml2(url)
-    print listhtml
     match = re.compile(r'<li>\s+<a href="([^"]+)".*?src="([^"]+)".*?alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, img, name in match:
         name = utils.cleantext(name)
@@ -46,6 +45,16 @@ def List(url):
         utils.addDir('Next Page', next, 221,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
+
+
+def clean_database():
+    conn = sqlite3.connect(xbmc.translatePath("special://database/Textures13.db"))
+    try:
+        with conn:
+            conn.execute("DELETE FROM texture WHERE url LIKE '%%%s%%';" % ".highwebmedia.com")
+            utils.dialog.ok('Finished','Chaturbate images cleared')
+    except:
+        pass
 
 
 def Playvid(url, name):

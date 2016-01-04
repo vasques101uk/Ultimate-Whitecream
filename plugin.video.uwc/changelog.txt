@@ -1,3 +1,9 @@
+[B]Version 1.0.69[/B]
+Fixed: HClips channel listing
+Changed: Streamin.to url handling
+Added: Chaturbate, remove cached images from textures database. Not advised, but some people requested it.
+
+
 [B]Version 1.0.68[/B]
 Fixed: Openload
 Fixed: ParadiseHill going to page 11
