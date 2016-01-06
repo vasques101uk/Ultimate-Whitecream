@@ -1,3 +1,8 @@
+[B]Version 1.0.70[/B]
+Changed: Better image cache removal for Chaturbate, now it also removes the files from the hd.
+Added: Option in the Addon settings for auto-refresh image cache on Chaturbate.
+
+
 [B]Version 1.0.69[/B]
 Fixed: HClips channel listing
 Changed: Streamin.to url handling

@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib, urllib2, re, cookielib, os.path, sys, socket
+import urllib, urllib2, re, cookielib, os, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, sqlite3
@@ -28,11 +28,13 @@ def Main():
     utils.addDir('[COLOR yellow]Couple[/COLOR]','https://chaturbate.com/couple-cams/?page=1',221,'','')
     utils.addDir('[COLOR yellow]Male[/COLOR]','https://chaturbate.com/male-cams/?page=1',221,'','')
     utils.addDir('[COLOR yellow]Transsexual[/COLOR]','https://chaturbate.com/transsexual-cams/?page=1',221,'','')
-    utils.addDownLink('[COLOR red]Delete webcam images from Textures db (not advised)[/COLOR]','',223,'','')
+    utils.addDownLink('[COLOR red]Refresh Chaturbate images[/COLOR]','',223,'','')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def List(url):
+    if utils.addon.getSetting("chaturbate") == "true":
+        clean_database()
     listhtml = utils.getHtml2(url)
     match = re.compile(r'<li>\s+<a href="([^"]+)".*?src="([^"]+)".*?alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, img, name in match:
@@ -47,12 +49,18 @@ def List(url):
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def clean_database():
+def clean_database(showdialog=False):
     conn = sqlite3.connect(xbmc.translatePath("special://database/Textures13.db"))
     try:
         with conn:
+            list = conn.execute("SELECT id, cachedurl FROM texture WHERE url LIKE '%%%s%%';" % ".highwebmedia.com")
+            for row in list:
+                conn.execute("DELETE FROM sizes WHERE idtexture LIKE '%s';" % row[0])
+                try: os.remove(xbmc.translatePath("special://thumbnails/" + row[1]))
+                except: pass
             conn.execute("DELETE FROM texture WHERE url LIKE '%%%s%%';" % ".highwebmedia.com")
-            utils.dialog.ok('Finished','Chaturbate images cleared')
+            if showdialog:
+                utils.dialog.ok('Finished','Chaturbate images cleared')
     except:
         pass
 
