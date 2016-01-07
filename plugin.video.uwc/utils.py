@@ -27,7 +27,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.68"
+__version__ = "1.0.70"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -240,10 +240,12 @@ def playvideo(videosource, name, download=None, url=None):
             videourl = decodeOpenLoad(openloadsrc)
         except:
             dialog.ok('Oh oh','Couldn\'t find playable OpenLoad link')
+            return
     elif vidhost == 'Streamin':
         progress.update( 40, "", "Loading Streamin", "" )
-        streaminurl = re.compile('<iframe.*?src="(http://streamin\.to[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
-        streaminsrc = getHtml2(streaminurl[0])
+        streaminurl = re.compile(r"//(?:www\.)?streamin\.to/(?:embed-)?([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
+        streaminurl = 'http://streamin.to/embed-%s-670x400.html' % streaminurl[0]
+        streaminsrc = getHtml2(streaminurl)
         videohash = re.compile('h=([^"]+)', re.DOTALL | re.IGNORECASE).findall(streaminsrc)
         videourl = re.compile('image: "(http://[^/]+/)', re.DOTALL | re.IGNORECASE).findall(streaminsrc)
         progress.update( 80, "", "Getting video file from Streamin", "" )

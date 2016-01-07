@@ -34,12 +34,12 @@ def Main():
 def List(url):
     print "hclips::List " + url
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<a href="(.+?)" class="thumb">.+?<img src="(.+?)" alt="(.+?)" width="220" height="165"', re.DOTALL).findall(listhtml)
+    match = re.compile('<a href="([^"]+)" class="thumb">.+?<img src="([^"]+)" alt="([^"]+)" width="220" height="165"', re.DOTALL).findall(listhtml)
     for videopage, img, name in match:
         name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 382, img, '')
     try:
-        nextp=re.compile('<li class="next">.+?<a href="(.+?)".*?>Next</a>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+        nextp=re.compile('<li class="next">.+?<a href="([^"]+)".*?>Next</a>', re.DOTALL | re.IGNORECASE).findall(listhtml)
         utils.addDir('Next Page', 'http://www.hclips.com' + nextp[0], 381,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -64,12 +64,12 @@ def Categories(url):
 def Channels(url):
     print "hclips::Channels " + url
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<a href="(.+?)" class="video_thumb" title="(.+?)">.+?<img height="165" width="285" src="(.+?)"', re.DOTALL).findall(listhtml)
+    match = re.compile('<a href="([^"]+)" class="video_thumb" title="([^"]+)">.+?<img height="165" width="285" src="([^"]+)"', re.DOTALL).findall(listhtml)
     for chanpage, name, img in match:
         name = utils.cleantext(name)
         utils.addDir(name, "http://hclips.com" + chanpage, 386, "http://hclips.com" + img, '')
     try:
-        nextp=re.compile('<li class="next">.+?<a href="(.+?)".*?>Next</a>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+        nextp=re.compile('<li class="next">.+?<a href="([^"]+)".*?>Next</a>', re.DOTALL | re.IGNORECASE).findall(listhtml)
         utils.addDir('Next Page', 'http://www.hclips.com' + nextp[0], 385,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -77,19 +77,19 @@ def Channels(url):
 def ChannelList(url):
     print "hclips::List " + url
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<a href="(.+?)" class="thumb" data-rt=".+?">.+?<img  width="220" height="165" src="(.+?)" alt="(.+?)"', re.DOTALL).findall(listhtml)
+    match = re.compile('<a href="([^"]+)" class="thumb" data-rt=".+?">.+?<img  width="220" height="165" src="([^"]+)" alt="([^"]+)"', re.DOTALL).findall(listhtml)
     for videopage, img, name in match:
         name = utils.cleantext(name)
         utils.addDownLink(name, 'http://www.hclips.com' + videopage, 382, img, '')
     try:
-        nextp=re.compile('<li class="next">.+?<a href="(.+?)".*?>Next</a>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+        nextp=re.compile('<li class="next">.+?<a href="([^"]+)".*?>Next</a>', re.DOTALL | re.IGNORECASE).findall(listhtml)
         utils.addDir('Next Page', 'http://www.hclips.com' + nextp[0], 386,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def Playvid(url, name, download=None):
     html = utils.getHtml(url, '')
-    videourl = re.compile("video_url: '(.+?.mp4)").findall(html)
+    videourl = re.compile("video_url: '([^']+)").findall(html)
     videourl = videourl[0]
     if download == 1:
         utils.downloadVideo(videourl, name)
