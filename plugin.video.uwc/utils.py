@@ -27,7 +27,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.71"
+__version__ = "1.0.72"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -169,6 +169,8 @@ def playvideo(videosource, name, download=None, url=None):
         hosts.append('Streamin')          
     if re.search('www.flashx.tv', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('FlashX')
+    if re.search('mega3x.net', videosource, re.DOTALL | re.IGNORECASE):
+        hosts.append('Mega3X')        
     if len(hosts) == 0:
         progress.close()
         dialog.ok('Oh oh','Couldn\'t find any video')
@@ -264,6 +266,15 @@ def playvideo(videosource, name, download=None, url=None):
         flashxujs = beautify(flashxjs[0])
         videourl = re.compile(r'\[{\s+file: "([^"]+)",', re.DOTALL | re.IGNORECASE).findall(flashxujs)
         videourl = videourl[0]
+    elif vidhost == 'Mega3X':
+        progress.update( 40, "", "Loading Mega3X", "" )
+        mega3xurl = re.compile('src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
+        mega3xsrc = getHtml(mega3xurl[0],'', openloadhdr)
+        mega3xjs = re.compile("<script[^>]+>(eval[^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(mega3xsrc)
+        progress.update( 80, "", "Getting video file from Mega3X", "" )
+        mega3xujs = beautify(mega3xjs[0])
+        videourl = re.compile('file: "([^"]+mp4)"', re.DOTALL | re.IGNORECASE).findall(mega3xujs)
+        videourl = videourl[0]        
     progress.close()
     playvid(videourl, name, download)
 
@@ -286,9 +297,9 @@ def PlayStream(name, url):
 
 def getHtml(url, referer, hdr=None, NoCookie=None):
     if not hdr:
-        req = Request(url, '', headers)
+        req = Request(url, None, headers)
     else:
-        req = Request(url, '', hdr)
+        req = Request(url, None, hdr)
     if len(referer) > 1:
         req.add_header('Referer', referer)
     response = urlopen(req, timeout=60)

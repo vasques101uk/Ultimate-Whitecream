@@ -32,7 +32,7 @@ def XTMain():
     utils.addDir('[COLOR yellow]Search[/COLOR]','http://xtheatre.net/page/1/?s=',24,'','')
     Sort = '[COLOR yellow]Current sort:[/COLOR] ' + sortlistxt[int(addon.getSetting("sortxt"))]
     utils.addDir(Sort, '', 25, '', '')    
-    XTList('http://xtheatre.net/page/1/',1)
+    XTList('http://xtheatre.net/category/movies/page/1/',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -60,9 +60,9 @@ def XTSearch(url):
 def XTList(url, page):
     sort = getXTSortMethod()
     if re.search('\?', url, re.DOTALL | re.IGNORECASE):
-        url = url + '&filtre=' + sort
+        url = url + '&filtre=' + sort + '&display=extract'
     else:
-        url = url + '?filtre=' + sort
+        url = url + '?filtre=' + sort + '&display=extract'
     print url
     listhtml = utils.getHtml(url, '')
     match = re.compile('src="([^"]+?)" class="attachment.*?<a href="([^"]+)" title="([^"]+)".*?<div class="right">.<p>([^<]+)</p>', re.DOTALL | re.IGNORECASE).findall(listhtml)

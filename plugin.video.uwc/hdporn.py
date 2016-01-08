@@ -44,8 +44,8 @@ def PAQList(url, page, onelist=None):
         url = url.replace('page/1/','page/'+str(page)+'/')    
     listhtml = utils.getHtml(url, '')
     if 'pornaq' in url:
-        match = re.compile('src="([^"]+)" class="attachment-primary-post-thumbnail wp-post-image".*?<a title="([^"]+)" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-        for img, name, videopage in match:
+        match = re.compile(r'<h2>\s+<a title="([^"]+)" href="([^"]+)".*?src="([^"]+)" class="attachment-primary-post-thumbnail', re.DOTALL | re.IGNORECASE).findall(listhtml)
+        for name, videopage, img in match:
             name = utils.cleantext(name)
             utils.addDownLink(name, videopage, 62, img, '')
     elif 'porn00' in url:

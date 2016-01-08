@@ -1,3 +1,9 @@
+[B]Version 1.0.72[/B]
+Added: Mega3X support (for Cat3Movie)
+Fixed: Xtheatre listing
+Fixed: PornAQ listing
+
+
 [B]Version 1.0.71[/B]
 Added: MrSexe (anton40)
 
