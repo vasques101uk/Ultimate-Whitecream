@@ -33,7 +33,7 @@ def HQMAIN():
 
 def HQLIST(url):
     link = utils.getHtml(url, '')
-    match = re.compile('<a href="([^"]+)"[^<]+<img src="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(link)
+    match = re.compile('<a href="([^"]+)" class="image featured non-overlay".*?<img id="[^"]+" src="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(link)
     for url, img, name in match:
         name = utils.cleantext(name)    
         videourl = "http://www.hqporner.com" + url

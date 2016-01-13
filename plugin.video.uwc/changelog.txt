@@ -1,3 +1,9 @@
+[B]Version 1.0.73[/B]
+Added: Ero-tik
+Added: Different sections/categories for Chaturbate
+Fixed: HQPorner
+
+
 [B]Version 1.0.72[/B]
 Added: Mega3X support (for Cat3Movie)
 Fixed: Xtheatre listing
