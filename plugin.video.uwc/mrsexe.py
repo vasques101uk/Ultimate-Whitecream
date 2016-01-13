@@ -58,9 +58,9 @@ def Search(url):
 
 def Categories(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile(r'<a href="(/cat/.+?)".+?>(.+?)</a>', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match = re.compile('value="(/cat[^"]+)">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
     for catpage, name in match:
-        utils.addDir(name, 'http://www.mrsexe.com/' + catpage, 401, '')
+        utils.addDir(name, 'http://www.mrsexe.com' + catpage, 401, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
