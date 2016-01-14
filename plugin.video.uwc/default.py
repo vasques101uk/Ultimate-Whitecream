@@ -22,7 +22,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
 import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
-import freeomovie, hclips, pornhub, mrsexe, erotik
+import freeomovie, hclips, pornhub, mrsexe, erotik, favorites
 
 socket.setdefaulttimeout(60)
 
@@ -41,6 +41,7 @@ def INDEX():
     utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Hentai[/COLOR]','http://www.hentaicraving.com/?genre=Uncensored',30,os.path.join(imgDir, 'hc.jpg'),'')
     utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Tubes[/COLOR]','',6,'','')
     utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Webcams & Streams[/COLOR]','',7,'','')
+    utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Favorites[/COLOR]','',901,'','')
     download_path = addon.getSetting('download_path')
     if download_path != '' and os.path.exists(download_path):
         utils.addDir('[COLOR white]Whitecream[/COLOR] [COLOR yellow]Download Folder[/COLOR]',download_path,4,'','')
@@ -148,31 +149,25 @@ mode = None
 img = None
 page = 1
 download = None
+fav = None
+favmode = None
 
-try:
-    url = urllib.unquote_plus(params["url"])
-except:
-    pass
-try:
-    name = urllib.unquote_plus(params["name"])
-except:
-    pass
-try:
-    mode = int(params["mode"])
-except:
-    pass
-try:
-    page = int(params["page"])
-except:
-    pass
-try:
-    img = urllib.unquote_plus(params["img"])
-except:
-    pass
-try:
-    download = int(params["download"])
-except:
-    pass
+try: url = urllib.unquote_plus(params["url"])
+except: pass
+try: name = urllib.unquote_plus(params["name"])
+except: pass
+try: mode = int(params["mode"])
+except: pass
+try: page = int(params["page"])
+except: pass
+try: img = urllib.unquote_plus(params["img"])
+except: pass
+try: download = int(params["download"])
+except: pass
+try: fav = params["fav"]
+except: pass
+try: favmode = int(params["favmode"])
+except: pass
 
 if mode is None: INDEX()
 elif mode == 2: INDEXS()
@@ -375,5 +370,8 @@ elif mode == 402: mrsexe.Playvid(url, name, download)
 elif mode == 403: mrsexe.Categories(url)
 elif mode == 404: mrsexe.Search(url)
 elif mode == 405: mrsexe.Stars(url)
+
+elif mode == 900: favorites.Favorites(fav,favmode,name,url,img)
+elif mode == 901: favorites.List()
 
 xbmcplugin.endOfDirectory(utils.addon_handle)

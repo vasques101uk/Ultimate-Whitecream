@@ -27,7 +27,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.74"
+__version__ = "1.0.75"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -359,7 +359,9 @@ def cleantext(text):
     return text
 
 
-def addDownLink(name, url, mode, iconimage, desc, stream=None):
+def addDownLink(name, url, mode, iconimage, desc, stream=None, fav='add'):
+    if fav == 'add': favtext = "Add to"
+    elif fav == 'del': favtext = "Remove from"
     u = (sys.argv[0] +
          "?url=" + urllib.quote_plus(url) +
          "&mode=" + str(mode) +
@@ -368,6 +370,13 @@ def addDownLink(name, url, mode, iconimage, desc, stream=None):
          "?url=" + urllib.quote_plus(url) +
          "&mode=" + str(mode) +
          "&download=" + str(1) +
+         "&name=" + urllib.quote_plus(name))
+    favorite = (sys.argv[0] +
+         "?url=" + urllib.quote_plus(url) +
+         "&fav=" + fav +
+         "&favmode=" + str(mode) +
+         "&mode=" + str('900') +
+         "&img=" + urllib.quote_plus(iconimage) +
          "&name=" + urllib.quote_plus(name))         
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
@@ -377,7 +386,8 @@ def addDownLink(name, url, mode, iconimage, desc, stream=None):
         liz.setInfo(type="Video", infoLabels={"Title": name})
     else:
         liz.setInfo(type="Video", infoLabels={"Title": name, "plot": desc, "plotoutline": desc})
-    liz.addContextMenuItems([('Download Video', 'xbmc.RunPlugin('+dwnld+')')])
+    liz.addContextMenuItems([('[COLOR yellow]Download Video[/COLOR]', 'xbmc.RunPlugin('+dwnld+')'),
+    ('[COLOR yellow]' + favtext + ' favorites[/COLOR]', 'xbmc.RunPlugin('+favorite+')')])
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=False)
     return ok
     
