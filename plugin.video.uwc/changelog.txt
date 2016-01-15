@@ -1,3 +1,8 @@
+[B]Version 1.0.76[/B]
+Fixed: Pornhub video listing
+Changed: renamed Thepornnation to ThePornEmpire
+
+
 [B]Version 1.0.75[/B]
 Added: Favorites, you can add any video to the Whitecream Favorite list from the contextmenu
 

@@ -33,7 +33,7 @@ def Main():
 def List(url):
     print "pornhub::List " + url
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<li class="videoblock".+?<a href="([^"]+)" title="([^"]+)".+?<var class="duration">([^<]+).*?data-mediumthumb="([^"]+)"', re.DOTALL).findall(listhtml)
+    match = re.compile('<li class="videoblock.+?<a href="([^"]+)" title="([^"]+)".+?<var class="duration">([^<]+)<.*?data-mediumthumb="([^"]+)"', re.DOTALL).findall(listhtml)
     for videopage, name, duration, img in match:
         name = utils.cleantext(name)
         name = name + " [COLOR blue]" + duration + "[/COLOR]"

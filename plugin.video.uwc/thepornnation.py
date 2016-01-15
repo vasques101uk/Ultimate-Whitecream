@@ -26,17 +26,17 @@ progress = utils.progress
 
 
 def TPNMain(url):
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','thepornempire.com/',123,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','thepornempire.com/?s=',124,'','')
-    utils.addDir('[COLOR yellow]Movies[/COLOR]','thepornempire.com/category/movies/',125,'','')
+    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://thepornempire.com/',123,'','')
+    utils.addDir('[COLOR yellow]Search[/COLOR]','http://thepornempire.com/?s=',124,'','')
+    utils.addDir('[COLOR yellow]Movies[/COLOR]','http://thepornempire.com/category/movies/',125,'','')
     TPNList(url)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def TPNMainMovies(url):
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','thepornempire.com/',126,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','thepornempire.com/?s=',124,'','')
-    utils.addDir('[COLOR yellow]Scenes[/COLOR]','thepornempire.com/category/videos/',120,'','')
+    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://thepornempire.com/',126,'','')
+    utils.addDir('[COLOR yellow]Search[/COLOR]','http://thepornempire.com/?s=',124,'','')
+    utils.addDir('[COLOR yellow]Scenes[/COLOR]','http://thepornempire.com/category/videos/',120,'','')
     TPNList(url)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
