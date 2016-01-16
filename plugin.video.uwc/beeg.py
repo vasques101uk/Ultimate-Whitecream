@@ -32,8 +32,8 @@ dialog = utils.dialog
 # 84 BGSearch
 
 def BGMain():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://beeg.com/api/v5/index/main/0/pc',83,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://beeg.com/api/v5/index/search/0/pc?query=',84,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://beeg.com/api/v5/index/main/0/pc',83,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://beeg.com/api/v5/index/search/0/pc?query=',84,'','')
     BGList('http://beeg.com/api/v5/index/main/0/mobile')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

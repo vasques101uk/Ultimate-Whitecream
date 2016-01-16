@@ -25,8 +25,8 @@ import utils
 progress = utils.progress
 
 def Main():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.pelisxporno.com/',143,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.pelisxporno.com/?s=',144,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.pelisxporno.com/',143,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.pelisxporno.com/?s=',144,'','')
     List('http://www.pelisxporno.com/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

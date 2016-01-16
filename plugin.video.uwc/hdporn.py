@@ -26,15 +26,15 @@ import utils
 progress = utils.progress
 
 def PAQMain():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.pornaq.com',63,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.pornaq.com/page/1/?s=',68,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.pornaq.com',63,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.pornaq.com/page/1/?s=',68,'','')
     PAQList('http://www.pornaq.com/page/1/',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def P00Main():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.porn00.org',63,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.porn00.org/page/1/?s=',68,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.porn00.org',63,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.porn00.org/page/1/?s=',68,'','')
     PAQList('http://www.porn00.org/page/1/',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)    
 

@@ -25,10 +25,10 @@ import utils
 progress = utils.progress
 
 def Main():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.hdzog.com/search/?q=', 343, '', '')
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.hdzog.com/categories/', 344, '', '')
-    utils.addDir('[COLOR yellow]Channels[/COLOR]','http://www.hdzog.com/channels/', 345, '', '')
-    utils.addDir('[COLOR yellow]Models[/COLOR]','http://www.hdzog.com/models/', 346, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.hdzog.com/search/?q=', 343, '', '')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.hdzog.com/categories/', 344, '', '')
+    utils.addDir('[COLOR hotpink]Channels[/COLOR]','http://www.hdzog.com/channels/', 345, '', '')
+    utils.addDir('[COLOR hotpink]Models[/COLOR]','http://www.hdzog.com/models/', 346, '', '')
     List('http://www.hdzog.com/new/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

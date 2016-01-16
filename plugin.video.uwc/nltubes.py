@@ -34,11 +34,11 @@ sitelist = ['http://www.poldertube.nl', 'http://www.milf.nl', 'http://www.sextub
 
 def NLTUBES(url, site):
     siteurl = sitelist[site]
-    utils.addDir('[COLOR yellow]Categories[/COLOR]', siteurl + '/categorieen',103,'', site)
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]', siteurl + '/categorieen',103,'', site)
     if site == 0:
-        utils.addDir('[COLOR yellow]Search[/COLOR]', siteurl + '/pornofilms/zoeken/',104,'', site)
+        utils.addDir('[COLOR hotpink]Search[/COLOR]', siteurl + '/pornofilms/zoeken/',104,'', site)
     else:
-        utils.addDir('[COLOR yellow]Search[/COLOR]', siteurl + '/videos/zoeken/',104,'', site)
+        utils.addDir('[COLOR hotpink]Search[/COLOR]', siteurl + '/videos/zoeken/',104,'', site)
     NLVIDEOLIST(url, site)
 
 
@@ -52,7 +52,7 @@ def NLVIDEOLIST(url, site):
         else:
             hd = " "    
         videourl = siteurl + url
-        duration2 = "[COLOR blue]" +  duration + "[/COLOR]"
+        duration2 = "[COLOR deeppink]" +  duration + "[/COLOR]"
         utils.addDownLink(name + hd + duration2, videourl, 102, img, '')
     try:
         nextp=re.compile('<a href="([^"]+)" title="volg', re.DOTALL | re.IGNORECASE).findall(link)

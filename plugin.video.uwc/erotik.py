@@ -25,10 +25,10 @@ progress = utils.progress
 
 
 def EROMain():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.ero-tik.com',263,'','')
-    utils.addDir('[COLOR yellow]Top Rated[/COLOR]','http://www.ero-tik.com/topvideos.html?page=1',261,'','')
-    utils.addDir('[COLOR yellow]Most Liked[/COLOR]','http://www.ero-tik.com/topvideos.html?do=rating&page=1',261,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.ero-tik.com/search.php?keywords=',264,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.ero-tik.com',263,'','')
+    utils.addDir('[COLOR hotpink]Top Rated[/COLOR]','http://www.ero-tik.com/topvideos.html?page=1',261,'','')
+    utils.addDir('[COLOR hotpink]Most Liked[/COLOR]','http://www.ero-tik.com/topvideos.html?do=rating&page=1',261,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.ero-tik.com/search.php?keywords=',264,'','')
     EROList('http://www.ero-tik.com/newvideos.html?page=1')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -63,8 +63,9 @@ def EROSearch(url):
 
 def EROCat(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('href="(http://www.ero-tik.com/browse-[^"]+)"[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
-    for catpage, name in match:
+    match = re.compile('<ul class="dropdown-menu">(.*?)</ul>', re.DOTALL | re.IGNORECASE).findall(cathtml)[0]
+    match1 = re.compile('href="(http://www.ero-tik.com/browse-[^"]+)"[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match)
+    for catpage, name in match1:
         utils.addDir(name, catpage, 261, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

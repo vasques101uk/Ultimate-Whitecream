@@ -25,9 +25,9 @@ import utils
 progress = utils.progress
 
 def Main():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.hclips.com/search/?p=0&q=', 384, '', '')
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.hclips.com/categories/', 383, '', '')
-    utils.addDir('[COLOR yellow]Channels[/COLOR]','http://www.hclips.com/channels/', 385, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.hclips.com/search/?p=0&q=', 384, '', '')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.hclips.com/categories/', 383, '', '')
+    utils.addDir('[COLOR hotpink]Channels[/COLOR]','http://www.hclips.com/channels/', 385, '', '')
     List('http://www.hclips.com/latest-updates/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

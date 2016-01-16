@@ -25,8 +25,8 @@ import utils
 progress = utils.progress
 
 def Main():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://pornkino.to/?s=', 333, '', '')
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://pornkino.to/', 334, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://pornkino.to/?s=', 333, '', '')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://pornkino.to/', 334, '', '')
     List('http://pornkino.to/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -61,7 +61,7 @@ def Categories(url):
     match = re.compile("Kategorien</span>.*?<ul>(.*?)</ul>", re.DOTALL | re.IGNORECASE).findall(cathtml)
     match1 = re.compile(r'href="([^"]+)"[^>]+>([^<]+)</a> \((\d+)', re.DOTALL | re.IGNORECASE).findall(match[0])
     for catpage, name, videos in match1:
-        name = name + ' [COLOR blue](%s)[/COLOR]' % videos
+        name = name + ' [COLOR deeppink](%s)[/COLOR]' % videos
         utils.addDir(name, catpage, 331, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

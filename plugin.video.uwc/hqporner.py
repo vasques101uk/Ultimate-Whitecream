@@ -23,10 +23,10 @@ import utils
 
 
 def HQMAIN():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://hqporner.com/porn-categories.php',153,'','')
-    utils.addDir('[COLOR yellow]Studios[/COLOR]','http://hqporner.com/porn-studios.php',153,'','')
-    utils.addDir('[COLOR yellow]Girls[/COLOR]','http://hqporner.com/porn-actress.php',153,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://hqporner.com/?s=',154,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://hqporner.com/porn-categories.php',153,'','')
+    utils.addDir('[COLOR hotpink]Studios[/COLOR]','http://hqporner.com/porn-studios.php',153,'','')
+    utils.addDir('[COLOR hotpink]Girls[/COLOR]','http://hqporner.com/porn-actress.php',153,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://hqporner.com/?s=',154,'','')
     HQLIST('http://hqporner.com/hdporn/1')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

@@ -25,10 +25,10 @@ progress = utils.progress
 
 
 def XTCMain():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://xtasie.com/video-porn-categories/',203,'','')
-    utils.addDir('[COLOR yellow]Top Rated[/COLOR]','http://xtasie.com/top-rated-porn-videos/page/1/',201,'','')
-    utils.addDir('[COLOR yellow]Most Rated[/COLOR]','http://xtasie.com/most-viewed-porn-videos/page/1/',201,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://xtasie.com/?s=',204,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://xtasie.com/video-porn-categories/',203,'','')
+    utils.addDir('[COLOR hotpink]Top Rated[/COLOR]','http://xtasie.com/top-rated-porn-videos/page/1/',201,'','')
+    utils.addDir('[COLOR hotpink]Most Rated[/COLOR]','http://xtasie.com/most-viewed-porn-videos/page/1/',201,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://xtasie.com/?s=',204,'','')
     XTCList('http://xtasie.com/porn-video-list/page/1/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

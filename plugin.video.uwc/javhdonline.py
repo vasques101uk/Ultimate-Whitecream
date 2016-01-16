@@ -25,12 +25,12 @@ import utils
 progress = utils.progress
 
 def Main():
-    utils.addDir('[COLOR yellow]Gravure Idol[/COLOR]','http://javhdonline.com/watch/category/gravure-idol/', 181, '', '')
-    utils.addDir('[COLOR yellow]Uncensored[/COLOR]','http://javhdonline.com/watch/category/jav-uncensored/', 181, '', '')
-    utils.addDir('[COLOR yellow]Censored[/COLOR]','http://javhdonline.com/watch/category/jav-censored/', 181, '', '')
-    utils.addDir('[COLOR yellow]Hentai Anime[/COLOR]','http://javhdonline.com/watch/category/hentai-anime/', 181, '', '')
-    utils.addDir('[COLOR yellow]Tags[/COLOR]','http://javhdonline.com/', 183, '', '')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://javhdonline.com/?s=', 184, '', '')
+    utils.addDir('[COLOR hotpink]Gravure Idol[/COLOR]','http://javhdonline.com/watch/category/gravure-idol/', 181, '', '')
+    utils.addDir('[COLOR hotpink]Uncensored[/COLOR]','http://javhdonline.com/watch/category/jav-uncensored/', 181, '', '')
+    utils.addDir('[COLOR hotpink]Censored[/COLOR]','http://javhdonline.com/watch/category/jav-censored/', 181, '', '')
+    utils.addDir('[COLOR hotpink]Hentai Anime[/COLOR]','http://javhdonline.com/watch/category/hentai-anime/', 181, '', '')
+    utils.addDir('[COLOR hotpink]Tags[/COLOR]','http://javhdonline.com/', 183, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://javhdonline.com/?s=', 184, '', '')
     List('http://javhdonline.com/watch/category/jav-uncensored/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

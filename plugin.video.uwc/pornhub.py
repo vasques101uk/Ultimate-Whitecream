@@ -25,8 +25,8 @@ import utils
 progress = utils.progress
 
 def Main():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.pornhub.com/video/search?o=mr&search=', 394, '', '')
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.pornhub.com/categories', 393, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.pornhub.com/video/search?o=mr&search=', 394, '', '')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.pornhub.com/categories', 393, '', '')
     List('http://www.pornhub.com/video?o=cm')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -36,7 +36,7 @@ def List(url):
     match = re.compile('<li class="videoblock.+?<a href="([^"]+)" title="([^"]+)".+?<var class="duration">([^<]+)<.*?data-mediumthumb="([^"]+)"', re.DOTALL).findall(listhtml)
     for videopage, name, duration, img in match:
         name = utils.cleantext(name)
-        name = name + " [COLOR blue]" + duration + "[/COLOR]"
+        name = name + " [COLOR deeppink]" + duration + "[/COLOR]"
         utils.addDownLink(name, 'http://www.pornhub.com' + videopage, 392, img, '')
     try:
         nextp=re.compile('<li class="page_next"><a href="(.+?)" class="orangeButton">Next</a></li>', re.DOTALL).findall(listhtml)

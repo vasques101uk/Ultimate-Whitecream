@@ -25,8 +25,8 @@ import utils
 progress = utils.progress
 
 def Main():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.xvideospanish.com/categorias/',133,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.xvideospanish.com/?s=',134,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.xvideospanish.com/categorias/',133,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.xvideospanish.com/?s=',134,'','')
     List('http://www.xvideospanish.com/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -37,7 +37,7 @@ def List(url):
     for videopage, img, name, runtime in match:
         name = utils.cleantext(name[7:])
         if runtime:
-            name = name + ' [COLOR blue]' + runtime + '[/COLOR]'
+            name = name + ' [COLOR deeppink]' + runtime + '[/COLOR]'
         utils.addDownLink(name, videopage, 132, img, '')
     try:
         nextp=re.compile('<a class="nextpostslink" rel="next" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
@@ -61,7 +61,7 @@ def Categories(url):
     cathtml = utils.getHtml(url, '')
     match = re.compile('data-original="([^"]+)".*?href="([^"]+)">([^<]+)<.*?strong>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
     for img, catpage, name, videos in match:
-        name = name + ' [COLOR blue]' + videos + ' videos[/COLOR]'
+        name = name + ' [COLOR deeppink]' + videos + ' videos[/COLOR]'
         utils.addDir(name, catpage, 131, img)
     xbmcplugin.endOfDirectory(utils.addon_handle)   
 

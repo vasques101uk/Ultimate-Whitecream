@@ -25,9 +25,9 @@ import utils
 progress = utils.progress
 
 def Main():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.mrsexe.com/?search=', 404, '', '')
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.mrsexe.com/', 403, '', '')
-    utils.addDir('[COLOR yellow]Stars[/COLOR]','http://www.mrsexe.com/filles/', 405, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.mrsexe.com/?search=', 404, '', '')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.mrsexe.com/', 403, '', '')
+    utils.addDir('[COLOR hotpink]Stars[/COLOR]','http://www.mrsexe.com/filles/', 405, '', '')
     List('http://www.mrsexe.com/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

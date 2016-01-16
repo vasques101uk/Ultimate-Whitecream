@@ -24,10 +24,10 @@ import utils
 progress = utils.progress
 
 def Main():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.tubepornclassic.com/categories/', 363, '', '')
-    utils.addDir('[COLOR yellow]Top Rated[/COLOR]','http://www.tubepornclassic.com/top-rated/', 361, '', '')
-    utils.addDir('[COLOR yellow]Most Viewed[/COLOR]','http://www.tubepornclassic.com/most-popular/', 361, '', '')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.tubepornclassic.com/search/', 364, '', '')    
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.tubepornclassic.com/categories/', 363, '', '')
+    utils.addDir('[COLOR hotpink]Top Rated[/COLOR]','http://www.tubepornclassic.com/top-rated/', 361, '', '')
+    utils.addDir('[COLOR hotpink]Most Viewed[/COLOR]','http://www.tubepornclassic.com/most-popular/', 361, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.tubepornclassic.com/search/', 364, '', '')    
     List('http://www.tubepornclassic.com/latest-updates/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -37,7 +37,7 @@ def List(url):
     match = re.compile('<a href="([^"]+)" title="([^"]+)".*?original="([^"]+)".*?duration">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, name, img, duration in match:
         name = utils.cleantext(name)
-        name = name + " [COLOR blue]" + duration + "[/COLOR]"
+        name = name + " [COLOR deeppink]" + duration + "[/COLOR]"
         utils.addDownLink(name, videopage, 362, img, '')
     try:
         nextp = re.compile('<a href="([^"]+)"[^>]+>Next', re.DOTALL | re.IGNORECASE).findall(listhtml)

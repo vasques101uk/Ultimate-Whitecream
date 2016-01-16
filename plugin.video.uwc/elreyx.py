@@ -25,10 +25,10 @@ import utils
 progress = utils.progress
 
 def EXMain():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://elreyx.com/index1.html',113,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://elreyx.com/search-',114,'','')
-    utils.addDir('[COLOR yellow]Pornstars[/COLOR]','http://elreyx.com/index1.html',115,'','')
-    utils.addDir('[COLOR yellow]Movies[/COLOR]','http://elreyx.com/index1.html',116,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://elreyx.com/index1.html',113,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://elreyx.com/search-',114,'','')
+    utils.addDir('[COLOR hotpink]Pornstars[/COLOR]','http://elreyx.com/index1.html',115,'','')
+    utils.addDir('[COLOR hotpink]Movies[/COLOR]','http://elreyx.com/index1.html',116,'','')
     EXList('http://elreyx.com/index1.html')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

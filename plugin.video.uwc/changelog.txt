@@ -1,3 +1,9 @@
+[B]Version 1.0.77[/B]
+Added: MyFreeCams
+Fixed: Double categories in Ero-tik
+Changed: Colors in the addon are more inline with the logo
+
+
 [B]Version 1.0.76[/B]
 Fixed: Pornhub video listing
 Changed: renamed Thepornnation to ThePornEmpire

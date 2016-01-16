@@ -25,17 +25,17 @@ import utils
 progress = utils.progress
 
 def Main():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://playporn.to/?submit=Search&s=', 234, '', '')
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://playporn.to/', 235, '', '')
-    utils.addDir('[COLOR yellow]Movies[/COLOR]','http://playporn.to/category/xxx-movie-stream/', 231, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://playporn.to/?submit=Search&s=', 234, '', '')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://playporn.to/', 235, '', '')
+    utils.addDir('[COLOR hotpink]Movies[/COLOR]','http://playporn.to/category/xxx-movie-stream/', 231, '', '')
     List('http://playporn.to/category/xxx-clips-scenes-stream/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def MainMovies():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://playporn.to/?submit=Search&s=', 234, '', '')
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://playporn.to/', 236, '', '')
-    utils.addDir('[COLOR yellow]Scenes[/COLOR]','http://playporn.to/category/xxx-clips-scenes-stream/', 230, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://playporn.to/?submit=Search&s=', 234, '', '')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://playporn.to/', 236, '', '')
+    utils.addDir('[COLOR hotpink]Scenes[/COLOR]','http://playporn.to/category/xxx-clips-scenes-stream/', 230, '', '')
     List('http://playporn.to/category/xxx-movie-stream/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

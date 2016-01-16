@@ -24,8 +24,8 @@ import utils
 progress = utils.progress
 
 def YFTMain():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.yourfreetube.net/index.html',193,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.yourfreetube.net/search.php?keywords=',194,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.yourfreetube.net/index.html',193,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.yourfreetube.net/search.php?keywords=',194,'','')
     YFTList('http://www.yourfreetube.net/newvideos.html')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

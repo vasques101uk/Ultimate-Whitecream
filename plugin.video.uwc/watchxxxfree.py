@@ -27,10 +27,10 @@ sortlistwxf = [addon.getLocalizedString(30012), addon.getLocalizedString(30013),
 
 
 def WXFMain():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.watchxxxfree.com/categories/',12,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.watchxxxfree.com/page/1/?s=',14,'','')
-    utils.addDir('[COLOR yellow]Top Pornstars[/COLOR]','http://www.watchxxxfree.com/top-pornstars/',15,'','')
-    Sort = '[COLOR yellow]Current sort:[/COLOR] ' + sortlistwxf[int(addon.getSetting("sortwxf"))]
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.watchxxxfree.com/categories/',12,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.watchxxxfree.com/page/1/?s=',14,'','')
+    utils.addDir('[COLOR hotpink]Top Pornstars[/COLOR]','http://www.watchxxxfree.com/top-pornstars/',15,'','')
+    Sort = '[COLOR hotpink]Current sort:[/COLOR] ' + sortlistwxf[int(addon.getSetting("sortwxf"))]
     utils.addDir(Sort, '', 16, '', '')
     WXFList('http://www.watchxxxfree.com/page/1/',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -41,7 +41,7 @@ def WXFCat(url):
     match = re.compile('data-src="([^"]+)".*?<a href="([^"]+)"[^<]+<span>([^<]+)</s.*?">([^<]+)', re.DOTALL | re.IGNORECASE).findall(cathtml)
     for img, catpage, name, videos in match:
         catpage = catpage + 'page/1/'
-        name = name + ' [COLOR blue]' + videos + '[/COLOR]'
+        name = name + ' [COLOR deeppink]' + videos + '[/COLOR]'
         utils.addDir(name, catpage, 11, img, 1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
     

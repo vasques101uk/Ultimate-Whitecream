@@ -25,15 +25,15 @@ import utils
 progress = utils.progress
 
 def Main():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://justporn.to/?s=', 244, '', '')
-    utils.addDir('[COLOR yellow]Movies[/COLOR]','http://justporn.to/category/dvdrips-full-movies/', 245, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://justporn.to/?s=', 244, '', '')
+    utils.addDir('[COLOR hotpink]Movies[/COLOR]','http://justporn.to/category/dvdrips-full-movies/', 245, '', '')
     List('http://justporn.to/category/scenes/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def MainMovies():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://justporn.to/?s=', 244, '', '')
-    utils.addDir('[COLOR yellow]Scenes[/COLOR]','http://justporn.to/category/scenes/', 240, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://justporn.to/?s=', 244, '', '')
+    utils.addDir('[COLOR hotpink]Scenes[/COLOR]','http://justporn.to/category/scenes/', 240, '', '')
     List('http://justporn.to/category/dvdrips-full-movies/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

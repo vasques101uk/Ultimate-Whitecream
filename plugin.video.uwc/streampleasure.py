@@ -25,7 +25,7 @@ progress = utils.progress
 
 
 def SPMain():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://streampleasure.com/page/1/?s=',213,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://streampleasure.com/page/1/?s=',213,'','')
     SPList('http://streampleasure.com/page/1/?filtre=date&cat=0',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

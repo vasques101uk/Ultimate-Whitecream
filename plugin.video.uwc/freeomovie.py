@@ -26,8 +26,8 @@ progress = utils.progress
 
 
 def Main():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.freeomovie.com/', 373, '', '')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.freeomovie.com/?s=', 374, '', '')    
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.freeomovie.com/', 373, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.freeomovie.com/?s=', 374, '', '')    
     List('http://www.freeomovie.com/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

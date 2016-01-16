@@ -36,7 +36,7 @@ def getHC(url):
     return data
 
 def HCList(url):
-    utils.addDir('[COLOR white]A-Z List[/COLOR] [COLOR yellow]Censored & Uncensored[/COLOR]','http://www.hentaicraving.com/hentai-list/',33,'','')
+    utils.addDir('[COLOR hotpink]A-Z List[/COLOR] [COLOR white]Censored & Uncensored[/COLOR]','http://www.hentaicraving.com/hentai-list/',33,'','')
     link = utils.getHtml(url, '')
     match = re.compile("""<a href='([^']+)'><img.*?title="([^"]+)".*?src="([^"]+)".*?Description: </b> ([^<]+)<p>""", re.DOTALL | re.IGNORECASE).findall(link)
     for videourl, name, img, desc in match:

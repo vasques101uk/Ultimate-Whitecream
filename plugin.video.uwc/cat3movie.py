@@ -25,8 +25,8 @@ import utils
 progress = utils.progress
 
 def Main():
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://cat3movie.us/?s=', 353, '', '')
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://cat3movie.us', 354, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://cat3movie.us/?s=', 353, '', '')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://cat3movie.us', 354, '', '')
     List('http://cat3movie.us')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

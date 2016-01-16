@@ -26,8 +26,8 @@ progress = utils.progress
 
 
 def Main():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]', 'http://www.videomegaporn.com/categories/', 163, '', '')
-    utils.addDir('[COLOR yellow]Search[/COLOR]', 'http://www.videomegaporn.com/search-', 164, '', '')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]', 'http://www.videomegaporn.com/categories/', 163, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]', 'http://www.videomegaporn.com/search-', 164, '', '')
     List('http://www.videomegaporn.com/index.html')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -38,7 +38,7 @@ def List(url):
     for videopage, name, img, runtime in match:
         name = utils.cleantext(name)
         if runtime:
-            name = name + ' [COLOR blue]' + runtime + '[/COLOR]'
+            name = name + ' [COLOR deeppink]' + runtime + '[/COLOR]'
         utils.addDownLink(name, videopage, 162, img, '')
     try:
         nextp=re.compile("<a href='([^']+)' title='([^']+)'>&raquo;</a>", re.DOTALL | re.IGNORECASE).findall(listhtml)

@@ -24,7 +24,7 @@ import utils
 dialog = utils.dialog
 
 def Main():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.paradisehill.tv/en/',253,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.paradisehill.tv/en/',253,'','')
     List('http://www.paradisehill.tv/en/?page=1',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -52,7 +52,7 @@ def Cat(url):
     match = re.compile("Categories</h2>(.*?)<noindex>", re.DOTALL | re.IGNORECASE).findall(cathtml)
     match1 = re.compile('link" href="([^"]+)".*?bci-title">([^<]+)<.*?src="([^"]+)".*?cat-title">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[0])
     for caturl, name, img, videos in match1:
-        name = name + " [COLOR blue]" + videos + "[/COLOR]"
+        name = name + " [COLOR deeppink]" + videos + "[/COLOR]"
         img = "http://www.paradisehill.tv" + img
         catpage = "http://www.paradisehill.tv" + caturl + "?page=1"
         utils.addDir(name, catpage, 251, img, 1)

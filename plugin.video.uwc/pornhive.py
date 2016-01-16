@@ -26,8 +26,8 @@ from jsbeautifier import beautify
 progress = utils.progress
 
 def PHMain():
-    utils.addDir('[COLOR yellow]Categories[/COLOR]','http://www.pornhive.tv/en/movies/all',73,'','')
-    utils.addDir('[COLOR yellow]Search[/COLOR]','http://www.pornhive.tv/en/search?title=',74,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.pornhive.tv/en/movies/all',73,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.pornhive.tv/en/search?title=',74,'','')
     PHList('http://www.pornhive.tv/en/movies/all')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
