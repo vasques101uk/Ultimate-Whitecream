@@ -34,7 +34,7 @@ dialog = utils.dialog
 def BGMain():
     utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://beeg.com/api/v5/index/main/0/pc',83,'','')
     utils.addDir('[COLOR hotpink]Search[/COLOR]','http://beeg.com/api/v5/index/search/0/pc?query=',84,'','')
-    BGList('http://beeg.com/api/v5/index/main/0/mobile')
+    BGList('http://beeg.com/api/v5/index/main/0/pc')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -48,10 +48,12 @@ def BGList(url):
         name = videos["title"].encode("utf8")
         utils.addDownLink(name, videopage, 82, img, '')
     try:
-        page=re.compile('http://beeg.com/api/v5/index/[^/]+/([0-9]+)/pc', re.DOTALL | re.IGNORECASE).findall(url)
+        page=re.compile('http://beeg.com/api/v5/index/[^/]+/([0-9]+)/pc', re.DOTALL | re.IGNORECASE).findall(url)[0]
+        page = int(page)
+        npage = page + 1
         if jsondata["pages"] > page:
-            nextp = url.replace("/"+str(page)+"/", "/"+str(page+1)+"/")
-            utils.addDir('Next Page', nextp,81,'')
+            nextp = url.replace("/"+str(page)+"/", "/"+str(npage)+"/")
+            utils.addDir('Next Page ('+str(npage)+')', nextp,81,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

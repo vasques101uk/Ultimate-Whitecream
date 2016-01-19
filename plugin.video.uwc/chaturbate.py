@@ -95,7 +95,7 @@ def Main():
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def List(url):
+def List(url, page=None):
     if utils.addon.getSetting("chaturbate") == "true":
         clean_database()
     listhtml = utils.getHtml2(url)
@@ -105,11 +105,13 @@ def List(url):
         name = "[" + status + "]" +name + " Age: [COLOR deeppink]" + age + "[/COLOR]"
         videopage = "https://chaturbate.com" + videopage
         utils.addDownLink(name, videopage, 222, img, '')
-    try:
-        nextp=re.compile('<a href="([^"]+)" class="next', re.DOTALL | re.IGNORECASE).findall(listhtml)
-        next = "https://chaturbate.com" + nextp[0]
-        utils.addDir('Next Page', next, 221,'')
-    except: pass
+    if len(match) == 90:
+        try:
+            page = page + 1
+            nextp=re.compile('<a href="([^"]+)" class="next', re.DOTALL | re.IGNORECASE).findall(listhtml)
+            next = "https://chaturbate.com" + nextp[0]
+            utils.addDir('Next Page ('+str(page)+')', next, 221,'', page)
+        except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 

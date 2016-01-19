@@ -1,3 +1,11 @@
+[B]Version 1.0.78[/B]
+Added: Cam4
+Added: Streamcloud to utils.py for Freeomovie
+Fixed: Beeg pagination
+Changed: Chaturbate page number in Next link
+Changed: Improved Myfreecams video loading (?)
+
+
 [B]Version 1.0.77[/B]
 Added: MyFreeCams
 Fixed: Double categories in Ero-tik

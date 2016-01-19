@@ -47,26 +47,33 @@ def Playvid(url, name):
     count = 0
     for videoid in range(491, 340, -1):
         dp.update(int(count))
-        videourl = ''
+        videotest = 'false'
         testurl = 'http://video%s.myfreecams.com:1935/NxServer/mfc_%s.f4v_aac/playlist.m3u8' % (videoid, url)
-        try: videourl = urllib2.urlopen(testurl)
-        except: pass
+        if videotest == 'false':
+            try: videotest = urllib2.urlopen(testurl)
+            except: videotest = 'false'
         count = count + 0.7
-        if videourl:
+        if not videotest == 'false':
             dp.update(100)
             dp.close()
-            videourl = testurl
-            iconimage = xbmc.getInfoImage("ListItem.Thumb")
-            listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-            listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-            listitem.setProperty("IsPlayable","true")
-            if int(sys.argv[1]) == -1:
-                pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-                pl.clear()
-                pl.add(videourl, listitem)
-                xbmc.Player().play(pl)
-            else:
-                listitem.setPath(str(videourl))
-                xbmcplugin.setResolvedUrl(utils.addon_handle, True, listitem)
-    utils.dialog.ok('Oh oh','Couldn\'t find a playable webcam link')
+            break
+        if dp.iscanceled():
+            dp.close()
+            break
+    if not videotest == 'false':
+        videourl = testurl
+        iconimage = xbmc.getInfoImage("ListItem.Thumb")
+        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+        listitem.setProperty("IsPlayable","true")
+        if int(sys.argv[1]) == -1:
+            pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+            pl.clear()
+            pl.add(videourl, listitem)
+            xbmc.Player().play(pl)
+        else:
+            listitem.setPath(str(videourl))
+            xbmcplugin.setResolvedUrl(utils.addon_handle, True, listitem)
+    else:
+        utils.dialog.ok('Oh oh','Couldn\'t find a playable webcam link')
 

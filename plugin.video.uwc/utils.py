@@ -27,7 +27,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.77"
+__version__ = "1.0.78"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -163,14 +163,16 @@ def playvideo(videosource, name, download=None, url=None):
     hosts = []
     if re.search('videomega\.tv/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('VideoMega')
-    if re.search('openload\.', videosource, re.DOTALL | re.IGNORECASE):
+    if re.search('openload\.(?:co|io)?/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('OpenLoad')
     if re.search('streamin.to', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('Streamin')          
     if re.search('www.flashx.tv', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('FlashX')
     if re.search('mega3x.net', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Mega3X')        
+        hosts.append('Mega3X')
+    if re.search('streamcloud\.eu', videosource, re.DOTALL | re.IGNORECASE):
+        hosts.append('StreamCloud')         
     if len(hosts) == 0:
         progress.close()
         dialog.ok('Oh oh','Couldn\'t find any video')
@@ -274,7 +276,20 @@ def playvideo(videosource, name, download=None, url=None):
         progress.update( 80, "", "Getting video file from Mega3X", "" )
         mega3xujs = beautify(mega3xjs[0])
         videourl = re.compile('file: "([^"]+mp4)"', re.DOTALL | re.IGNORECASE).findall(mega3xujs)
-        videourl = videourl[0]        
+        videourl = videourl[0]  
+    elif vidhost == 'StreamCloud':
+        progress.update( 40, "", "Opening Streamcloud", "" )
+        streamcloudurl = re.compile(r"//(?:www\.)?streamcloud\.eu?/([0-9a-zA-Z-_/.]+html)", re.DOTALL | re.IGNORECASE).findall(videosource)
+        streamcloudurl = "http://streamcloud.eu/" + streamcloudurl[0]
+        progress.update( 50, "", "Getting Streamcloud page", "" )
+        schtml = postHtml(streamcloudurl)
+        form_values = {}
+        match = re.compile('<input.*?name="(.*?)".*?value="(.*?)">', re.DOTALL | re.IGNORECASE).findall(schtml)
+        for name, value in match:
+            form_values[name] = value.replace("download1","download2")
+        progress.update( 60, "", "Grabbing video file", "" )    
+        newscpage = postHtml(streamcloudurl, form_data=form_values)
+        videourl = re.compile('file: "(.+?)",', re.DOTALL | re.IGNORECASE).findall(newscpage)[0]  
     progress.close()
     playvid(videourl, name, download)
 

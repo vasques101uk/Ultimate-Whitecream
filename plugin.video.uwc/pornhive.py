@@ -94,7 +94,7 @@ def PHVideo(url, name, download=None):
     elif sitename == "Openload":
         progress.update( 30, "", "Getting Openload", "" )
         progress.close()
-        utils.PLAYVIDEO(outurl, name)
+        utils.PLAYVIDEO(outurl, name, download)
         return
     else:
         progress.close()

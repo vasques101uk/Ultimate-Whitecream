@@ -22,7 +22,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
 import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
-import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams
+import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4
 
 socket.setdefaulttimeout(60)
 
@@ -101,6 +101,7 @@ def INDEXT():
 def INDEXW():
     utils.addDir('[COLOR hotpink]Chaturbate[/COLOR] [COLOR white]- webcams[/COLOR]','https://chaturbate.com/?page=1',220,os.path.join(imgDir, 'chaturbate.png'),'')
     utils.addDir('[COLOR hotpink]MyFreeCams[/COLOR] [COLOR white]- webcams[/COLOR]','https://www.myfreecams.com',270,os.path.join(imgDir, 'myfreecams.jpg'),'')
+    utils.addDir('[COLOR hotpink]Cam4[/COLOR] [COLOR white]- webcams[/COLOR]','http://www.cam4.com',280,os.path.join(imgDir, 'cam4.png'),'')    
     utils.addDir('[COLOR hotpink]Streams[/COLOR] [COLOR white]- beta[/COLOR]','',8,'','')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
@@ -302,7 +303,7 @@ elif mode == 211: streampleasure.SPList(url,page)
 elif mode == 212: streampleasure.SPPlayvid(url, name, download)
 elif mode == 213: streampleasure.SPSearch(url)
 elif mode == 220: chaturbate.Main()
-elif mode == 221: chaturbate.List(url)
+elif mode == 221: chaturbate.List(url, page)
 elif mode == 222: chaturbate.Playvid(url, name)
 elif mode == 223: chaturbate.clean_database(True)
 elif mode == 230: playporn.Main()
@@ -330,6 +331,10 @@ elif mode == 264: erotik.EROSearch(url)
 elif mode == 270: myfreecams.Main()
 elif mode == 271: myfreecams.List(url)
 elif mode == 272: myfreecams.Playvid(url, name)
+elif mode == 280: cam4.Main()
+elif mode == 281: cam4.List(url, page)
+elif mode == 282: cam4.Playvid(url, name)
+elif mode == 283: cam4.clean_database(True)
 elif mode == 330: pornkino.Main()
 elif mode == 331: pornkino.List(url)
 elif mode == 332: pornkino.Playvid(url, name, download)
