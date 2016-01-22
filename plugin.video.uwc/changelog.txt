@@ -1,3 +1,9 @@
+[B]Version 1.0.79[/B]
+Added: Option for ParadiseHill in addon settings, to play all the parts as 1 playlist
+Fixed: Cam4 fix for people not getting the cam list (I hope)
+Changed: Very small improvement in videohost detection
+
+
 [B]Version 1.0.78[/B]
 Added: Cam4
 Added: Streamcloud to utils.py for Freeomovie

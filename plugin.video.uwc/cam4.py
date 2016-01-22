@@ -51,7 +51,7 @@ def clean_database(showdialog=False):
 def List(url, page):
     if utils.addon.getSetting("chaturbate") == "true":
         clean_database()
-    listhtml = utils.getHtml2(url)
+    listhtml = utils.getHtml(url, url)
     match = re.compile('profileDataBox"> <a href="([^"]+)".*?src="([^"]+)" title="Chat Now Free with ([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videourl, img, name in match:
         name = utils.cleantext(name)
@@ -65,7 +65,7 @@ def List(url, page):
 
 
 def Playvid(url, name):
-    listhtml = utils.getHtml(url, '')
+    listhtml = utils.getHtml(url, url)
     match = re.compile('data="([^"]+)".*?videoAppUrl=([^&]+)&.*?videoPlayUrl=([^&]+)&', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for swfUrl, videoAppUrl, videoPlayUrl in match:
         videourl = '%s playpath=%s swfUrl=%s pageUrl=%s' % (videoAppUrl, videoPlayUrl, swfUrl, url)

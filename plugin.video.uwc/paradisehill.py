@@ -60,26 +60,45 @@ def Cat(url):
 
 
 def Playvid(url, name, download=None):
+    if utils.addon.getSetting("paradisehill") == "true": playall = True
+    else: playall = ''
     videopage = utils.getHtml(url, '')
     match = re.compile('films="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
     videos = match[0].split('|||')
     
-    if len(videos) > 1:
-        i = 1
-        videolist = []
-        for x in videos:
-            videolist.append('Part ' + str(i))
-            i += 1
-        videopart = dialog.select('Multiple videos found', videolist)
-        videourl = videos[videopart]
-    else: videourl = videos[0]    
-    
-    videourl = videourl + "|referer="+ url
+    if playall == '':
+        if len(videos) > 1:
+            i = 1
+            videolist = []
+            for x in videos:
+                videolist.append('Part ' + str(i))
+                i += 1
+            videopart = dialog.select('Multiple videos found', videolist)
+            videourl = videos[videopart]
+        else: videourl = videos[0]    
+        videourl = videourl + "|referer="+ url
 
-    if download == 1:
+    if download == 1 and playall == '':
         utils.downloadVideo(videourl, name)
     else:
         iconimage = xbmc.getInfoImage("ListItem.Thumb")
-        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-        xbmc.Player().play(videourl, listitem)
+      
+        if playall:
+            pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+            pl.clear()
+            i = 1
+            for videourl in videos:
+                newname = name + ' Part ' + str(i)
+                listitem = xbmcgui.ListItem(newname, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+                listitem.setInfo('video', {'Title': newname, 'Genre': 'Porn'})
+                listitem.setProperty("IsPlayable","true")
+                videourl = videourl + "|referer="+ url
+                pl.add(videourl, listitem)
+                i += 1
+                listitem = ''
+            xbmc.Player().play(pl)
+        else:
+            listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+            listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})        
+            xbmc.Player().play(videourl, listitem)
+            

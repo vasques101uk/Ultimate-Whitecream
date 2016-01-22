@@ -27,7 +27,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.78"
+__version__ = "1.0.79"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -165,13 +165,13 @@ def playvideo(videosource, name, download=None, url=None):
         hosts.append('VideoMega')
     if re.search('openload\.(?:co|io)?/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('OpenLoad')
-    if re.search('streamin.to', videosource, re.DOTALL | re.IGNORECASE):
+    if re.search('streamin\.to/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('Streamin')          
-    if re.search('www.flashx.tv', videosource, re.DOTALL | re.IGNORECASE):
+    if re.search('flashx\.tv/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('FlashX')
-    if re.search('mega3x.net', videosource, re.DOTALL | re.IGNORECASE):
+    if re.search('mega3x\.net/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('Mega3X')
-    if re.search('streamcloud\.eu', videosource, re.DOTALL | re.IGNORECASE):
+    if re.search('streamcloud\.eu/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('StreamCloud')         
     if len(hosts) == 0:
         progress.close()
