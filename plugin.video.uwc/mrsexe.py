@@ -25,6 +25,7 @@ import utils
 progress = utils.progress
 
 def Main():
+    utils.addDir('[COLOR hotpink]Classiques[/COLOR]','http://www.mrsexe.com/classiques/', 401, '', '')
     utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.mrsexe.com/?search=', 404, '', '')
     utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.mrsexe.com/', 403, '', '')
     utils.addDir('[COLOR hotpink]Stars[/COLOR]','http://www.mrsexe.com/filles/', 405, '', '')
@@ -34,9 +35,10 @@ def Main():
 
 def List(url):
     listhtml = utils.getHtml(url, '')
-    match = re.compile(r'<a class="thumbnail" href="(.+?)">\n<script.+?</script>\n<figure>\n<img  id=".+?" src="(.+?)".+?/>\n<figcaption>\n<span class="video-icon"><i class="fa fa-play"></i></span>\n<span class="duration"><i class="fa fa-clock-o"></i>(.+?)</span>\n(.+?)\n').findall(listhtml)
-    for videopage, img, duration, name in match:
-        name = utils.cleantext(name) + ' ' + duration
+    match = re.compile('thumb-list(.*?)<ul class="right pagination">', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match1 = re.compile(r'<li class="[^"]*">\s<a class="thumbnail" href="([^"]+)">\n<script.+?</script>\n<figure>\n<img  id=".+?" src="([^"]+)".+?/>\n<figcaption>\n<span class="video-icon"><i class="fa fa-play"></i></span>\n<span class="duration"><i class="fa fa-clock-o"></i>([^<]+)</span>\n(.+?)\n', re.DOTALL | re.IGNORECASE).findall(match[0])
+    for videopage, img, duration, name in match1:
+        name = utils.cleantext(name) + ' [COLOR deeppink]' + duration + '[/COLOR]'
         utils.addDownLink(name, 'http://www.mrsexe.com/' + videopage, 402, img, '')
     try:
         nextp=re.compile(r'<li class="arrow"><a href="(.+?)">suivant</li>').findall(listhtml)
@@ -67,8 +69,9 @@ def Categories(url):
 def Stars(url):
     print "mrsexe::Stars " + url
     starhtml = utils.getHtml(url, '')
-    match = re.compile(r'<figure>\s<a href="(.+?)"><img src="(.+?)" alt=""\s/></a>\s</figure>.+?</div>\s<div class="infos">\s<h5><a href=".+?">([\w\s]+)</a></h5>\s([0-9]+) vid', re.DOTALL | re.IGNORECASE).findall(starhtml)
-    for starpage, img, name, vidcount in match:
+    match = re.compile(r'<header>\s<h3 class="filles">Les filles de MrSexe</h3>(.*?)</ul>', re.DOTALL | re.IGNORECASE).findall(starhtml)
+    match1 = re.compile(r'<figure>\s<a href="(.+?)"><img src="(.+?)" alt=""\s/></a>\s</figure>.+?</div>\s<div class="infos">\s<h5><a href=".+?">([^<]+)</a></h5>\s([0-9]+) vid', re.DOTALL | re.IGNORECASE).findall(match[0])
+    for starpage, img, name, vidcount in match1:
         name = name + " (" + vidcount + " Videos)"
         utils.addDir(name, 'http://www.mrsexe.com/' + starpage, 401, img)
     try:

@@ -23,11 +23,14 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 from jsbeautifier import beautify
 
+from StringIO import StringIO
+import gzip
+
 __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.79"
+__version__ = "1.0.80"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -131,6 +134,7 @@ def downloadVideo(url, name):
             pass
     if download_path != '':
         dp = xbmcgui.DialogProgress()
+        name = name.split("[")[0]
         dp.create("Ultimate Whitecream Download",name[:50])
         tmp_file = tempfile.mktemp(dir=download_path, suffix=".mp4")
         tmp_file = xbmc.makeLegalFilename(tmp_file)        
@@ -310,15 +314,23 @@ def PlayStream(name, url):
     return
 
 
-def getHtml(url, referer, hdr=None, NoCookie=None):
+def getHtml(url, referer, hdr=None, NoCookie=None, data=None):
     if not hdr:
-        req = Request(url, None, headers)
+        req = Request(url, data, headers)
     else:
-        req = Request(url, None, hdr)
+        req = Request(url, data, hdr)
     if len(referer) > 1:
         req.add_header('Referer', referer)
+    if data:
+        req.add_header('Content-Length', len(data))
     response = urlopen(req, timeout=60)
-    data = response.read()
+    if response.info().get('Content-Encoding') == 'gzip':
+        buf = StringIO( response.read())
+        f = gzip.GzipFile(fileobj=buf)
+        data = f.read()
+        f.close()
+    else:
+        data = response.read()    
     if not NoCookie:
         # Cope with problematic timestamp values on RPi on OpenElec 4.2.1
         try:
@@ -407,11 +419,13 @@ def addDownLink(name, url, mode, iconimage, desc, stream=None, fav='add'):
     return ok
     
 
-def addDir(name, url, mode, iconimage, page=None):
+def addDir(name, url, mode, iconimage, page=None, channel=None, section=None):
     u = (sys.argv[0] +
          "?url=" + urllib.quote_plus(url) +
          "&mode=" + str(mode) +
          "&page=" + str(page) +
+         "&channel=" + str(channel) +
+         "&section=" + str(section) +         
          "&name=" + urllib.quote_plus(name))
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)

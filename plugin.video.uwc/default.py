@@ -22,7 +22,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
 import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
-import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4
+import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4, porndig, absoluporn
 
 socket.setdefaulttimeout(60)
 
@@ -88,14 +88,17 @@ def INDEXM():
     utils.addDir('[COLOR hotpink]FreeOMovie[/COLOR]','http://www.freeomovie.com/',370,os.path.join(imgDir, 'freeomovie.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
-def INDEXT():    
+def INDEXT():
     utils.addDir('[COLOR hotpink]TodayPorn[/COLOR]','http://www.todayporn.com/page1.html',90,os.path.join(imgDir, 'tp.png'),'')
     utils.addDir('[COLOR hotpink]Poldertube.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.poldertube.nl/pornofilms/nieuw',100,os.path.join(imgDir, 'poldertube.png'),0)
     utils.addDir('[COLOR hotpink]Milf.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.milf.nl/videos/nieuw',100,os.path.join(imgDir, 'milfnl.png'),1)
     utils.addDir('[COLOR hotpink]Sextube.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.sextube.nl/videos/nieuw',100,os.path.join(imgDir, 'sextube.png'),2)
     utils.addDir('[COLOR hotpink]TubePornClassic[/COLOR]','http://www.tubepornclassic.com/latest-updates/',360,os.path.join(imgDir, 'tubepornclassic.png'),'')
-    utils.addDir('[COLOR hotpink]HClips[/COLOR]','http://www.hclips.com/latest-updates/',380,os.path.join(imgDir, 'hclips.png'),'')    
-    utils.addDir('[COLOR hotpink]PornHub[/COLOR]','http://www.pornhub.com/newest.html',390,os.path.join(imgDir, 'pornhub.png'),'')    
+    utils.addDir('[COLOR hotpink]HClips[/COLOR]','http://www.hclips.com/latest-updates/',380,os.path.join(imgDir, 'hclips.png'),'')
+    utils.addDir('[COLOR hotpink]PornHub[/COLOR]','http://www.pornhub.com/newest.html',390,os.path.join(imgDir, 'pornhub.png'),'')
+    utils.addDir('[COLOR hotpink]Porndig[/COLOR] [COLOR white]Professional[/COLOR]','http://www.porndig.com',290,os.path.join(imgDir, 'porndig.png'),'')
+    utils.addDir('[COLOR hotpink]Porndig[/COLOR] [COLOR white]Amateurs[/COLOR]','http://www.porndig.com',290,os.path.join(imgDir, 'porndig.png'),'')
+    utils.addDir('[COLOR hotpink]AbsoluPorn[/COLOR]','http://www.absoluporn.com/en/',300,os.path.join(imgDir, 'absoluporn.gif'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXW():
@@ -154,6 +157,8 @@ page = 1
 download = None
 fav = None
 favmode = None
+channel = None
+section = None
 
 try: url = urllib.unquote_plus(params["url"])
 except: pass
@@ -170,6 +175,10 @@ except: pass
 try: fav = params["fav"]
 except: pass
 try: favmode = int(params["favmode"])
+except: pass
+try: channel = int(params["channel"])
+except: pass
+try: section = int(params["section"])
 except: pass
 
 if mode is None: INDEX()
@@ -335,6 +344,17 @@ elif mode == 280: cam4.Main()
 elif mode == 281: cam4.List(url, page)
 elif mode == 282: cam4.Playvid(url, name)
 elif mode == 283: cam4.clean_database(True)
+elif mode == 290: porndig.Main(name)
+elif mode == 291: porndig.List(page, channel, section)
+elif mode == 292: porndig.Playvid(url, name, download)
+elif mode == 293: porndig.Categories(url)
+elif mode == 294: porndig.Studios(url, page)
+elif mode == 295: porndig.Pornstars(url, page)
+elif mode == 300: absoluporn.Main()
+elif mode == 301: absoluporn.List(url)
+elif mode == 302: absoluporn.Playvid(url, name, download)
+elif mode == 303: absoluporn.Cat(url)
+elif mode == 304: absoluporn.Search(url)
 elif mode == 330: pornkino.Main()
 elif mode == 331: pornkino.List(url)
 elif mode == 332: pornkino.Playvid(url, name, download)
