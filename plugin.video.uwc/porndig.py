@@ -63,30 +63,6 @@ def Categories(caturl):
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def getHtml(url, data, headers):
-    req = utils.Request(url, data, headers)
-    req.add_header('Referer', 'http://www.porndig.com/videos/')
-    print data
-    print len(data)
-    req.add_header('Content-Length', len(data))
-    try:
-        response = utils.urlopen(req)
-        if response.info().get('Content-Encoding') == 'gzip':
-            buf = StringIO( response.read())
-            f = gzip.GzipFile(fileobj=buf)
-            data = f.read()
-            f.close()
-        else:
-            data = response.read()
-        try: utils.cj.save(cookiePath)
-        except: pass
-        response.close()
-    except urllib2.HTTPError as e:
-        print e.code
-        print e.read()
-    return data
-
-
 def VideoListData(page, channel):
     sort = 'date'
     offset = page * 100
