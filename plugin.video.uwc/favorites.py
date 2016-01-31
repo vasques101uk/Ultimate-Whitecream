@@ -22,16 +22,21 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon, sqlite3
 import utils
 
 dialog = utils.dialog
+favoritesdb = utils.favoritesdb
 
-favoritesdb = os.path.join(utils.profileDir, 'favorites.db')
 
-if not os.path.isfile(xbmc.translatePath(favoritesdb)):
-    conn = sqlite3.connect(favoritesdb)
-    c = conn.cursor()
-    try:
-        c.execute("SELECT * FROM favorites;")
-    except sqlite3.OperationalError:
-        c.executescript("CREATE TABLE favorites (name, url, mode, image);")
+
+conn = sqlite3.connect(favoritesdb)
+c = conn.cursor()
+try:
+    c.execute("SELECT * FROM favorites;")
+except sqlite3.OperationalError:
+    c.executescript("CREATE TABLE favorites (name, url, mode, image);")
+try:
+    c.execute("SELECT * FROM keywords;")
+except sqlite3.OperationalError:
+    c.executescript("CREATE TABLE keywords (keyword);")
+conn.close()
 
 
 def List():
@@ -41,8 +46,10 @@ def List():
         c.execute("SELECT * FROM favorites")
         for (name, url, mode, img) in c.fetchall():
             utils.addDownLink(name, url, int(mode), img, '', '', 'del')
+        conn.close()
         xbmcplugin.endOfDirectory(utils.addon_handle)
     except:
+        conn.close()
         dialog.ok('No Favorites','No Favorites found')
         return
 
@@ -63,6 +70,7 @@ def addFav(mode,name,url,img):
     c = conn.cursor()
     c.execute("INSERT INTO favorites VALUES (?,?,?,?)", (name, url, mode, img))
     conn.commit()
+    conn.close()
 
 
 def delFav(url):
@@ -70,4 +78,6 @@ def delFav(url):
     c = conn.cursor()
     c.execute("DELETE FROM favorites WHERE url = '%s'" % url)
     conn.commit()
+    conn.close()
+
 

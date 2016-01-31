@@ -19,7 +19,7 @@
 '''
 
 import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile, string
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon, sqlite3
 
 from jsbeautifier import beautify
 
@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.81"
+__version__ = "1.0.82"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -86,6 +86,8 @@ else:
     opener = urllib2.build_opener()
 
 urllib2.install_opener(opener)
+
+favoritesdb = os.path.join(profileDir, 'favorites.db')
 
 class StopDownloading(Exception):
     def __init__(self, value): self.value = value 
@@ -419,18 +421,19 @@ def addDownLink(name, url, mode, iconimage, desc, stream=None, fav='add'):
     return ok
     
 
-def addDir(name, url, mode, iconimage, page=None, channel=None, section=None):
+def addDir(name, url, mode, iconimage, page=None, channel=None, section=None, keyword='', Folder=True):
     u = (sys.argv[0] +
          "?url=" + urllib.quote_plus(url) +
          "&mode=" + str(mode) +
          "&page=" + str(page) +
          "&channel=" + str(channel) +
-         "&section=" + str(section) +         
+         "&section=" + str(section) +
+         "&keyword=" + urllib.quote_plus(keyword) +
          "&name=" + urllib.quote_plus(name))
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name})
-    ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=True)
+    ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=Folder)
     return ok
     
 def _get_keyboard(default="", heading="", hidden=False):
@@ -477,3 +480,51 @@ def decode(encoded):
     for octc in (c for c in re.findall(r'\\(\d{2,3})', encoded)):
         encoded = encoded.replace(r'\%s' % octc, chr(int(octc, 8)))
     return encoded.decode('utf8')
+
+
+def searchDir(url, mode):
+    conn = sqlite3.connect(favoritesdb)
+    c = conn.cursor()
+    try:
+        c.execute("SELECT * FROM keywords")
+        for (keyword,) in c.fetchall():
+            name = '[COLOR deeppink]' + keyword + '[/COLOR]'
+            addDir(name, url, mode, '', keyword=keyword)
+    except: pass
+    addDir('[COLOR hotpink]Add Keyword[/COLOR]', url, 902, '', '', mode, Folder=False)
+    addDir('[COLOR hotpink]Clear list[/COLOR]', '', 903, '', Folder=False)
+    xbmcplugin.endOfDirectory(addon_handle)
+
+def newSearch(url, mode):
+    vq = _get_keyboard(heading="Searching for...")
+    if (not vq): return False, 0
+    title = urllib.quote_plus(vq)
+    addKeyword(title)
+    xbmc.executebuiltin('Container.Refresh')
+    #searchcmd = (sys.argv[0] +
+    #     "?url=" + urllib.quote_plus(url) +
+    #     "&mode=" + str(mode) +
+    #     "&keyword=" + urllib.quote_plus(title))
+    #xbmc.executebuiltin('xbmc.RunPlugin('+searchcmd+')')
+
+
+def clearSearch():
+    delKeyword()
+    xbmc.executebuiltin('Container.Refresh')
+
+
+def addKeyword(keyword):
+    xbmc.log(keyword)
+    conn = sqlite3.connect(favoritesdb)
+    c = conn.cursor()
+    c.execute("INSERT INTO keywords VALUES (?)", (keyword,))
+    conn.commit()
+    conn.close()
+
+
+def delKeyword():
+    conn = sqlite3.connect(favoritesdb)
+    c = conn.cursor()
+    c.execute("DELETE FROM keywords;")
+    conn.commit()
+    conn.close()

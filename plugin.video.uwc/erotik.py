@@ -50,15 +50,15 @@ def EROList(url):
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
     
-def EROSearch(url):
+def EROSearch(url, keyword=None):
     searchUrl = url
-    vq = utils._get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','+')
-    searchUrl = searchUrl + title
-    print "Searching URL: " + searchUrl
-    EROList(searchUrl)
+    if not keyword:
+        utils.searchDir(url, 264)
+    else:
+        title = keyword.replace(' ','+')
+        searchUrl = searchUrl + title
+        print "Searching URL: " + searchUrl
+        EROList(searchUrl)
 
 
 def EROCat(url):

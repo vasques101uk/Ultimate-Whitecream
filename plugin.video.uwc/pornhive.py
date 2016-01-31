@@ -37,6 +37,7 @@ def PHList(url):
     listhtml = utils.getHtml(url, '')
     match = re.compile('panel-img">.*?<a href="([^"]+)" title="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, name, img in match:
+        name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 72, img, '')
     try:
         nextp=re.compile('<a href="([^"]+)">Next', re.DOTALL | re.IGNORECASE).findall(listhtml)
@@ -45,15 +46,15 @@ def PHList(url):
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
     
-def PHSearch(url):
+def PHSearch(url, keyword=None):
     searchUrl = url
-    vq = utils._get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','+')
-    searchUrl = searchUrl + title
-    print "Searching URL: " + searchUrl
-    PHList(searchUrl)
+    if not keyword:
+        utils.searchDir(url, 74)
+    else:
+        title = keyword.replace(' ','+')
+        searchUrl = searchUrl + title
+        print "Searching URL: " + searchUrl
+        PHList(searchUrl)
 
 
 def PHCat(url):

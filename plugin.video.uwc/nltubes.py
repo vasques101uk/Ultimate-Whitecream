@@ -75,15 +75,15 @@ def NLPLAYVID(url,name, download=None):
         xbmc.Player().play(videourl, listitem)
 
 
-def NLSEARCH(url, site):
+def NLSEARCH(url, site, keyword=None):
     searchUrl = url
-    vq = utils._get_keyboard(heading="Enter the query")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','%20')
-    searchUrl = searchUrl + title
-    print "Searching URL: " + searchUrl
-    NLVIDEOLIST(searchUrl, site)
+    if not keyword:
+        utils.searchDir(url, 104)
+    else:
+        title = keyword.replace(' ','%20')
+        searchUrl = searchUrl + title
+        print "Searching URL: " + searchUrl
+        NLVIDEOLIST(searchUrl, site)
 
 
 def NLCAT(url, site):

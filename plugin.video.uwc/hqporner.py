@@ -56,15 +56,15 @@ def HQCAT(url):
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def HQSEARCH(url):
+def HQSEARCH(url, keyword=None):
     searchUrl = url
-    vq = utils._get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','+')
-    searchUrl = searchUrl + title
-    print "Searching URL: " + searchUrl
-    HQLIST(searchUrl) 
+    if not keyword:
+        utils.searchDir(url, 154)
+    else:
+        title = keyword.replace(' ','+')
+        searchUrl = searchUrl + title
+        print "Searching URL: " + searchUrl
+        HQLIST(searchUrl)
 
 
 def HQPLAY(url, name, download=None):

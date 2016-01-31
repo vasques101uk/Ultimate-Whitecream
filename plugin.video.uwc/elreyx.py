@@ -47,15 +47,15 @@ def EXList(url):
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
     
-def EXSearch(url):
+def EXSearch(url, keyword=None):
     searchUrl = url
-    vq = utils._get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','+')
-    searchUrl = searchUrl + title + ".html"
-    print "Searching URL: " + searchUrl
-    EXList(searchUrl)
+    if not keyword:
+        utils.searchDir(url, 114)
+    else:
+        title = keyword.replace(' ','+')
+        searchUrl = searchUrl + title + ".html"
+        print "Searching URL: " + searchUrl
+        EXList(searchUrl)
 
 
 def EXCat(url):

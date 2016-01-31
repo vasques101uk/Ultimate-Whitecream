@@ -181,15 +181,15 @@ def PCat(url):
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def PSearch(url):
+def PSearch(url, keyword=None):
     searchUrl = url
-    vq = utils._get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','+')
-    searchUrl = searchUrl + title
-    print "Searching URL: " + searchUrl
-    PAQList(searchUrl, 1)
+    if not keyword:
+        utils.searchDir(url, 68)
+    else:
+        title = keyword.replace(' ','+')
+        searchUrl = searchUrl + title
+        print "Searching URL: " + searchUrl
+        PAQList(searchUrl, 1)
 
 
 def getVK(url):

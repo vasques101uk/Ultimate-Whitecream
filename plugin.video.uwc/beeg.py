@@ -125,12 +125,12 @@ def BGCat(url):
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def BGSearch(url):
+def BGSearch(url, keyword=None):
     searchUrl = url
-    vq = utils._get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','+')
-    searchUrl = searchUrl + title
-    print "Searching URL: " + searchUrl
-    BGList(searchUrl)
+    if not keyword:
+        utils.searchDir(url, 84)
+    else:
+        title = keyword.replace(' ','+')
+        searchUrl = searchUrl + title
+        print "Searching URL: " + searchUrl
+        BGList(searchUrl)

@@ -46,15 +46,15 @@ def XTCat(url):
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
     
-def XTSearch(url):
+def XTSearch(url, keyword=None):
     searchUrl = url
-    vq = utils._get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','+')
-    searchUrl = searchUrl + title
-    print "Searching URL: " + searchUrl
-    XTList(searchUrl, 1)     
+    if not keyword:
+        utils.searchDir(url, 24)
+    else:
+        title = keyword.replace(' ','+')
+        searchUrl = searchUrl + title
+        print "Searching URL: " + searchUrl
+        XTList(searchUrl, 1)
 
 
 def XTList(url, page):

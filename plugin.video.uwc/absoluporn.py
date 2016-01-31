@@ -80,12 +80,12 @@ def Cat(url):
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def Search(url):
+def Search(url, keyword=None):
     searchUrl = url
-    vq = utils._get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
-    title = urllib.quote_plus(vq)
-    title = title.replace(' ','%20')
-    searchUrl = searchUrl + title + '-1.html'
-    print "Searching URL: " + searchUrl
-    List(searchUrl) 
+    if not keyword:
+        utils.searchDir(url, 304)
+    else:
+        title = keyword.replace(' ','%20')
+        searchUrl = searchUrl + title + '-1.html'
+        print "Searching URL: " + searchUrl
+        List(searchUrl)
