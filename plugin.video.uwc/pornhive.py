@@ -74,10 +74,15 @@ def PHVideo(url, name, download=None):
     if len(match) > 1:
         sites = []
         for videourl, site in match:
-            sites.append(site)
-        site = utils.dialog.select('Select video site', sites)
-        sitename = match[site][1]
-        siteurl = match[site][0]
+            if site != 'hdstream' and site != 'imagetwist':
+                sites.append(site)
+        if len(sites) ==  1:
+            sitename = match[0][1]
+            siteurl = match[0][0]
+        else:
+            site = utils.dialog.select('Select video site', sites)
+            sitename = match[site][1]
+            siteurl = match[site][0]
     else:
         sitename = match[0][1]
         siteurl = match[0][0]
