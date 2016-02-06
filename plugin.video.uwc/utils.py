@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.82"
+__version__ = "1.0.83"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -488,7 +488,7 @@ def searchDir(url, mode):
     try:
         c.execute("SELECT * FROM keywords")
         for (keyword,) in c.fetchall():
-            name = '[COLOR deeppink]' + keyword + '[/COLOR]'
+            name = '[COLOR deeppink]' + urllib.unquote_plus(keyword) + '[/COLOR]'
             addDir(name, url, mode, '', keyword=keyword)
     except: pass
     addDir('[COLOR hotpink]Add Keyword[/COLOR]', url, 902, '', '', mode, Folder=False)

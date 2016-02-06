@@ -1,3 +1,9 @@
+[B]Version 1.0.83[/B]
+Added: CzechHD
+Added: Webcam image refresh in Favorites listing
+Changed: Chaturbate listing
+
+
 [B]Version 1.0.82[/B]
 Added: You can now add/use keywords for every site with a search function
 

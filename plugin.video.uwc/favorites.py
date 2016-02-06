@@ -21,6 +21,9 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon, sqlite3
 
 import utils
 
+from chaturbate import clean_database as cleanchat
+from cam4 import clean_database as cleancam4
+
 dialog = utils.dialog
 favoritesdb = utils.favoritesdb
 
@@ -29,17 +32,17 @@ favoritesdb = utils.favoritesdb
 conn = sqlite3.connect(favoritesdb)
 c = conn.cursor()
 try:
-    c.execute("SELECT * FROM favorites;")
-except sqlite3.OperationalError:
-    c.executescript("CREATE TABLE favorites (name, url, mode, image);")
-try:
-    c.execute("SELECT * FROM keywords;")
-except sqlite3.OperationalError:
-    c.executescript("CREATE TABLE keywords (keyword);")
+    c.executescript("CREATE TABLE IF NOT EXISTS favorites (name, url, mode, image);")
+    c.executescript("CREATE TABLE IF NOT EXISTS keywords (keyword);")
+except:
+    pass
 conn.close()
 
 
 def List():
+    if utils.addon.getSetting("chaturbate") == "true":
+        cleanchat()
+        cleancam4()
     conn = sqlite3.connect(favoritesdb)
     c = conn.cursor()
     try:

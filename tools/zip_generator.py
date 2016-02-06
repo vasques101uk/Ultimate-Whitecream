@@ -45,7 +45,7 @@ def main():
     if(addon_dir.startswith('.')):
       # skip hidden dirs
       continue
-    if(addon_dir == "repositor.whitecream"):
+    if(addon_dir == "repository.whitecream"):
       # skip download directory
       continue
     create_zip_file(addon_dir)

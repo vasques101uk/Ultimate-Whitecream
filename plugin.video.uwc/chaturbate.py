@@ -102,7 +102,8 @@ def List(url, page=None):
     match = re.compile(r'<li>\s+<a href="([^"]+)".*?src="([^"]+)".*?<div[^>]+>([^<]+)</div>.*?href[^>]+>([^<]+)<.*?age[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, img, status, name, age in match:
         name = utils.cleantext(name)
-        name = "[" + status + "]" +name + " Age: [COLOR deeppink]" + age + "[/COLOR]"
+        status = status.replace("\n","").strip()
+        name = name + " [" + status + "] Age: [COLOR deeppink]" + age + "[/COLOR]"
         videopage = "https://chaturbate.com" + videopage
         utils.addDownLink(name, videopage, 222, img, '')
     if len(match) == 90:
