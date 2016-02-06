@@ -70,7 +70,7 @@ def PHVideo(url, name, download=None):
     progress.create('Play video', 'Searching videofile.')
     progress.update( 10, "", "Loading video page", "" )
     videopage = utils.getHtml(url, '')
-    match = re.compile(r'<li id="link-([^"]+).*?xs-12">\s+Watch it on ([\w]+)', re.DOTALL | re.IGNORECASE).findall(videopage)
+    match = re.compile(r'<li id="link-([^"]+).*?xs-12">\s+Watch it on ([\w\.]+)', re.DOTALL | re.IGNORECASE).findall(videopage)
     if len(match) > 1:
         sites = []
         for videourl, site in match:
@@ -86,13 +86,13 @@ def PHVideo(url, name, download=None):
     if sitename == "StreamCloud":
         progress.update( 30, "", "Getting StreamCloud", "" )
         playurl = getStreamCloud(outurl)
-    elif sitename == "FlashX":
+    elif "lash" in sitename:
         progress.update( 30, "", "Getting FlashX", "" )
         playurl = getFlashX(outurl)
     elif sitename == "NowVideo":
         progress.update( 30, "", "Getting NowVideo", "" )
         playurl = getNowVideo(outurl)        
-    elif sitename == "Openload":
+    elif "Openload" in sitename:
         progress.update( 30, "", "Getting Openload", "" )
         progress.close()
         utils.PLAYVIDEO(outurl, name, download)

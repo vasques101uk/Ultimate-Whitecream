@@ -1,3 +1,8 @@
+[B]Version 1.0.84[/B]
+Fixed: Videomega playback
+Fixed: Pornhive
+
+
 [B]Version 1.0.83[/B]
 Added: CzechHD
 Added: Webcam image refresh in Favorites listing
