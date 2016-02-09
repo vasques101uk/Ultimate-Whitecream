@@ -22,7 +22,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
 import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
-import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4, porndig, absoluporn, czechhd
+import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4, porndig, absoluporn, czechhd, xxxstreams
 
 socket.setdefaulttimeout(60)
 
@@ -70,6 +70,7 @@ def INDEXS():
     utils.addDir('[COLOR hotpink]Mr Sexe[/COLOR]','http://www.mrsexe.com/',400,os.path.join(imgDir, 'mrsexe.png'),'')
     utils.addDir('[COLOR hotpink]Ero-tik[/COLOR]','http://www.ero-tik.com/',260,os.path.join(imgDir, 'erotik.png'),'')
     utils.addDir('[COLOR hotpink]CzechHD[/COLOR]','http://czechhd.net/',310,os.path.join(imgDir, 'czechhd.png'),'')     
+    utils.addDir('[COLOR hotpink]XXX Streams[/COLOR]','http://xxxstreams.org/',410,os.path.join(imgDir, 'xxxstreams.png'),'')     
     utils.addDir('[COLOR hotpink]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -411,6 +412,11 @@ elif mode == 402: mrsexe.Playvid(url, name, download)
 elif mode == 403: mrsexe.Categories(url)
 elif mode == 404: mrsexe.Search(url, keyword)
 elif mode == 405: mrsexe.Stars(url)
+elif mode == 410: xxxstreams.Main()
+elif mode == 411: xxxstreams.List(url)
+elif mode == 412: xxxstreams.Playvid(url, name, download)
+elif mode == 413: xxxstreams.Categories(url)
+#elif mode == 414: xxxstreams.Search(url, keyword)
 
 elif mode == 900: favorites.Favorites(fav,favmode,name,url,img)
 elif mode == 901: favorites.List()
