@@ -22,6 +22,7 @@ import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile, str
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon, sqlite3
 
 from jsbeautifier import beautify
+from jsunpack import unpack
 
 from StringIO import StringIO
 import gzip
@@ -30,7 +31,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.83"
+__version__ = "1.0.85"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -224,8 +225,8 @@ def playvideo(videosource, name, download=None, url=None):
         vmhost = 'http://videomega.tv/view.php?ref=' + hashref[0]
         videopage = getHtml(vmhost, url)
         vmpacked = re.compile(r"(eval\(.*\))\s+</", re.DOTALL | re.IGNORECASE).findall(videopage)
-        vmunpacked = beautify(vmpacked[0])
-        videourl = re.compile('src", "([^"]+)', re.DOTALL | re.IGNORECASE).findall(vmunpacked)
+        vmunpacked = unpack(vmpacked[0])
+        videourl = re.compile('src",\s?"([^"]+)', re.DOTALL | re.IGNORECASE).findall(vmunpacked)
         videourl = videourl[0]
         videourl = videourl + '|Referer=' + vmhost + '&User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36'
     elif vidhost == 'OpenLoad':
@@ -256,7 +257,7 @@ def playvideo(videosource, name, download=None, url=None):
         streaminurl = re.compile(r"//(?:www\.)?streamin\.to/(?:embed-)?([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
         streaminurl = 'http://streamin.to/embed-%s-670x400.html' % streaminurl[0]
         streaminsrc = getHtml2(streaminurl)
-        videohash = re.compile('h=([^"]+)', re.DOTALL | re.IGNORECASE).findall(streaminsrc)
+        videohash = re.compile('\?h=([^"]+)', re.DOTALL | re.IGNORECASE).findall(streaminsrc)
         videourl = re.compile('image: "(http://[^/]+/)', re.DOTALL | re.IGNORECASE).findall(streaminsrc)
         progress.update( 80, "", "Getting video file from Streamin", "" )
         videourl = videourl[0] + videohash[0] + "/v.mp4"
@@ -380,6 +381,7 @@ def cleantext(text):
     text = text.replace('&#8211;','-')
     text = text.replace('&#038;','&')
     text = text.replace('&#8217;','\'')
+    text = text.replace('&#8216;','\'')
     text = text.replace('&#8230;','...')
     text = text.replace('&quot;','"')
     text = text.replace('&#039;','`')
