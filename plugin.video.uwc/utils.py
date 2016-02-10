@@ -21,7 +21,6 @@
 import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile, string
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon, sqlite3
 
-from jsbeautifier import beautify
 from jsunpack import unpack
 
 from StringIO import StringIO
@@ -31,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.85"
+__version__ = "1.0.86"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -272,8 +271,9 @@ def playvideo(videosource, name, download=None, url=None):
         progress.update( 70, "", "Grabbing video file", "" ) 
         flashxjs = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(flashxsrc2)
         progress.update( 80, "", "Getting video file from FlashX", "" )
-        flashxujs = beautify(flashxjs[0])
-        videourl = re.compile(r'\[{\s+file: "([^"]+)",', re.DOTALL | re.IGNORECASE).findall(flashxujs)
+        try: flashxujs = unpack(flashxjs[0])
+        except: flashxujs = flashxjs[0]
+        videourl = re.compile(r'\[{\s?file:\s?"([^"]+)",', re.DOTALL | re.IGNORECASE).findall(flashxujs)
         videourl = videourl[0]
     elif vidhost == 'Mega3X':
         progress.update( 40, "", "Loading Mega3X", "" )
@@ -281,8 +281,8 @@ def playvideo(videosource, name, download=None, url=None):
         mega3xsrc = getHtml(mega3xurl[0],'', openloadhdr)
         mega3xjs = re.compile("<script[^>]+>(eval[^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(mega3xsrc)
         progress.update( 80, "", "Getting video file from Mega3X", "" )
-        mega3xujs = beautify(mega3xjs[0])
-        videourl = re.compile('file: "([^"]+mp4)"', re.DOTALL | re.IGNORECASE).findall(mega3xujs)
+        mega3xujs = unpack(mega3xjs[0])
+        videourl = re.compile('file:\s?"([^"]+mp4)"', re.DOTALL | re.IGNORECASE).findall(mega3xujs)
         videourl = videourl[0]  
     elif vidhost == 'StreamCloud':
         progress.update( 40, "", "Opening Streamcloud", "" )

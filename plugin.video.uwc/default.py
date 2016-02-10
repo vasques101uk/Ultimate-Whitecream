@@ -70,7 +70,7 @@ def INDEXS():
     utils.addDir('[COLOR hotpink]Mr Sexe[/COLOR]','http://www.mrsexe.com/',400,os.path.join(imgDir, 'mrsexe.png'),'')
     utils.addDir('[COLOR hotpink]Ero-tik[/COLOR]','http://www.ero-tik.com/',260,os.path.join(imgDir, 'erotik.png'),'')
     utils.addDir('[COLOR hotpink]CzechHD[/COLOR]','http://czechhd.net/',310,os.path.join(imgDir, 'czechhd.png'),'')     
-    utils.addDir('[COLOR hotpink]XXX Streams[/COLOR]','http://xxxstreams.org/',410,os.path.join(imgDir, 'xxxstreams.png'),'')     
+    utils.addDir('[COLOR hotpink]XXX Streams[/COLOR]','http://xxxstreams.eu/',410,os.path.join(imgDir, 'xxxstreams.png'),'')     
     utils.addDir('[COLOR hotpink]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

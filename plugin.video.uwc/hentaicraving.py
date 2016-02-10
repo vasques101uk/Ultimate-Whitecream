@@ -19,7 +19,7 @@
 import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
-from jsbeautifier import beautify
+from jsunpack import unpack
 
 import utils
 
@@ -87,7 +87,7 @@ def HCPlayvid(url,name, download=None):
     else:
         progress.update( 80, "", "Loading video", "" )
         match2 = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(urldata2)
-        res = beautify(match2[0])
+        res = unpack(match2[0])
         match3 = re.compile("file.*?(http.*?mp4)", re.DOTALL | re.IGNORECASE).findall(res)
         videourl = match3[0]
     progress.close()

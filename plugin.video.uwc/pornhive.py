@@ -21,7 +21,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils
 
-from jsbeautifier import beautify
+from jsunpack import unpack
 
 progress = utils.progress
 
@@ -138,8 +138,9 @@ def getFlashX(url):
     flashxsrc2 = utils.getHtml2(flashxurl2[0])
     progress.update( 70, "", "Grabbing video file", "" )
     flashxjs = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(flashxsrc2)
-    flashxujs = beautify(flashxjs[0])
-    videourl = re.compile(r'\[{\s+file: "([^"]+)",', re.DOTALL | re.IGNORECASE).findall(flashxujs)
+    try: flashxujs = unpack(flashxjs[0])
+    except: flashxujs = flashxjs[0]
+    videourl = re.compile(r'\[{\s?file:\s?"([^"]+)",', re.DOTALL | re.IGNORECASE).findall(flashxujs)
     progress.update( 80, "", "Returning video file", "" )
     videourl = videourl[0]
     return videourl

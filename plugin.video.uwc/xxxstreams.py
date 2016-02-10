@@ -1,6 +1,7 @@
 '''
     Ultimate Whitecream
     Copyright (C) 2016 mortael
+    Copyright (C) 2016 anton40
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,16 +24,16 @@ import utils
 
 
 def Main():
-    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://xxxstreams.org/',413,'','')
-    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://xxxstreams.org/?s=',414,'','')
-    List('http://xxxstreams.org/page/1')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://xxxstreams.eu/',413,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://xxxstreams.eu/?s=',414,'','')
+    List('http://xxxstreams.eu/page/1')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def List(url):
     html = utils.getHtml(url, '')
-    match = re.compile(r'<img src="(.+?)"/>.+?<a href="(.+?)" class="more-link">.+?<span class="screen-reader-text">(.+?)</span>', re.DOTALL | re.IGNORECASE).findall(html)
-    for img, videopage, name in match:
+    match = re.compile(r'data-id="\d+" title="([^"]+)" href="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(html)
+    for name, videopage, img in match:
         name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 412, img, '')
     try:
@@ -53,12 +54,13 @@ def Categories(url):
         utils.addDir(name, catpage, 411, '')    
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
-#def Search(url, keyword=None):
-#    searchUrl = url
-#    if not keyword:
-#        utils.searchDir(url, 414)
-#    else:
-#        title = keyword.replace(' ','+')
-#        searchUrl = searchUrl + title
-#        List(searchUrl)
+
+def Search(url, keyword=None):
+    searchUrl = url
+    if not keyword:
+        utils.searchDir(url, 414)
+    else:
+        title = keyword.replace(' ','+')
+        searchUrl = searchUrl + title
+        List(searchUrl)
 

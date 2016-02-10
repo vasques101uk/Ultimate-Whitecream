@@ -1,3 +1,8 @@
+[B]Version 1.0.86[/B]
+Added: xxxstreams (Anton40)
+Removed: jsbeautifier, now using the jsunpack module by Bstrdsmkr
+
+
 [B]Version 1.0.85[/B]
 Fixed: Streamin.to playback
 Fixed: Improved Pornhive, also added streamin.to support
