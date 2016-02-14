@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.86"
+__version__ = "1.0.87"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -460,13 +460,16 @@ def decodeOpenLoad(html):
     aastring = aastring.replace("((o^_^o) - (ﾟΘﾟ))","2")
     aastring = aastring.replace("(o^_^o)","3")
     aastring = aastring.replace("(ﾟΘﾟ)","1")
+    aastring = aastring.replace("(+!+[])","1")
     aastring = aastring.replace("(c^_^o)","0")
+    aastring = aastring.replace("(0+0)","0")
     aastring = aastring.replace("(ﾟДﾟ)[ﾟεﾟ]","\\")
     aastring = aastring.replace("(3 +3 +0)","6")
     aastring = aastring.replace("(3 - 1 +0)","2")
-    aastring = aastring.replace("(1 -0)","1")
-    aastring = aastring.replace("(4 -0)","4")
-
+    aastring = aastring.replace("(!+[]+!+[])","2")
+    aastring = aastring.replace("(-~-~2)","4")
+    aastring = aastring.replace("(-~-~1)","3")
+    
     decodestring = re.search(r"\\\+([^(]+)", aastring, re.DOTALL | re.IGNORECASE).group(1)
     decodestring = "\\+"+ decodestring
     decodestring = decodestring.replace("+","")
@@ -474,8 +477,8 @@ def decodeOpenLoad(html):
     
     decodestring = decode(decodestring)
     decodestring = decodestring.replace("\\/","/")
-    
-    videourl = re.search(r'vr\s?=\s?"([^"]+)', decodestring, re.DOTALL | re.IGNORECASE).group(1)
+
+    videourl = re.search(r"vr\s?=\s?\"|'([^\"']+)", decodestring, re.DOTALL | re.IGNORECASE).group(1)
     return videourl
 
 def decode(encoded):

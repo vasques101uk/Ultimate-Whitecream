@@ -1,3 +1,7 @@
+[B]Version 1.0.87[/B]
+Fixed: Quick fix for OpenLoad
+
+
 [B]Version 1.0.86[/B]
 Added: xxxstreams (Anton40)
 Removed: jsbeautifier, now using the jsunpack module by Bstrdsmkr
