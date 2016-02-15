@@ -25,6 +25,7 @@ dialog = utils.dialog
 
 def Main():
     utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.paradisehill.tv/en/',253,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.paradisehill.tv/en/search_results.html?search=',254,'','')
     List('http://www.paradisehill.tv/en/?page=1',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -57,6 +58,16 @@ def Cat(url):
         catpage = "http://www.paradisehill.tv" + caturl + "?page=1"
         utils.addDir(name, catpage, 251, img, 1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
+
+
+def Search(url, keyword=None):
+    searchUrl = url
+    if not keyword:
+        utils.searchDir(url, 254)
+    else:
+        title = keyword.replace(' ','+')
+        searchUrl = searchUrl + title
+        List(searchUrl, 1)
 
 
 def Playvid(url, name, download=None):

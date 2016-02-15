@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.87"
+__version__ = "1.0.88"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -263,7 +263,17 @@ def playvideo(videosource, name, download=None, url=None):
     elif vidhost == 'FlashX':
         progress.update( 40, "", "Loading FlashX", "" )
         flashxurl = re.compile(r"//(?:www\.)?flashx\.tv/(?:embed-)?([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        flashxurl = 'http://flashx.tv/embed-%s-670x400.html' % flashxurl[0]
+        flashxlist = list(set(flashxurl))
+        if len(flashxlist) > 1:
+            i = 1
+            hashlist = []
+            for x in flashxlist:
+                hashlist.append('Video ' + str(i))
+                i += 1
+            fxvideo = dialog.select('Multiple videos found', hashlist)
+            flashxurl = flashxlist[fxvideo]
+        else: flashxurl = flashxurl[0]        
+        flashxurl = 'http://flashx.tv/embed-%s-670x400.html' % flashxurl
         flashxsrc = getHtml2(flashxurl)
         progress.update( 60, "", "Grabbing video file", "" )
         flashxurl2 = re.compile('<a href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(flashxsrc)
@@ -451,6 +461,7 @@ def decodeOpenLoad(html):
 
     aastring = re.search(r"<video(?:.|\s)*?<script\s[^>]*?>((?:.|\s)*?)</script", html, re.DOTALL | re.IGNORECASE).group(1)
     
+    # decodeOpenLoad made by mortael, please leave this line for proper credit :)
     aastring = aastring.replace("((ﾟｰﾟ) + (ﾟｰﾟ) + (ﾟΘﾟ))", "9")
     aastring = aastring.replace("((ﾟｰﾟ) + (ﾟｰﾟ))","8")
     aastring = aastring.replace("((ﾟｰﾟ) + (o^_^o))","7")

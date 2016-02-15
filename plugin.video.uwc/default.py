@@ -23,6 +23,7 @@ import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre,
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
 import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
 import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4, porndig, absoluporn, czechhd, xxxstreams
+import xxxsorg, jav720p
 
 socket.setdefaulttimeout(60)
 
@@ -70,7 +71,8 @@ def INDEXS():
     utils.addDir('[COLOR hotpink]Mr Sexe[/COLOR]','http://www.mrsexe.com/',400,os.path.join(imgDir, 'mrsexe.png'),'')
     utils.addDir('[COLOR hotpink]Ero-tik[/COLOR]','http://www.ero-tik.com/',260,os.path.join(imgDir, 'erotik.png'),'')
     utils.addDir('[COLOR hotpink]CzechHD[/COLOR]','http://czechhd.net/',310,os.path.join(imgDir, 'czechhd.png'),'')     
-    utils.addDir('[COLOR hotpink]XXX Streams[/COLOR]','http://xxxstreams.eu/',410,os.path.join(imgDir, 'xxxstreams.png'),'')     
+    utils.addDir('[COLOR hotpink]XXX Streams (eu)[/COLOR]','http://xxxstreams.eu/',410,os.path.join(imgDir, 'xxxstreams.png'),'')
+    utils.addDir('[COLOR hotpink]XXX Streams (org)[/COLOR]','http://xxxstreams.org/',420,os.path.join(imgDir, 'xxxsorg.png'),'')     
     utils.addDir('[COLOR hotpink]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -88,6 +90,7 @@ def INDEXM():
     utils.addDir('[COLOR hotpink]Cat3Movie[/COLOR]','http://cat3movie.us',350,os.path.join(imgDir, 'cat3movie.png'),'')
     utils.addDir('[COLOR hotpink]ParadiseHill[/COLOR]','http://www.paradisehill.tv/en/',250,os.path.join(imgDir, 'paradisehill.png'),'')
     utils.addDir('[COLOR hotpink]FreeOMovie[/COLOR]','http://www.freeomovie.com/',370,os.path.join(imgDir, 'freeomovie.png'),'')
+    utils.addDir('[COLOR hotpink]Jav720p[/COLOR]','http://jav720p.com/',320,'','')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXT():
@@ -367,6 +370,11 @@ elif mode == 311: czechhd.List(url)
 elif mode == 312: czechhd.Playvid(url, name, download)
 elif mode == 313: czechhd.Categories(url)
 elif mode == 314: czechhd.Search(url, keyword)
+elif mode == 320: jav720p.Main()
+elif mode == 321: jav720p.List(url)
+elif mode == 322: jav720p.Playvid(url, name, download)
+elif mode == 323: jav720p.Categories(url)
+elif mode == 324: jav720p.Search(url, keyword)
 elif mode == 330: pornkino.Main()
 elif mode == 331: pornkino.List(url)
 elif mode == 332: pornkino.Playvid(url, name, download)
@@ -416,7 +424,12 @@ elif mode == 410: xxxstreams.Main()
 elif mode == 411: xxxstreams.List(url)
 elif mode == 412: xxxstreams.Playvid(url, name, download)
 elif mode == 413: xxxstreams.Categories(url)
-#elif mode == 414: xxxstreams.Search(url, keyword)
+elif mode == 414: xxxstreams.Search(url, keyword)
+elif mode == 420: xxxsorg.Main()
+elif mode == 421: xxxsorg.List(url)
+elif mode == 422: xxxsorg.Playvid(url, name, download)
+elif mode == 423: xxxsorg.Categories(url)
+#elif mode == 424: xxxsorg.Search(url, keyword)
 
 elif mode == 900: favorites.Favorites(fav,favmode,name,url,img)
 elif mode == 901: favorites.List()

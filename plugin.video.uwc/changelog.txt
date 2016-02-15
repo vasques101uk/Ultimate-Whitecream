@@ -1,9 +1,15 @@
+[B]Version 1.0.88[/B]
+Added: xxxstreams (org) (Anton40)
+Added: jav720p
+Added: Search for Paradisehill ;)
+
+
 [B]Version 1.0.87[/B]
 Fixed: Quick fix for OpenLoad
 
 
 [B]Version 1.0.86[/B]
-Added: xxxstreams (Anton40)
+Added: xxxstreams (eu)
 Removed: jsbeautifier, now using the jsunpack module by Bstrdsmkr
 
 
