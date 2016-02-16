@@ -1,3 +1,8 @@
+[B]Version 1.0.89[/B]
+Fixed: Multiple keyword search for ParadiseHill
+Fixed: xxxstreams (org) videos wouldn't load on Android
+
+
 [B]Version 1.0.88[/B]
 Added: xxxstreams (org) (Anton40)
 Added: jav720p

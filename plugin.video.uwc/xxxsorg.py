@@ -44,6 +44,7 @@ def List(url):
  
  
 def Playvid(url, name, download):
+    url = url.split('#')[0]
     utils.PLAYVIDEO(url, name, download)
  
  
