@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.89"
+__version__ = "1.0.90"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -421,7 +421,8 @@ def addDownLink(name, url, mode, iconimage, desc, stream=None, fav='add'):
          "&name=" + urllib.quote_plus(name))         
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    liz.setProperty('IsPlayable', 'true')
+    if stream:
+        liz.setProperty('IsPlayable', 'true')
     if len(desc) < 1:
         liz.setInfo(type="Video", infoLabels={"Title": name})
     else:

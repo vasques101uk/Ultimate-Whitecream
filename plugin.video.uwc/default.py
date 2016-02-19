@@ -20,10 +20,10 @@ import urllib, urllib2, re, cookielib, os.path, sys, socket
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
-import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, javhdonline, yourfreetube
+import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, yourfreetube
 import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
 import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4, porndig, absoluporn, czechhd, xxxstreams
-import xxxsorg, jav720p
+import xxxsorg
 
 socket.setdefaulttimeout(60)
 
@@ -62,7 +62,6 @@ def INDEXS():
     utils.addDir('[COLOR hotpink]VideoMegaPorn[/COLOR]','http://www.videomegaporn.com/index.html',160,os.path.join(imgDir, 'videomegaporn.png'),'')
     utils.addDir('[COLOR hotpink]StreamXXX[/COLOR]','http://streamxxx.tv/category/clips/',170,os.path.join(imgDir, 'streamxxx.png'),'')
     utils.addDir('[COLOR hotpink]JustPorn[/COLOR]','http://justporn.to/category/scenes/',240,os.path.join(imgDir, 'justporn.png'),'')
-    utils.addDir('[COLOR hotpink]JavHDonline[/COLOR]','http://javhdonline.com/watch/category/jav-uncensored/',180,os.path.join(imgDir, 'javhdonline.png'),'')
     utils.addDir('[COLOR hotpink]YourFreeTube[/COLOR]','http://www.yourfreetube.net/newvideos.html',190,'','')
     utils.addDir('[COLOR hotpink]Xtasie[/COLOR]','http://xtasie.com/porn-video-list/page/1/',200,os.path.join(imgDir, 'xtasie.png'),'')
     utils.addDir('[COLOR hotpink]StreamPleasure[/COLOR]','http://streampleasure.com/page/1/?filtre=date&cat=0',210,os.path.join(imgDir, 'streampleasure.png'),'')    
@@ -90,7 +89,6 @@ def INDEXM():
     utils.addDir('[COLOR hotpink]Cat3Movie[/COLOR]','http://cat3movie.us',350,os.path.join(imgDir, 'cat3movie.png'),'')
     utils.addDir('[COLOR hotpink]ParadiseHill[/COLOR]','http://www.paradisehill.tv/en/',250,os.path.join(imgDir, 'paradisehill.png'),'')
     utils.addDir('[COLOR hotpink]FreeOMovie[/COLOR]','http://www.freeomovie.com/',370,os.path.join(imgDir, 'freeomovie.png'),'')
-    utils.addDir('[COLOR hotpink]Jav720p[/COLOR]','http://jav720p.com/',320,'','')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXT():
@@ -302,11 +300,6 @@ elif mode == 174: streamxxx.Search(url, keyword)
 elif mode == 175: streamxxx.MainMovies()
 elif mode == 176: streamxxx.MainInternationalMovies()
 elif mode == 177: streamxxx.Categories(url)
-elif mode == 180: javhdonline.Main()
-elif mode == 181: javhdonline.List(url)
-elif mode == 182: javhdonline.Playvid(url, name, download)
-elif mode == 183: javhdonline.Tags(url)
-elif mode == 184: javhdonline.Search(url, keyword)
 elif mode == 190: yourfreetube.YFTMain()
 elif mode == 191: yourfreetube.YFTList(url)
 elif mode == 192: yourfreetube.YFTPlayvid(url, name, download)
@@ -370,11 +363,6 @@ elif mode == 311: czechhd.List(url)
 elif mode == 312: czechhd.Playvid(url, name, download)
 elif mode == 313: czechhd.Categories(url)
 elif mode == 314: czechhd.Search(url, keyword)
-elif mode == 320: jav720p.Main()
-elif mode == 321: jav720p.List(url)
-elif mode == 322: jav720p.Playvid(url, name, download)
-elif mode == 323: jav720p.Categories(url)
-elif mode == 324: jav720p.Search(url, keyword)
 elif mode == 330: pornkino.Main()
 elif mode == 331: pornkino.List(url)
 elif mode == 332: pornkino.Playvid(url, name, download)
