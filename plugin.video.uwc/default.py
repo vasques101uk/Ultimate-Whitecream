@@ -23,7 +23,7 @@ import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre,
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, yourfreetube
 import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
 import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4, porndig, absoluporn, czechhd, xxxstreams
-import xxxsorg
+import xxxsorg, eroticage
 
 socket.setdefaulttimeout(60)
 
@@ -89,6 +89,7 @@ def INDEXM():
     utils.addDir('[COLOR hotpink]Cat3Movie[/COLOR]','http://cat3movie.us',350,os.path.join(imgDir, 'cat3movie.png'),'')
     utils.addDir('[COLOR hotpink]ParadiseHill[/COLOR]','http://www.paradisehill.tv/en/',250,os.path.join(imgDir, 'paradisehill.png'),'')
     utils.addDir('[COLOR hotpink]FreeOMovie[/COLOR]','http://www.freeomovie.com/',370,os.path.join(imgDir, 'freeomovie.png'),'')
+    utils.addDir('[COLOR hotpink]Eroticage[/COLOR]','http://www.eroticage.net/',430,'','')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXT():
@@ -418,6 +419,11 @@ elif mode == 421: xxxsorg.List(url)
 elif mode == 422: xxxsorg.Playvid(url, name, download)
 elif mode == 423: xxxsorg.Categories(url)
 #elif mode == 424: xxxsorg.Search(url, keyword)
+elif mode == 430: eroticage.Main()
+elif mode == 431: eroticage.List(url)
+elif mode == 432: eroticage.Playvid(url, name, download)
+elif mode == 433: eroticage.Categories(url)
+elif mode == 434: eroticage.Search(url, keyword)
 
 elif mode == 900: favorites.Favorites(fav,favmode,name,url,img)
 elif mode == 901: favorites.List()
