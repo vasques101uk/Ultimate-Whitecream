@@ -89,7 +89,7 @@ def getBMW(url):
     #redirecturl = utils.getVideoLink(url, '')
     #videodomain = re.compile("http://([^/]+)/", re.DOTALL | re.IGNORECASE).findall(redirecturl)[0]
     videos = re.compile(r'file: "([^"]+mp4)", label: "\d', re.DOTALL | re.IGNORECASE).findall(videopage)
-    videourl = videos[-1]
+    videourl = videos[-2]
     return videourl
 
 def getIP(url):
@@ -100,6 +100,6 @@ def getIP(url):
 
 def getFly(url):
     videopage = utils.getHtml(url, '')
-    videos = re.compile('file: "([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
+    videos = re.compile('fileUrl="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
     videourl = videos[-1]
     return videourl
