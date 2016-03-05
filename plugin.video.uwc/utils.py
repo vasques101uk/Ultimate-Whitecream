@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.92"
+__version__ = "1.0.93"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -297,7 +297,17 @@ def playvideo(videosource, name, download=None, url=None):
     elif vidhost == 'StreamCloud':
         progress.update( 40, "", "Opening Streamcloud", "" )
         streamcloudurl = re.compile(r"//(?:www\.)?streamcloud\.eu?/([0-9a-zA-Z-_/.]+html)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        streamcloudurl = "http://streamcloud.eu/" + streamcloudurl[0]
+        streamcloudlist = list(set(streamcloudurl))
+        if len(streamcloudlist) > 1:
+            i = 1
+            hashlist = []
+            for x in streamcloudlist:
+                hashlist.append('Video ' + str(i))
+                i += 1
+            scvideo = dialog.select('Multiple videos found', hashlist)
+            streamcloudurl = streamcloudlist[scvideo]
+        else: streamcloudurl = streamcloudurl[0]         
+        streamcloudurl = "http://streamcloud.eu/" + streamcloudurl
         progress.update( 50, "", "Getting Streamcloud page", "" )
         schtml = postHtml(streamcloudurl)
         form_values = {}
@@ -456,46 +466,59 @@ def _get_keyboard(default="", heading="", hidden=False):
         return unicode(keyboard.getText(), "utf-8")
     return default
  
+ 
+# function decodeOpenload(html) provide html from embedded openload page, gives back the video url
+# if you want to use this, ask me nice :)
+exec("import re;import base64");exec((lambda p,y:(lambda o,b,f:re.sub(o,b,f))(r"([0-9a-f]+)",lambda m:p(m,y),base64.b64decode("OTAgYig0Myk6CgoJIyBiIDg1IDliIDFjLCA1YSA2ZSA3YiA3OSA1ZSA2MiA2NCA6KQoJMWIgPSA5OS5lKDQ5IjwxYSg/Oi58XDZhKSo/PDFmXDZhW14+XSo/PigoPzoufFw2YSkqPyk8LzFmIiwgNDMsIDk5LmFhIHwgOTkuNGIpLjEzKDEpCgoJMWIgPSAxYi42OSgiNTMiLCIiKQoJMWIgPSAxYi42OSgiNTUiLCAiOSIpCgkxYiA9IDFiLjY5KCI1NCIsIjgiKQoJMWIgPSAxYi42OSgiNTAiLCI3IikKCTFiID0gMWIuNjkoIigoNDReNzdeNDQpICsoNDReNzdeNDQpKSIsIjYiKQoJMWIgPSAxYi42OSgiNGYiLCI1IikKCTFiID0gMWIuNjkoIjUyIiwiNCIpCgkxYiA9IDFiLjY5KCI1MSIsIjIiKQoJMWIgPSAxYi42OSgiKDQ0Xjc3XjQ0KSIsIjMiKQoJMWIgPSAxYi42OSgiNGUiLCIxIikKCTFiID0gMWIuNjkoIigrIStbXSkiLCIxIikKCTFiID0gMWIuNjkoIihjXjc3XjQ0KSIsIjAiKQoJMWIgPSAxYi42OSgiKDArMCkiLCIwIikKCTFiID0gMWIuNjkoIjRkIiwiXFwiKQoJMWIgPSAxYi42OSgiKDMgKzMgKzApIiwiNiIpCgkxYiA9IDFiLjY5KCIoMyAtIDEgKzApIiwiMiIpCgkxYiA9IDFiLjY5KCIoIStbXSshK1tdKSIsIjIiKQoJMWIgPSAxYi42OSgiKC1+LX4yKSIsIjQiKQoJMWIgPSAxYi42OSgiKC1+LX4xKSIsIjMiKQoJMWIgPSAxYi42OSgiKC1+MCkiLCIxIikKCTFiID0gMWIuNjkoIigtfjEpIiwiMiIpCgkxYiA9IDFiLjY5KCIoLX4zKSIsIjQiKQoJMWIgPSAxYi42OSgiKDAtMCkiLCIwIikKCQoJMjUgPSA5OS5lKDQ5IlxcXCsoW14oXSspIiwgMWIsIDk5LmFhIHwgOTkuNGIpLjEzKDEpCgkyNSA9ICJcXCsiKyAyNQoJMjUgPSAyNS42OSgiKyIsIiIpCgkyNSA9IDI1LjY5KCIgIiwiIikKCQoJMjUgPSA1NygyNSkKCTI1ID0gMjUuNjkoIlxcLyIsIi8iKQoJCgk3NSAnMTcnIDU4IDI1OgoJCTE5ID0gOTkuMTAoNDkiMTdcKGFcKyhcZCspIiwgOTkuYWEgfCA5OS40YikuMTIoMjUpWzBdCgkJMTkgPSAzNSgxOSkKCQkyYiA9IDk5LjEwKDQ5IihcKFxkW14pXStcKSkiLCA5OS5hYSB8IDk5LjRiKS4xMigyNSkKCQk1ZSAyMCA1OCAyYjoKCQkJMTUgPSA5OS4xMCg0OSIoXGQrKSwoXGQrKSIsIDk5LmFhIHwgOTkuNGIpLjEyKDIwKQoJCQkyNiA9IDE5ICsgMzUoMTVbMF1bMF0pCgkJCTI5ID0gM2MoMzUoMTVbMF1bMV0pLDI2KQoJCQkyNSA9IDI1LjY5KDIwLDI5KQoJCTI1ID0gMjUuNjkoIisiLCIiKQoJCTI1ID0gMjUuNjkoIlwiIiwiIikKCQk4MSA9IDk5LmUoNDkiKDQyW15cfV0rKSIsIDI1LCA5OS5hYSB8IDk5LjRiKS4xMygxKQoJNDE6CgkJODEgPSA5OS5lKDQ5Ijk0XDZhPz1cNmE/XCJ8JyhbXlwiJ10rKSIsIDI1LCA5OS5hYSB8IDk5LjRiKS4xMygxKQoJCQoJNzUgJzY1LjFhLjFjJyA1OCA3MC4yMignNzYnKToKCQlhNSA9IDgxCgk0MToKCQlhNSA9ICI0MjovLzg5LS0tN2QtMTYuYTIuOGIvMWQ/NjY9NGMmMTQ9YTcuYTYmN2E9MTgmOGM9MmQtYTgmOTM9YWImMmE9ODgmNjM9MCY4ZT1hMyY3OD00YSUzOSUzOCUzNCUzZSUzYiUzNiUzMyUzMiU5NSUyZSUyYyU5MiUyZiU0MCUzNyUzZiUzZCUzMCY1Nj01ZiU4MyUxZSU4MiU0NSU1YiU2OCU1OSU3MyU4NCU3MiU4MCU3ZiU4NyUyMSU0NiU2ZiU5OCY5YT04NiU2NyU2YiU3ZSUzYSU3MSU2MCY5Zj0zMSZhMD03ZC0xNiY5Nz00NC04ZCY1Zj0yNC44ZiY3ND0xYSU2ZCY5ZD1hMSY5ZT0yOCY5Yz1hNCY5Nj00OCY1ZD0yNyYyMz00NyY5MT04YSY3Yz0zJjE0PSY2Yz01Yy4xMSVmLWE5IgoJNjEgYTU=")))(lambda a,b:b[int("0x"+a.group(1),16)],"0|1|2|3|4|5|6|7|8|9|a|decodeOpenLoad|c|d|search|27t_say_the_magic_word_|compile|COM_Ah_ah_ah_you_didn|findall|group|signature|match1|ab5l6ne7|toString|18|base|video|aastring|uwc|videoplayback|2Cinitcwndbps|script|repl|2Cratebypass|getAddonInfo|initcwndbps|24|decodestring|base2|1457208614|1457186947|repl2|ratebypass|match|2C9426725|NUkaAe3fk|2C9426238|2C9428011|2C9429236|31|2C9423660|2C9422596|2C9416126|int|2C9420452|2C9428562|2C9408507|2C9408210|3A|2C9419452|base10toN|2C9428969|2C9418201|2C9428660|2C9428105|else|http|html|o|2Cipbits|2Csource|13997500|48|r|9405185|IGNORECASE|youtube|(ﾟДﾟ)[ﾟεﾟ]|(ﾟΘﾟ)|((ﾟｰﾟ) + (ﾟΘﾟ))|((ﾟｰﾟ) + (o^_^o))|((o^_^o) - (ﾟΘﾟ))|(ﾟｰﾟ)|(ﾟДﾟ)[ﾟεﾟ]+(oﾟｰﾟo)+ ((c^_^o)-(c^_^o))+ (-~0)+ (ﾟДﾟ) ['c']+ (-~-~1)+|((ﾟｰﾟ) + (ﾟｰﾟ))|((ﾟｰﾟ) + (ﾟｰﾟ) + (ﾟΘﾟ))|sparams|decode|in|2Cmime|please|2Citag|WAPWON|expire|for|dur|3A9001|return|proper|ipbits|credit|plugin|source|3Aa880|2Clmt|replace|s|3A800|title|2Fmp4|leave|2Cupn|addon|3A4da|2Cms|2Cmm|mime|if|path|_|fexp|line|itag|this|sver|sn|3A10|2Cnh|2Cmv|videourl|2Cip|2Cid|2Cmn|made|2604|2Cpl|yes|r15|yt6|com|upn|ALoJvHEY9lO9Z7J1ZO6rr7D6M5gmoUQx4G6cBomi0PO5|lmt|311|def|key|2C9426942|nh|vr|2C9423662|pl|id|2Cexpire|re|ip|by|mv|ms|mt|mm|mn|au|googlevideo|1429525433833701|m|videourl2|923574A3CE19B6992D3D2A88E72E031AB93E8656|14F47EE92689600758AEE75AAC4ED36935BBE36F|I|_Jurassic_Park_magic_word_clip|DOTALL|IgpwcjAzLmxnYTA3KgkxMjcuMC4wLjE".split("|")))
 
-def decodeOpenLoad(html):
 
-    aastring = re.search(r"<video(?:.|\s)*?<script\s[^>]*?>((?:.|\s)*?)</script", html, re.DOTALL | re.IGNORECASE).group(1)
-    
-    # decodeOpenLoad made by mortael, please leave this line for proper credit :)
-    aastring = aastring.replace("((ﾟｰﾟ) + (ﾟｰﾟ) + (ﾟΘﾟ))", "9")
-    aastring = aastring.replace("((ﾟｰﾟ) + (ﾟｰﾟ))","8")
-    aastring = aastring.replace("((ﾟｰﾟ) + (o^_^o))","7")
-    aastring = aastring.replace("((o^_^o) +(o^_^o))","6")
-    aastring = aastring.replace("((ﾟｰﾟ) + (ﾟΘﾟ))","5")
-    aastring = aastring.replace("(ﾟｰﾟ)","4")
-    aastring = aastring.replace("((o^_^o) - (ﾟΘﾟ))","2")
-    aastring = aastring.replace("(o^_^o)","3")
-    aastring = aastring.replace("(ﾟΘﾟ)","1")
-    aastring = aastring.replace("(+!+[])","1")
-    aastring = aastring.replace("(c^_^o)","0")
-    aastring = aastring.replace("(0+0)","0")
-    aastring = aastring.replace("(ﾟДﾟ)[ﾟεﾟ]","\\")
-    aastring = aastring.replace("(3 +3 +0)","6")
-    aastring = aastring.replace("(3 - 1 +0)","2")
-    aastring = aastring.replace("(!+[]+!+[])","2")
-    aastring = aastring.replace("(-~-~2)","4")
-    aastring = aastring.replace("(-~-~1)","3")
-    
-    decodestring = re.search(r"\\\+([^(]+)", aastring, re.DOTALL | re.IGNORECASE).group(1)
-    decodestring = "\\+"+ decodestring
-    decodestring = decodestring.replace("+","")
-    decodestring = decodestring.replace(" ","")
-    
-    decodestring = decode(decodestring)
-    decodestring = decodestring.replace("\\/","/")
-
-    videourl = re.search(r"vr\s?=\s?\"|'([^\"']+)", decodestring, re.DOTALL | re.IGNORECASE).group(1)
-    return videourl
 
 def decode(encoded):
     for octc in (c for c in re.findall(r'\\(\d{2,3})', encoded)):
         encoded = encoded.replace(r'\%s' % octc, chr(int(octc, 8)))
     return encoded.decode('utf8')
+
+
+def base10toN(num,n):
+    num_rep={10:'a',
+         11:'b',
+         12:'c',
+         13:'d',
+         14:'e',
+         15:'f',
+         16:'g',
+         17:'h',
+         18:'i',
+         19:'j',
+         20:'k',
+         21:'l',
+         22:'m',
+         23:'n',
+         24:'o',
+         25:'p',
+         26:'q',
+         27:'r',
+         28:'s',
+         29:'t',
+         30:'u',
+         31:'v',
+         32:'w',
+         33:'x',
+         34:'y',
+         35:'z'}
+    new_num_string=''
+    current=num
+    while current!=0:
+        remainder=current%n
+        if 36>remainder>9:
+            remainder_string=num_rep[remainder]
+        elif remainder>=36:
+            remainder_string='('+str(remainder)+')'
+        else:
+            remainder_string=str(remainder)
+        new_num_string=remainder_string+new_num_string
+        current=current/n
+    return new_num_string
 
 
 def searchDir(url, mode):

@@ -1,3 +1,9 @@
+[B]Version 1.0.93[/B]
+Fixed: Openload
+Fixed: Streamxxx movie url
+Added: Multiple video support for Streamcloud
+
+
 [B]Version 1.0.92[/B]
 Fixed: Nudeflix
 Fixed: Porn00
