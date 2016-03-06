@@ -100,7 +100,7 @@ def PPlayvid(url, name, alternative=1, download=None):
                 PPlayvid(alturl, name, nalternative, download)
             else:
                 progress.close()
-                utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
+                utils.notify('Oh oh','Couldn\'t find a supported videohost')
         else:
             videourl = video720[0]
             playvid()
@@ -114,7 +114,7 @@ def PPlayvid(url, name, alternative=1, download=None):
                 PPlayvid(alturl, name, nalternative, download)
             else:
                 progress.close()
-                utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
+                utils.notify('Oh oh','Couldn\'t find a supported videohost')
         else:
             playvid()              
     elif re.search('/\?V=', videopage, re.DOTALL | re.IGNORECASE):
@@ -129,7 +129,7 @@ def PPlayvid(url, name, alternative=1, download=None):
                     PPlayvid(alturl, name, nalternative, download)
                 else:
                     progress.close()
-                    utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
+                    utils.notify('Oh oh','Couldn\'t find a supported videohost')
             else:
                 videourl = video720[0]
                 playvid()
@@ -139,7 +139,7 @@ def PPlayvid(url, name, alternative=1, download=None):
                 PPlayvid(alturl, name, nalternative, download)
             else:
                 progress.close()
-                utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')        
+                utils.notify('Oh oh','Couldn\'t find a supported videohost')        
     elif re.search('google.com/file', videopage, re.DOTALL | re.IGNORECASE):
         match = re.compile('file/d/([^/]+)/', re.DOTALL | re.IGNORECASE).findall(videopage)
         googleurl = "https://docs.google.com/uc?id="+match[0]+"&export=download"
@@ -152,7 +152,7 @@ def PPlayvid(url, name, alternative=1, download=None):
                 PPlayvid(alturl, name, nalternative, download)
             else:
                 progress.close()
-                utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
+                utils.notify('Oh oh','Couldn\'t find a supported videohost')
         else:
             videourl = video720[0]
             playvid()
@@ -161,7 +161,7 @@ def PPlayvid(url, name, alternative=1, download=None):
         PPlayvid(alturl, name, nalternative, download)
     else:
         progress.close()
-        utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
+        utils.notify('Oh oh','Couldn\'t find a supported videohost')
 
 
 def PCat(url):
@@ -226,7 +226,7 @@ def getVK(url):
         if len(quality_list) > 1:
             result = xbmcgui.Dialog().select('Choose the quality', quality_list)
             if result == -1:
-                utils.dialog.ok('Oh oh','No video selected')
+                utils.notify('Oh oh','No video selected')
             else:
                 return link_list[result] + '|User-Agent=%s' % (utils.USER_AGENT)
         else:

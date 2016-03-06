@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.0.94"
+__version__ = "1.0.95"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -58,6 +58,7 @@ rootDir = xbmc.translatePath(rootDir)
 resDir = os.path.join(rootDir, 'resources')
 imgDir = os.path.join(resDir, 'images')
 streams = xbmc.translatePath(os.path.join(rootDir, 'streamlist.m3u'))
+uwcicon = xbmc.translatePath(os.path.join(rootDir, 'icon.png'))
 
 profileDir = addon.getAddonInfo('profile')
 profileDir = xbmc.translatePath(profileDir).decode("utf-8")
@@ -158,6 +159,12 @@ def downloadVideo(url, name):
                     pass
 
 
+def notify(header=None, msg='', duration=5000):
+    if header is None: header = 'Ultimate Whitecream'
+    builtin = "XBMC.Notification(%s,%s, %s, %s)" % (header, msg, duration, uwcicon)
+    xbmc.executebuiltin(builtin)
+
+
 def PLAYVIDEO(url, name, download=None):
     progress.create('Play video', 'Searching videofile.')
     progress.update( 10, "", "Loading video page", "" )
@@ -181,7 +188,7 @@ def playvideo(videosource, name, download=None, url=None):
         hosts.append('StreamCloud')         
     if len(hosts) == 0:
         progress.close()
-        dialog.ok('Oh oh','Couldn\'t find any video')
+        notify('Oh oh','Couldn\'t find any video')
         return
     elif len(hosts) > 1:
         if addon.getSetting("dontask") == "true":
@@ -207,7 +214,7 @@ def playvideo(videosource, name, download=None, url=None):
         else:
             hashkey = re.compile("""hashkey=([^"']+)""", re.DOTALL | re.IGNORECASE).findall(videosource)
             if not hashkey:
-                dialog.ok('Oh oh','Couldn\'t find playable videomega link')
+                notify('Oh oh','Couldn\'t find playable videomega link')
                 return
             if len(hashkey) > 1:
                 i = 1
@@ -249,7 +256,7 @@ def playvideo(videosource, name, download=None, url=None):
             progress.update( 80, "", "Getting video file from OpenLoad", "")
             videourl = decodeOpenLoad(openloadsrc)
         except:
-            dialog.ok('Oh oh','Couldn\'t find playable OpenLoad link')
+            notify('Oh oh','Couldn\'t find playable OpenLoad link')
             return
     elif vidhost == 'Streamin':
         progress.update( 40, "", "Loading Streamin", "" )
@@ -431,6 +438,7 @@ def addDownLink(name, url, mode, iconimage, desc, stream=None, fav='add'):
          "&name=" + urllib.quote_plus(name))         
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+    liz.setArt({'thumb': iconimage, 'icon': iconimage})
     if stream:
         liz.setProperty('IsPlayable', 'true')
     if len(desc) < 1:
@@ -454,6 +462,7 @@ def addDir(name, url, mode, iconimage, page=None, channel=None, section=None, ke
          "&name=" + urllib.quote_plus(name))
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    liz.setArt({'thumb': iconimage, 'icon': iconimage})
     liz.setInfo(type="Video", infoLabels={"Title": name})
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=Folder)
     return ok

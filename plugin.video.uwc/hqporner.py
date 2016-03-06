@@ -79,7 +79,7 @@ def HQPLAY(url, name, download=None):
     elif re.search('flyflv', iframeurl[0], re.DOTALL | re.IGNORECASE):
         videourl = getFly(iframeurl[0])
     else:
-        utils.dialog.ok('Oh oh','Couldn\'t find a supported videohost')
+        utils.notify('Oh oh','Couldn\'t find a supported videohost')
         return
     utils.playvid(videourl, name, download)
 
