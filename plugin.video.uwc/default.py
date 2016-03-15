@@ -47,6 +47,14 @@ def INDEX():
     download_path = addon.getSetting('download_path')
     if download_path != '' and os.path.exists(download_path):
         utils.addDir('[COLOR hotpink]Whitecream[/COLOR] [COLOR white]Download Folder[/COLOR]',download_path,4,os.path.join(rootDir, 'icon.png'),'')
+        
+    if not addon.getSetting('uwccounter') == 'true':
+        try:
+            counterpage = utils.getHtml('http://bit.ly/uwccounter','')
+            if 'WhiteCream' in counterpage:
+                addon.setSetting('uwccounter','true')
+        except: pass
+        
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 def INDEXS():
@@ -188,13 +196,6 @@ try: section = int(params["section"])
 except: pass
 try: keyword = urllib.unquote_plus(params["keyword"])
 except: pass
-
-if not addon.getSetting('uwccounter') == 'true':
-    try:
-        counterpage = utils.getHtml('http://bit.ly/uwccounter','')
-        if 'WhiteCream' in counterpage:
-            addon.setSetting('uwccounter','true')
-    except: pass
 
 
 if mode is None: INDEX()
