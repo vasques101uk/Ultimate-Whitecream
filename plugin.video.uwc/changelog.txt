@@ -1,3 +1,7 @@
+[B]Version 1.0.97[/B]
+Fixed: Porndig
+
+
 [B]Version 1.0.96[/B]
 Added: Videowood and Jetload video hosts
 Changed: All the video hosts in utils.py have support for multiple videos

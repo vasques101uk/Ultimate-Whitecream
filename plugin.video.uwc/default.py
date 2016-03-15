@@ -114,7 +114,7 @@ def INDEXW():
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def STREAMS():
-    streamurl = 'https://github.com/whitecream01/WhiteCream-V0.0.1/raw/master/plugin.video.uwc/streamlist.m3u'
+    streamurl = 'http://bit.ly/uwcstreams'
     streamlist = utils.getHtml(streamurl, '')
     match = re.compile('#.+,(.+?)\n(.+?)\n').findall(streamlist)
     for name, url in match:
@@ -189,6 +189,12 @@ except: pass
 try: keyword = urllib.unquote_plus(params["keyword"])
 except: pass
 
+if not addon.getSetting('uwccounter') == 'true':
+    try:
+        counterpage = utils.getHtml('http://bit.ly/uwccounter','')
+        if 'WhiteCream' in counterpage:
+            addon.setSetting('uwccounter','true')
+    except: pass
 
 
 if mode is None: INDEX()
