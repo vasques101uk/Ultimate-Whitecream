@@ -1,3 +1,10 @@
+[B]Version 1.1.0[/B]
+Fixed: Pagination for Absoluporn and some videoplayback
+Fixed: Cam4, return to older method for getting videourl
+Fixed: Videolisting/Categories StreamXXX
+Fixed: Pagination for YourFreeTube
+
+
 [B]Version 1.0.99[/B]
 Added: More supported hosts for Pornhive
 
