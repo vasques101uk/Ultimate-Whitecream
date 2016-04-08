@@ -31,6 +31,7 @@ from compat import (
 )
 
 dialog = utils.dialog
+addon = utils.addon
 
 # 80 BGMain
 # 81 BGList
@@ -38,27 +39,43 @@ dialog = utils.dialog
 # 83 BGCat
 # 84 BGSearch
 
+def BGVersion():
+    bgpage = utils.getHtml('http://beeg.com','')
+    bgversion = re.compile(r"cpl/(\d+)\.js", re.DOTALL | re.IGNORECASE).findall(bgpage)[0]
+    bgsavedversion = addon.getSetting('bgversion')
+    if bgversion <> bgsavedversion:
+        addon.setSetting('bgversion',bgversion)
+        bgjspage = utils.getHtml('http://static.beeg.com/cpl/'+bgversion+'.js','http://beeg.com')
+        bgsalt = re.compile('beeg_salt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(bgjspage)[0]
+        addon.setSetting('bgsalt',bgsalt)
+
 def BGMain():
-    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://api2.beeg.com/api/v6/1739/index/main/0/pc',83,'','')
-    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://api2.beeg.com/api/v6/1739/index/main/0/pc?query=',84,'','')
-    BGList('http://api2.beeg.com/api/v6/1739/index/main/0/pc')
+    BGVersion()
+    bgversion = addon.getSetting('bgversion')
+
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://api2.beeg.com/api/v6/'+bgversion+'/index/main/0/pc',83,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://api2.beeg.com/api/v6/'+bgversion+'/index/main/0/pc?query=',84,'','')
+    BGList('http://api2.beeg.com/api/v6/'+bgversion+'/index/main/0/pc')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 def BGList(url):
+    bgversion = addon.getSetting('bgversion')
     listjson = utils.getHtml(url,'')
-    jsondata = json.loads(listjson)
 
-    for videos in jsondata["videos"]:
-        img = "http://img.beeg.com/236x177/" + videos["id"] +  ".jpg"
-        videopage = "https://api.beeg.com/api/v6/1738/video/" + videos["id"]
-        name = videos["title"].encode("utf8")
+    match = re.compile(r'\{"title":"([^"]+)","id":"([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listjson)
+
+    for title, videoid in match:
+        img = "http://img.beeg.com/236x177/" + videoid +  ".jpg"
+        videopage = "https://api.beeg.com/api/v6/"+bgversion+"/video/" + videoid
+        name = title.encode("utf8")
         utils.addDownLink(name, videopage, 82, img, '')
     try:
-        page=re.compile('http://api2.beeg.com/api/v6/1739/index/[^/]+/([0-9]+)/pc', re.DOTALL | re.IGNORECASE).findall(url)[0]
+        page=re.compile('http://api2.beeg.com/api/v6/'+bgversion+'/index/[^/]+/([0-9]+)/pc', re.DOTALL | re.IGNORECASE).findall(url)[0]
         page = int(page)
         npage = page + 1
-        if jsondata["pages"] > page:
+        jsonpage = re.compile(r'pages":(\d+)', re.DOTALL | re.IGNORECASE).findall(listjson)[0]
+        if int(jsonpage) > page:
             nextp = url.replace("/"+str(page)+"/", "/"+str(npage)+"/")
             utils.addDir('Next Page ('+str(npage)+')', nextp,81,'')
     except: pass
@@ -79,8 +96,9 @@ def split(o, e):
     return n
 
 def decrypt_key(key):
+    bgsalt = addon.getSetting('bgsalt')
     # Reverse engineered from http://static.beeg.com/cpl/1738.js
-    a = 'GUuyodcfS8FW8gQp4OKLMsZBcX0T7B'
+    a = bgsalt
     e = compat_urllib_parse_unquote(key)
     o = ''.join([
         compat_chr(compat_ord(e[n]) - compat_ord(a[n % len(a)]) % 21)
@@ -91,7 +109,6 @@ def decrypt_key(key):
 def BGPlayvid(url, name, download=None):
     videopage = utils.getHtml(url,'http://beeg.com')
     videopage = json.loads(videopage)
-    
    
     if not videopage["240p"] == None:
         url = videopage["240p"].encode("utf8")
@@ -99,7 +116,6 @@ def BGPlayvid(url, name, download=None):
         url = videopage["480p"].encode("utf8")
     if not videopage["720p"] == None:
         url = videopage["720p"].encode("utf8")
-
 
     url = url.replace("{DATA_MARKERS}","data=pc_XX")
     if not url.startswith("http:"): url = "https:" + url
@@ -127,11 +143,12 @@ def BGPlayvid(url, name, download=None):
 
 
 def BGCat(url):
+    bgversion = addon.getSetting('bgversion')
     caturl = utils.getHtml2(url)
-    catjson = json.loads(caturl)
-    
-    for tag in catjson["tags"]["popular"]:
-        videolist = "http://api2.beeg.com/api/v6/1739/index/tag/0/mobile?tag=" + tag.encode("utf8")
+    tags = re.compile(r'"nonpopular":\[(.*?)\]', re.DOTALL | re.IGNORECASE).findall(caturl)[0]
+    tags = re.compile('"([^"]+)"', re.DOTALL | re.IGNORECASE).findall(tags)
+    for tag in tags:
+        videolist = "http://api2.beeg.com/api/v6/"+bgversion+"/index/tag/0/mobile?tag=" + tag.encode("utf8")
         name = tag.encode("utf8")
         name = name[:1].upper() + name[1:]
         utils.addDir(name, videolist, 81, '')

@@ -1,3 +1,8 @@
+[B]Version 1.1.2[/B]
+Fixed: Beeg
+Fixed: Cat3movie
+
+
 [B]Version 1.1.1[/B]
 Fixed: Beeg (thanks to youtube-dl)
 Fixed: PornAQ videos (support for Openload)
