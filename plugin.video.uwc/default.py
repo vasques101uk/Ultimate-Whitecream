@@ -21,7 +21,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre, pornhive, beeg, todayporn, nltubes
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, yourfreetube
-import xtasie, streampleasure, chaturbate, playporn, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
+import xtasie, streampleasure, chaturbate, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
 import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4, porndig, absoluporn, czechhd, xxxstreams
 import xxxsorg, eroticage, anybunny
 
@@ -72,7 +72,6 @@ def INDEXS():
     utils.addDir('[COLOR hotpink]YourFreeTube[/COLOR]','http://www.yourfreetube.net/newvideos.html',190,'','')
     utils.addDir('[COLOR hotpink]Xtasie[/COLOR]','http://xtasie.com/porn-video-list/page/1/',200,os.path.join(imgDir, 'xtasie.png'),'')
     utils.addDir('[COLOR hotpink]StreamPleasure[/COLOR]','http://streampleasure.com/page/1/?filtre=date&cat=0',210,os.path.join(imgDir, 'streampleasure.png'),'')    
-    utils.addDir('[COLOR hotpink]Playporn[/COLOR]','http://playporn.to/category/xxx-clips-scenes-stream/',230,os.path.join(imgDir, 'playporn.png'),'')
     utils.addDir('[COLOR hotpink]HD Zog[/COLOR]','http://www.hdzog.com/new/',340,os.path.join(imgDir, 'hdzog.png'),'')    
     utils.addDir('[COLOR hotpink]Mr Sexe[/COLOR]','http://www.mrsexe.com/',400,os.path.join(imgDir, 'mrsexe.png'),'')
     utils.addDir('[COLOR hotpink]Ero-tik[/COLOR]','http://www.ero-tik.com/',260,os.path.join(imgDir, 'erotik.png'),'')
@@ -91,7 +90,6 @@ def INDEXM():
     utils.addDir('[COLOR hotpink]ThePornEmpire[/COLOR]','http://thepornempire.com/category/movies/',125,os.path.join(imgDir, 'thepornempire.png'),'')
     utils.addDir('[COLOR hotpink]PelisxPorno[/COLOR]','http://www.pelisxporno.com/',140,os.path.join(imgDir, 'pelisxporno.png'),'')
     utils.addDir('[COLOR hotpink]StreamXXX[/COLOR]','http://streamxxx.tv/category/movies/',175,os.path.join(imgDir, 'streamxxx.png'),'')
-    utils.addDir('[COLOR hotpink]Playporn[/COLOR]','http://playporn.to/category/xxx-movie-stream/',231,os.path.join(imgDir, 'playporn.png'),'')
     utils.addDir('[COLOR hotpink]Pornkino[/COLOR]','http://pornkino.to/',330,os.path.join(imgDir, 'pornkino.png'),'')
     utils.addDir('[COLOR hotpink]Cat3Movie[/COLOR]','http://cat3movie.us',350,os.path.join(imgDir, 'cat3movie.png'),'')
     utils.addDir('[COLOR hotpink]ParadiseHill[/COLOR]','http://www.paradisehill.tv/en/',250,os.path.join(imgDir, 'paradisehill.png'),'')
@@ -326,13 +324,6 @@ elif mode == 220: chaturbate.Main()
 elif mode == 221: chaturbate.List(url, page)
 elif mode == 222: chaturbate.Playvid(url, name)
 elif mode == 223: chaturbate.clean_database(True)
-elif mode == 230: playporn.Main()
-elif mode == 231: playporn.MainMovies()
-elif mode == 232: playporn.List(url)
-elif mode == 233: playporn.Playvid(url, name, download)
-elif mode == 234: playporn.Search(url, keyword)
-elif mode == 235: playporn.Categories(url, 0)
-elif mode == 236: playporn.Categories(url, 1)
 elif mode == 240: justporn.Main()
 elif mode == 241: justporn.List(url)
 elif mode == 242: justporn.Playvid(url, name, download)
