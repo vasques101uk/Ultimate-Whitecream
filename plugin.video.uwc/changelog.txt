@@ -1,3 +1,8 @@
+[B]Version 1.1.5[/B]
+Added: Spankbang (commited by NothingGnome)
+Added: K18
+
+
 [B]Version 1.1.4[/B]
 Fixed: Videowood, Jetload
 Fixed: MyFreeCams hanging on 2%

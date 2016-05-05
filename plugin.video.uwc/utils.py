@@ -29,8 +29,8 @@ import gzip
 __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
-__credits__ = "mortael, Fr33m1nd, anton40"
-__version__ = "1.1.4"
+__credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
+__version__ = "1.1.5"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 

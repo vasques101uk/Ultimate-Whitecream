@@ -23,7 +23,7 @@ import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre,
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, yourfreetube
 import xtasie, streampleasure, chaturbate, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
 import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4, porndig, absoluporn, czechhd, xxxstreams
-import xxxsorg, eroticage, anybunny, spankbang
+import xxxsorg, eroticage, anybunny, spankbang, k18
 
 socket.setdefaulttimeout(60)
 
@@ -77,7 +77,8 @@ def INDEXS():
     utils.addDir('[COLOR hotpink]Ero-tik[/COLOR]','http://www.ero-tik.com/',260,os.path.join(imgDir, 'erotik.png'),'')
     utils.addDir('[COLOR hotpink]CzechHD[/COLOR]','http://czechhd.net/',310,os.path.join(imgDir, 'czechhd.png'),'')     
     utils.addDir('[COLOR hotpink]XXX Streams (eu)[/COLOR]','http://xxxstreams.eu/',410,os.path.join(imgDir, 'xxxstreams.png'),'')
-    utils.addDir('[COLOR hotpink]XXX Streams (org)[/COLOR]','http://xxxstreams.org/',420,os.path.join(imgDir, 'xxxsorg.png'),'')     
+    utils.addDir('[COLOR hotpink]XXX Streams (org)[/COLOR]','http://xxxstreams.org/',420,os.path.join(imgDir, 'xxxsorg.png'),'')
+    utils.addDir('[COLOR hotpink]K18[/COLOR]','http://k18.co/',230,os.path.join(imgDir, 'k18.png'),'')
     utils.addDir('[COLOR hotpink]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -325,6 +326,11 @@ elif mode == 220: chaturbate.Main()
 elif mode == 221: chaturbate.List(url, page)
 elif mode == 222: chaturbate.Playvid(url, name)
 elif mode == 223: chaturbate.clean_database(True)
+elif mode == 230: k18.Main()
+elif mode == 231: k18.List(url)
+elif mode == 232: k18.Playvid(url, name, download)
+elif mode == 233: k18.Cat(url)
+elif mode == 234: k18.Search(url, keyword)
 elif mode == 240: justporn.Main()
 elif mode == 241: justporn.List(url)
 elif mode == 242: justporn.Playvid(url, name, download)

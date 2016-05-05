@@ -1,7 +1,7 @@
 '''
     Ultimate Whitecream
     Copyright (C) 2015 mortael
-    Copyright (C) 2015 anton40
+    Copyright (C) 2015 NothingGnome
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
