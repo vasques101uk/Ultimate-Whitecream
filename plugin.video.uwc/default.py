@@ -23,7 +23,7 @@ import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre,
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, yourfreetube
 import xtasie, streampleasure, chaturbate, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
 import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4, porndig, absoluporn, czechhd, xxxstreams
-import xxxsorg, eroticage, anybunny
+import xxxsorg, eroticage, anybunny, spankbang
 
 socket.setdefaulttimeout(60)
 
@@ -109,6 +109,7 @@ def INDEXT():
     utils.addDir('[COLOR hotpink]Porndig[/COLOR] [COLOR white]Amateurs[/COLOR]','http://www.porndig.com',290,os.path.join(imgDir, 'porndig.png'),'')
     utils.addDir('[COLOR hotpink]AbsoluPorn[/COLOR]','http://www.absoluporn.com/en/',300,os.path.join(imgDir, 'absoluporn.gif'),'')
     utils.addDir('[COLOR hotpink]Anybunny[/COLOR]','http://anybunny.com/',320,os.path.join(imgDir, 'anybunny.png'),'')    
+    utils.addDir('[COLOR hotpink]SpankBang[/COLOR]','http://spankbang.com/new_videos/',440,os.path.join(imgDir, 'spankbang.png'),'')	
     xbmcplugin.endOfDirectory(utils.addon_handle)
     
 def INDEXW():
@@ -428,6 +429,11 @@ elif mode == 431: eroticage.List(url)
 elif mode == 432: eroticage.Playvid(url, name, download)
 elif mode == 433: eroticage.Categories(url)
 elif mode == 434: eroticage.Search(url, keyword)
+elif mode == 440: spankbang.Main()
+elif mode == 441: spankbang.List(url)
+elif mode == 442: spankbang.Playvid(url, name, download)
+elif mode == 443: spankbang.Categories(url)
+elif mode == 444: spankbang.Search(url, keyword)
 
 elif mode == 900: favorites.Favorites(fav,favmode,name,url,img)
 elif mode == 901: favorites.List()
