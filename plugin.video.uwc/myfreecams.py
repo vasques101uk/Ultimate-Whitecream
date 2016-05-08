@@ -37,7 +37,7 @@ def List(url):
             url = '10' + url
         else:
             url = '1' + url
-        utils.addDownLink(name, url, 272, img, '')
+        utils.addDownLink(name, url, 272, img, '', noDownload=True)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 

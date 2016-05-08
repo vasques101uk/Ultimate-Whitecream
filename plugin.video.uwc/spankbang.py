@@ -40,15 +40,19 @@ search_mode = 444
 def Main():
     utils.addDir('[COLOR hotpink]Search[/COLOR]','http://spankbang.com/s/', search_mode, '', '')
     utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://spankbang.com/categories', categories_mode, '', '')
-    List('http://spankbang.com/new_videos/')
+    List('http://spankbang.com/new_videos/1/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 def List(url):
     print "spankbang::List " + url
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<a href="([^"]+)" class="thumb">.+?<img src="([^"]+)" alt="([^"]+)" class="cover"', re.DOTALL).findall(listhtml)
-    for videopage, img, name in match:
-        name = utils.cleantext(name)
+    match = re.compile('<a href="([^"]+)" class="thumb">.+?<img src="([^"]+)" alt="([^"]+)" class="cover".*?</span>(.*?)</a>.*?clock-o"></i> ([^<]+)<', re.DOTALL).findall(listhtml)
+    for videopage, img, name, hd, duration in match:
+        if hd.find('HD') > 0:
+            hd = " [COLOR orange]HD[/COLOR] "
+        else:
+            hd = " "
+        name = utils.cleantext(name) + hd + "[COLOR deeppink]" + duration + "m[/COLOR]"
         utils.addDownLink(name, base_url + videopage, play_mode, 'http:' + img, '')
     try:
         nextp=re.compile('<li class="active"><a>.+?</a></li><li><a href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
@@ -78,7 +82,7 @@ def Playvid(url, name, download=None):
     stream_id = re.compile("stream_id  = '([^']+)';").findall(html)
     stream_key = re.compile("stream_key  = '([^']+)'").findall(html)
     stream_hd = re.compile("stream_hd  = (1|0)").findall(html)
-    if stream_hd[0] == 1:
+    if int(stream_hd[0]) == 1:
         source = '/title/720p__mp4'
     else:
         source = '/title/480p__mp4'

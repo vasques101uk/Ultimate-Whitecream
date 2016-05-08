@@ -19,7 +19,7 @@
 '''
 
 import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile, string
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon, sqlite3
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon, sqlite3, urlparse, xbmcvfs
 
 from jsunpack import unpack
 
@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.5"
+__version__ = "1.1.6"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -57,7 +57,6 @@ if rootDir[-1] == ';':
 rootDir = xbmc.translatePath(rootDir)
 resDir = os.path.join(rootDir, 'resources')
 imgDir = os.path.join(resDir, 'images')
-streams = xbmc.translatePath(os.path.join(rootDir, 'streamlist.m3u'))
 uwcicon = xbmc.translatePath(os.path.join(rootDir, 'icon.png'))
 
 profileDir = addon.getAddonInfo('profile')
@@ -96,13 +95,13 @@ class StopDownloading(Exception):
 
 def downloadVideo(url, name):
 
-    def _pbhook(numblocks, blocksize, filesize, url=None,dp=None):
+    def _pbhook(downloaded, filesize, url=None,dp=None):
         try:
-            percent = min((numblocks*blocksize*100)/filesize, 100)
-            currently_downloaded = float(numblocks) * blocksize / (1024 * 1024)
-            kbps_speed = int((numblocks*blocksize) / (time.clock() - start))
+            percent = min((downloaded*100)/filesize, 100)
+            currently_downloaded = float(downloaded) / (1024 * 1024)
+            kbps_speed = int(downloaded / (time.clock() - start))
             if kbps_speed > 0:
-                eta = (filesize - numblocks * blocksize) / kbps_speed
+                eta = (filesize - downloaded) / kbps_speed
             else:
                 eta = 0
             kbps_speed = kbps_speed / 1024
@@ -117,7 +116,151 @@ def downloadVideo(url, name):
         if dp.iscanceled():
             dp.close()
             raise StopDownloading('Stopped Downloading')
+
             
+    def getResponse(url, headers2, size):
+        try:
+            if size > 0:
+                size = int(size)
+                headers2['Range'] = 'bytes=%d-' % size
+
+            req = Request(url, headers=headers2)
+
+            resp = urlopen(req, timeout=30)
+            return resp
+        except:
+            return None    
+
+    def doDownload(url, dest, dp):
+
+        try: headers = dict(urlparse.parse_qsl(url.rsplit('|', 1)[1]))
+        except: headers = dict('')
+        
+        if 'openload' in url:
+            headers = openloadhdr
+
+        url = url.split('|')[0]
+        file = dest.rsplit(os.sep, 1)[-1]
+        resp = getResponse(url, headers, 0)
+
+        if not resp:
+            xbmcgui.Dialog().ok("Ultimate Whitecream", 'Download failed', 'No response from server')
+            return False
+
+        try:    content = int(resp.headers['Content-Length'])
+        except: content = 0
+
+        try:    resumable = 'bytes' in resp.headers['Accept-Ranges'].lower()
+        except: resumable = False
+
+        #print "Download Header"
+        #print resp.headers
+        if resumable:
+            print "Download is resumable"
+
+        if content < 1:
+            xbmcgui.Dialog().ok("Ultimate Whitecream", 'Unknown filesize', 'Unable to download')
+            return False
+
+        size = 8192
+        mb   = content / (1024 * 1024)
+
+        if content < size:
+            size = content
+
+        total   = 0
+        errors  = 0
+        count   = 0
+        resume  = 0
+        sleep   = 0
+
+        print 'Download File Size : %dMB %s ' % (mb, dest)
+
+        #f = open(dest, mode='wb')
+        f = xbmcvfs.File(dest, 'w')
+
+        chunk  = None
+        chunks = []
+
+        while True:
+            downloaded = total
+            for c in chunks:
+                downloaded += len(c)
+            percent = min(100 * downloaded / content, 100)
+
+            _pbhook(downloaded,content,url,dp)
+
+            chunk = None
+            error = False
+
+            try:        
+                chunk  = resp.read(size)
+                if not chunk:
+                    if percent < 99:
+                        error = True
+                    else:
+                        while len(chunks) > 0:
+                            c = chunks.pop(0)
+                            f.write(c)
+                            del c
+
+                        f.close()
+                        print '%s download complete' % (dest)
+                        return True
+
+            except Exception, e:
+                print str(e)
+                error = True
+                sleep = 10
+                errno = 0
+
+                if hasattr(e, 'errno'):
+                    errno = e.errno
+
+                if errno == 10035: # 'A non-blocking socket operation could not be completed immediately'
+                    pass
+
+                if errno == 10054: #'An existing connection was forcibly closed by the remote host'
+                    errors = 10 #force resume
+                    sleep  = 30
+
+                if errno == 11001: # 'getaddrinfo failed'
+                    errors = 10 #force resume
+                    sleep  = 30
+
+            if chunk:
+                errors = 0
+                chunks.append(chunk)
+                if len(chunks) > 5:
+                    c = chunks.pop(0)
+                    f.write(c)
+                    total += len(c)
+                    del c
+
+            if error:
+                errors += 1
+                count  += 1
+                print '%d Error(s) whilst downloading %s' % (count, dest)
+                xbmc.sleep(sleep*1000)
+
+            if (resumable and errors > 0) or errors >= 10:
+                if (not resumable and resume >= 50) or resume >= 500:
+                    #Give up!
+                    print '%s download canceled - too many error whilst downloading' % (dest)
+                    return False
+
+                resume += 1
+                errors  = 0
+                if resumable:
+                    chunks  = []
+                    #create new response
+                    print 'Download resumed (%d) %s' % (resume, dest)
+                    resp = getResponse(url, headers, total)
+                else:
+                    #use existing response
+                    pass
+    
+
     def clean_filename(s):
         if not s:
             return ''
@@ -143,13 +286,16 @@ def downloadVideo(url, name):
         tmp_file = xbmc.makeLegalFilename(tmp_file)        
         start = time.clock()
         try:
-            urllib.urlretrieve(url,tmp_file,lambda nb, bs, fs, url=url: _pbhook(nb,bs,fs,url,dp))
-            vidfile = xbmc.makeLegalFilename(download_path + clean_filename(name) + ".mp4")
-            try:
-              os.rename(tmp_file, vidfile)
-              return vidfile
-            except:
-              return tmp_file            
+            #urllib.urlretrieve(url,tmp_file,lambda nb, bs, fs, url=url: _pbhook(nb,bs,fs,url,dp))
+            downloaded = doDownload(url, tmp_file, dp)
+            if downloaded:
+                vidfile = xbmc.makeLegalFilename(download_path + clean_filename(name) + ".mp4")
+                try:
+                  os.rename(tmp_file, vidfile)
+                  return vidfile
+                except:
+                  return tmp_file
+            else: raise StopDownloading('Stopped Downloading')
         except:
             while os.path.exists(tmp_file):
                 try:
@@ -418,7 +564,8 @@ def cleantext(text):
     return text
 
 
-def addDownLink(name, url, mode, iconimage, desc, stream=None, fav='add'):
+def addDownLink(name, url, mode, iconimage, desc, stream=None, fav='add', noDownload=False):
+    contextMenuItems = []
     if fav == 'add': favtext = "Add to"
     elif fav == 'del': favtext = "Remove from"
     u = (sys.argv[0] +
@@ -448,8 +595,10 @@ def addDownLink(name, url, mode, iconimage, desc, stream=None, fav='add'):
         liz.setInfo(type="Video", infoLabels={"Title": name})
     else:
         liz.setInfo(type="Video", infoLabels={"Title": name, "plot": desc, "plotoutline": desc})
-    liz.addContextMenuItems([('[COLOR hotpink]Download Video[/COLOR]', 'xbmc.RunPlugin('+dwnld+')'),
-    ('[COLOR hotpink]' + favtext + ' favorites[/COLOR]', 'xbmc.RunPlugin('+favorite+')')])
+    if noDownload == False:
+        contextMenuItems.append(('[COLOR hotpink]Download Video[/COLOR]', 'xbmc.RunPlugin('+dwnld+')'))
+    contextMenuItems.append(('[COLOR hotpink]' + favtext + ' favorites[/COLOR]', 'xbmc.RunPlugin('+favorite+')'))
+    liz.addContextMenuItems(contextMenuItems, replaceItems=False)
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=False)
     return ok
     
