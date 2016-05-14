@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.6"
+__version__ = "1.1.7"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -799,14 +799,14 @@ def videowood(data):
         return
 
 
-def searchDir(url, mode):
+def searchDir(url, mode, page=None):
     conn = sqlite3.connect(favoritesdb)
     c = conn.cursor()
     try:
         c.execute("SELECT * FROM keywords")
         for (keyword,) in c.fetchall():
             name = '[COLOR deeppink]' + urllib.unquote_plus(keyword) + '[/COLOR]'
-            addDir(name, url, mode, '', keyword=keyword)
+            addDir(name, url, mode, '', page=page, keyword=keyword)
     except: pass
     addDir('[COLOR hotpink]Add Keyword[/COLOR]', url, 902, '', '', mode, Folder=False)
     addDir('[COLOR hotpink]Clear list[/COLOR]', '', 903, '', Folder=False)
