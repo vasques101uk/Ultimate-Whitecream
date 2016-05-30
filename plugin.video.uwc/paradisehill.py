@@ -34,9 +34,8 @@ def List(url, page):
     if page == 1:
         url = url.replace('page=1','page='+str(page))
     listhtml = utils.getHtml(url, '')
-    match = re.compile('</h\d+>(.*?)<footer>', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    match1 = re.compile('link" href="([^"]+)".*?bci-title">([^<]+)<.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(match[0])
-    for videopage, name, img in match1:
+    match = re.compile('<a class="bci-title-link" href="(.+?)".+?title=".+?">.+?<span class="bci-title">(.+?)</span>.+?<span class="bci-pic"><img src="(.+?)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for videopage, name, img in match:
         name = utils.cleantext(name)
         img = "http://www.paradisehill.tv" + img
         videopage = "http://www.paradisehill.tv" + videopage
