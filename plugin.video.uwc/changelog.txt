@@ -1,3 +1,11 @@
+[B]Version 1.1.9[/B]
+Added: Search for xxxstreams(org) (thanks Anton40)
+Added: Sexix
+Changed: UWC Fanart, also adding it to every 'folder'
+Fixed: MyFreeCams, you should now get every video
+Fixed: ParadiseHill video listing (fixed by Anton40)
+
+
 [B]Version 1.1.8[/B]
 Fixed: Streamxxx videos
 

@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.8"
+__version__ = "1.1.9"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -491,7 +491,7 @@ def PlayStream(name, url):
     return
 
 
-def getHtml(url, referer, hdr=None, NoCookie=None, data=None):
+def getHtml(url, referer='', hdr=None, NoCookie=None, data=None):
     if not hdr:
         req = Request(url, data, headers)
     else:
@@ -587,8 +587,11 @@ def addDownLink(name, url, mode, iconimage, desc, stream=None, fav='add', noDown
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     liz.setArt({'thumb': iconimage, 'icon': iconimage})
+    fanart = os.path.join(rootDir, 'fanart.jpg')
     if addon.getSetting('posterfanart') == 'true':
-        liz.setArt({'poster': iconimage, 'fanart': iconimage})
+        fanart = iconimage
+        liz.setArt({'poster': iconimage})
+    liz.setArt({'fanart': fanart})
     if stream:
         liz.setProperty('IsPlayable', 'true')
     if len(desc) < 1:
@@ -615,8 +618,11 @@ def addDir(name, url, mode, iconimage, page=None, channel=None, section=None, ke
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setArt({'thumb': iconimage, 'icon': iconimage})
+    fanart = os.path.join(rootDir, 'fanart.jpg')
     if addon.getSetting('posterfanart') == 'true':
-        liz.setArt({'poster': iconimage, 'fanart': iconimage})
+        fanart = iconimage
+        liz.setArt({'poster': iconimage})
+    liz.setArt({'fanart': fanart})
     liz.setInfo(type="Video", infoLabels={"Title": name})
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=Folder)
     return ok

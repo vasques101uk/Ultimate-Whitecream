@@ -23,7 +23,7 @@ import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre,
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, yourfreetube
 import xtasie, streampleasure, chaturbate, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
 import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4, porndig, absoluporn, czechhd, xxxstreams
-import xxxsorg, eroticage, anybunny, spankbang, k18
+import xxxsorg, eroticage, anybunny, spankbang, k18, sexix
 
 socket.setdefaulttimeout(60)
 
@@ -79,6 +79,7 @@ def INDEXS():
     utils.addDir('[COLOR hotpink]XXX Streams (eu)[/COLOR]','http://xxxstreams.eu/',410,os.path.join(imgDir, 'xxxstreams.png'),'')
     utils.addDir('[COLOR hotpink]XXX Streams (org)[/COLOR]','http://xxxstreams.org/',420,os.path.join(imgDir, 'xxxsorg.png'),'')
     utils.addDir('[COLOR hotpink]K18[/COLOR]','http://k18.co/',230,os.path.join(imgDir, 'k18.png'),'')
+    utils.addDir('[COLOR hotpink]Sexix[/COLOR]','http://sexix.net/',450,os.path.join(imgDir, 'sexix.png'),'') 
     utils.addDir('[COLOR hotpink]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -441,6 +442,11 @@ elif mode == 441: spankbang.List(url)
 elif mode == 442: spankbang.Playvid(url, name, download)
 elif mode == 443: spankbang.Categories(url)
 elif mode == 444: spankbang.Search(url, keyword)
+elif mode == 450: sexix.Main()
+elif mode == 451: sexix.List(url)
+elif mode == 452: sexix.Playvid(url, name, download)
+elif mode == 453: sexix.Categories(url)
+elif mode == 454: sexix.Search(url, keyword)
 
 elif mode == 900: favorites.Favorites(fav,favmode,name,url,img)
 elif mode == 901: favorites.List()
