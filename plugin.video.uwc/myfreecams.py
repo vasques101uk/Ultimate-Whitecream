@@ -45,7 +45,7 @@ def findurl(url, name):
     dp = xbmcgui.DialogProgress()
     dp.create("Searching webcamlink","Searching webcamlink for:",name)
     count = 0
-    for videoid in range(491, 438, -1): #53
+    for videoid in range(492, 438, -1): #54
         dp.update(int(count))
         videotest = ''
         testurl = 'http://video%s.myfreecams.com:1935/NxServer/mfc_%s.f4v_aac/playlist.m3u8' % (videoid, url)
@@ -55,10 +55,38 @@ def findurl(url, name):
             dp.update(100)
             dp.close()        
             return testurl
-        count = count + 1
+        count = count + 0.7
         if dp.iscanceled():
             dp.close()
             break
+    for videoid in range(419, 404, -1): #15
+        dp.update(int(count))
+        videotest = ''
+        testurl = 'http://video%s.myfreecams.com:1935/NxServer/mfc_%s.f4v_aac/playlist.m3u8' % (videoid, url)
+        try: videotest = urllib2.urlopen(testurl, timeout=3)
+        except: pass
+        if videotest:
+            dp.update(100)
+            dp.close()        
+            return testurl
+        count = count + 0.7
+        if dp.iscanceled():
+            dp.close()
+            break
+    for videoid in range(371, 340, -1): #31
+        dp.update(int(count))
+        videotest = ''
+        testurl = 'http://video%s.myfreecams.com:1935/NxServer/mfc_%s.f4v_aac/playlist.m3u8' % (videoid, url)
+        try: videotest = urllib2.urlopen(testurl, timeout=3)
+        except: pass
+        if videotest:
+            dp.update(100)
+            dp.close()        
+            return testurl
+        count = count + 0.7
+        if dp.iscanceled():
+            dp.close()
+            break            
     for videoid in range(627, 600, -1): #27
         dp.update(int(count))
         videotest = ''
@@ -69,24 +97,10 @@ def findurl(url, name):
             dp.update(100)
             dp.close()        
             return testurl
-        count = count + 1
+        count = count + 0.7
         if dp.iscanceled():
             dp.close()
-            break
-    for videoid in range(419, 400, -1): #19
-        dp.update(int(count))
-        videotest = ''
-        testurl = 'http://video%s.myfreecams.com:1935/NxServer/mfc_%s.f4v_aac/playlist.m3u8' % (videoid, url)
-        try: videotest = urllib2.urlopen(testurl, timeout=3)
-        except: pass
-        if videotest:
-            dp.update(100)
-            dp.close()        
-            return testurl
-        count = count + 1
-        if dp.iscanceled():
-            dp.close()
-            break
+            break            
     return ''
 
 
