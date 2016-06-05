@@ -114,7 +114,7 @@ def addHCDir(name,url,mode,iconimage,desc):
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={ "Title": name, "plot": desc, "plotoutline": desc })
     liz.setArt({'thumb': iconimage, 'icon': iconimage})
-    fanart = os.path.join(rootDir, 'fanart.jpg')
+    fanart = os.path.join(utils.rootDir, 'fanart.jpg')
     if addon.getSetting('posterfanart') == 'true':
         fanart = iconimage
         liz.setArt({'poster': iconimage})
