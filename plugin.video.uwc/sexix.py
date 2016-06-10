@@ -51,7 +51,9 @@ def List(url):
 
 def Playvid(url, name, download):
     videopage = utils.getHtml(url)
-    plurl = re.compile(r"playlist:\s+'([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
+    #plurl = re.compile(r"playlist:\s+'([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
+    plurl = re.compile('\?u=([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)[0]
+    plurl = 'http://sexix.net/qaqqew/playlist.php?u=' + plurl
     plpage = utils.getHtml(plurl)
     videourl = re.compile('file="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(plpage)[0]
     xbmc.log(videourl)
