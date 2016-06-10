@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.11"
+__version__ = "1.1.12"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -639,7 +639,7 @@ def _get_keyboard(default="", heading="", hidden=False):
 def decodeOpenLoad(html):
 
     # decodeOpenLoad made by mortael, please leave this line for proper credit :)
-    aastring = re.search(r"<video(?:.|\s)*?<script\s[^>]*?>((?:.|\s)*?)</script", html, re.DOTALL | re.IGNORECASE).group(1)
+    aastring = re.search(r"<video(?:.|\s)*?<script\s[^>]*?>.+?<\/script>\s<script\s[^>]*?>((?:.|\s)*?)<\/", html, re.DOTALL | re.IGNORECASE).group(1)
 
     aastring = aastring.replace("(ﾟДﾟ)[ﾟεﾟ]+(oﾟｰﾟo)+ ((c^_^o)-(c^_^o))+ (-~0)+ (ﾟДﾟ) ['c']+ (-~-~1)+","")
     aastring = aastring.replace("((ﾟｰﾟ) + (ﾟｰﾟ) + (ﾟΘﾟ))", "9")
