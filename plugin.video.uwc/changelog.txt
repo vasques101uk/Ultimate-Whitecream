@@ -1,3 +1,10 @@
+[B]Version 1.1.14[/B]
+Fixed: Saving Streamxxx to favorites
+Fixed: FlashX videos
+Fixed: Spankbang, Videomegaporn, WatchXXXFree, ParadiseHill
+Changed: Switched Contextmenu items
+
+
 [B]Version 1.1.13[/B]
 Fixed: Openload pt 2
 Fixed: Sexix
