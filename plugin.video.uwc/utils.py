@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.14"
+__version__ = "1.1.15"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -336,6 +336,9 @@ def playvideo(videosource, name, download=None, url=None):
         hosts.append('Jetload')
     if re.search('videowood\.tv/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('Videowood')
+    if not 'keeplinks' in url:
+        if re.search('keeplinks\.eu/p1', videosource, re.DOTALL | re.IGNORECASE):
+            hosts.append('Keeplinks <--')        
     if len(hosts) == 0:
         progress.close()
         notify('Oh oh','Couldn\'t find any video')
@@ -457,6 +460,23 @@ def playvideo(videosource, name, download=None, url=None):
         vwsrc = getHtml(vwurl, url)
         progress.update( 80, "", "Getting video file from Videowood", "" )
         videourl = videowood(vwsrc)
+    elif vidhost == 'Keeplinks <--':
+        progress.update( 40, "", "Loading Keeplinks", "" )
+        klurl = re.compile(r"//(?:www\.)?keeplinks\.eu/p1/([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
+        klurl = chkmultivids(klurl)
+        klurl = 'http://www.keeplinks.eu/p1/' + klurl
+        kllink = getVideoLink(klurl, '')
+        kllinkid = kllink.split('/')[-1]
+        klheader = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+           'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+           'Accept-Encoding': 'none',
+           'Accept-Language': 'en-US,en;q=0.8',
+           'Connection': 'keep-alive',
+           'Cookie': 'flag['+kllinkid+'] = 1;'} 
+        klpage = getHtml(kllink, klurl, klheader)
+        playvideo(klpage, name, download, klurl)
+        return
     progress.close()
     playvid(videourl, name, download)
 

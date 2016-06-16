@@ -1,3 +1,8 @@
+[B]Version 1.1.15[/B]
+Fixed: Porntrex
+Added: Keeplinks to utils, for Pornkino
+
+
 [B]Version 1.1.14[/B]
 Fixed: Saving Streamxxx to favorites
 Fixed: FlashX videos
