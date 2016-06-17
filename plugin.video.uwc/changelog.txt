@@ -1,3 +1,8 @@
+[B]Version 1.1.16[/B]
+Fixed: Jetload
+Added: Streamdefence support for watchxxxfree
+
+
 [B]Version 1.1.15[/B]
 Fixed: Porntrex
 Added: Keeplinks to utils, for Pornkino

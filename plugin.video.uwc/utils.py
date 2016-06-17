@@ -19,7 +19,7 @@
 '''
 
 import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile, string
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon, sqlite3, urlparse, xbmcvfs
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon, sqlite3, urlparse, xbmcvfs, base64
 
 from jsunpack import unpack
 
@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.15"
+__version__ = "1.1.16"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -336,6 +336,8 @@ def playvideo(videosource, name, download=None, url=None):
         hosts.append('Jetload')
     if re.search('videowood\.tv/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('Videowood')
+    if re.search('streamdefence.com/view\.php', videosource, re.DOTALL | re.IGNORECASE):
+        hosts.append('Streamdefence')        
     if not 'keeplinks' in url:
         if re.search('keeplinks\.eu/p1', videosource, re.DOTALL | re.IGNORECASE):
             hosts.append('Keeplinks <--')        
@@ -450,7 +452,7 @@ def playvideo(videosource, name, download=None, url=None):
         jlurl = chkmultivids(jlurl)
         jlurl = "http://jetload.tv/" + jlurl
         jlsrc = getHtml(jlurl, url)
-        videourl = re.compile(r'<source src="([^"]+)', re.DOTALL | re.IGNORECASE).findall(jlsrc)
+        videourl = re.compile(r'file: "([^"]+)', re.DOTALL | re.IGNORECASE).findall(jlsrc)
         videourl = videourl[0]
     elif vidhost == 'Videowood':
         progress.update( 40, "", "Loading Videowood", "" )
@@ -476,6 +478,16 @@ def playvideo(videosource, name, download=None, url=None):
            'Cookie': 'flag['+kllinkid+'] = 1;'} 
         klpage = getHtml(kllink, klurl, klheader)
         playvideo(klpage, name, download, klurl)
+        return
+    elif vidhost == 'Streamdefence':
+        progress.update( 40, "", "Loading Streamdefence", "" )
+        sdurl = re.compile(r'streamdefence\.com/view.php\?ref=([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
+        sdurl = chkmultivids(sdurl)
+        sdurl = 'http://www.streamdefence.com/view.php?ref=' + sdurl
+        sdsrc = getHtml(sdurl, url)
+        progress.update( 80, "", "Getting video file from Streamdefence", "" )
+        sdpage = streamdefence(sdsrc)
+        playvideo(sdpage, name, download, sdurl)
         return
     progress.close()
     playvid(videourl, name, download)
@@ -829,6 +841,18 @@ def videowood(data):
         return
 
 
+def streamdefence(html):
+    if 'openload' in html:
+        return html
+    match = re.search(r'\("([^"]+)', html, re.DOTALL | re.IGNORECASE)
+    if match:
+        result = match.group()
+        decoded = base64.b64decode(result)
+    else:
+        decoded = base64.b64decode(html)
+    return streamdefence(decoded)
+        
+        
 def searchDir(url, mode, page=None):
     conn = sqlite3.connect(favoritesdb)
     c = conn.cursor()
