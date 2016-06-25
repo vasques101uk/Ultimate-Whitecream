@@ -1,3 +1,7 @@
+[B]Version 1.1.17[/B]
+Fixed: Sexix
+
+
 [B]Version 1.1.16[/B]
 Fixed: Jetload
 Added: Streamdefence support for watchxxxfree
