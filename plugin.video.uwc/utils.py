@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.18"
+__version__ = "1.1.19"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -387,7 +387,7 @@ def playvideo(videosource, name, download=None, url=None):
         openloadurl = re.compile(r"//(?:www\.)?openload\.(?:co|io)?/(?:embed|f)/([0-9a-zA-Z-_]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
         openloadurl = chkmultivids(openloadurl)
         
-        openloadurl1 = 'http://openload.co/f/%s/' % openloadurl
+        openloadurl1 = 'http://openload.co/embed/%s/' % openloadurl
 
         try:
             openloadsrc = getHtml(openloadurl1, '', openloadhdr)
@@ -673,19 +673,12 @@ def decodeOpenLoad(html):
 
     # decodeOpenLoad made by mortael, please leave this line for proper credit :)
     aastring = re.compile("<script[^>]+>(ﾟωﾟﾉ[^<]+)<", re.DOTALL | re.IGNORECASE).findall(html)
-    #haha = re.compile(r"welikekodi_ya_rly = (\d+) - (\d+)", re.DOTALL | re.IGNORECASE).findall(html)
-    #haha = int(haha[0][0]) - int(haha[0][1])
-
-    #if haha == 1:
-    #    haha2 = 2
-    #else:
-    #    haha2 = 1
+    hahadec = decodeOpenLoad2(aastring[0])
+    haha = re.compile(r"welikekodi_ya_rly = Math.round([^;]+);", re.DOTALL | re.IGNORECASE).findall(hahadec)[0]
+    haha = eval("int" + haha)
     
-    videourl1 = decodeOpenLoad2(aastring[0])
-    #videourl2 = decodeOpenLoad2(aastring[haha2])
+    videourl1 = decodeOpenLoad2(aastring[haha])
 
-    #xbmc.log(videourl1)
-    #xbmc.log(videourl2)
     return videourl1
     
     
@@ -733,11 +726,10 @@ def decodeOpenLoad2(aastring):
             decodestring = decodestring.replace(repl,repl2)
         decodestring = decodestring.replace("+","")
         decodestring = decodestring.replace("\"","")
-        #xbmc.log(decodestring)
         videourl = re.search(r"(http[^\}]+)", decodestring, re.DOTALL | re.IGNORECASE).group(1)
         videourl = videourl.replace("https","http")
     else:
-        videourl = re.search(r"vr\s?=\s?\"|'([^\"']+)", decodestring, re.DOTALL | re.IGNORECASE).group(1)
+        return decodestring
         
     UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0'
     headers = {'User-Agent': UA }
