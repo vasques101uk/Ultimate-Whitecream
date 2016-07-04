@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.19"
+__version__ = "1.1.20"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -446,7 +446,7 @@ def playvideo(videosource, name, download=None, url=None):
             form_values[name] = value.replace("download1","download2")
         progress.update( 60, "", "Grabbing video file", "" )    
         newscpage = postHtml(streamcloudurl, form_data=form_values)
-        videourl = re.compile('file: "(.+?)",', re.DOTALL | re.IGNORECASE).findall(newscpage)[0]
+        videourl = re.compile('file:\s*"(.+?)",', re.DOTALL | re.IGNORECASE).findall(newscpage)[0]
     elif vidhost == 'Jetload':
         progress.update( 40, "", "Loading Jetload", "" )
         jlurl = re.compile(r'jetload\.tv/([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)
