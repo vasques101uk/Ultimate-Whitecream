@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.20"
+__version__ = "1.1.21"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -415,7 +415,7 @@ def playvideo(videosource, name, download=None, url=None):
         flashxsrc = getHtml2(flashxurl)
         progress.update( 60, "", "Grabbing video file", "" )
         flashxurl2 = re.compile('<a href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(flashxsrc)
-        flashxsrc2 = getHtml(flashxurl2[0])
+        flashxsrc2 = utils.getHtml(flashxurl2[0], flashxurl, openloadhdr)
         progress.update( 70, "", "Grabbing video file", "" ) 
         flashxjs = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(flashxsrc2)
         progress.update( 80, "", "Getting video file from FlashX", "" )
