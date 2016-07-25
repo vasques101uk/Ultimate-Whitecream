@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.22"
+__version__ = "1.1.23"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -322,6 +322,8 @@ def playvideo(videosource, name, download=None, url=None):
     hosts = []
     if re.search('videomega\.tv/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('VideoMega')
+    if re.search('megavideo\.pro/', videosource, re.DOTALL | re.IGNORECASE):
+        hosts.append('VideoMega')        
     if re.search('openload\.(?:co|io)?/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('OpenLoad')
     if re.search('streamin\.to/', videosource, re.DOTALL | re.IGNORECASE):
@@ -340,7 +342,9 @@ def playvideo(videosource, name, download=None, url=None):
         hosts.append('Streamdefence')        
     if not 'keeplinks' in url:
         if re.search('keeplinks\.eu/p1', videosource, re.DOTALL | re.IGNORECASE):
-            hosts.append('Keeplinks <--')        
+            hosts.append('Keeplinks <--') 
+    if re.search('filecrypt.cc/Container', videosource, re.DOTALL | re.IGNORECASE):
+        hosts.append('Filecrypt')              
     if len(hosts) == 0:
         progress.close()
         notify('Oh oh','Couldn\'t find any video')
@@ -360,7 +364,7 @@ def playvideo(videosource, name, download=None, url=None):
             hashref = re.compile("""javascript["']>ref=['"]([^'"]+)""", re.DOTALL | re.IGNORECASE).findall(videosource)
         elif re.search("videomega.tv/iframe.php", videosource, re.DOTALL | re.IGNORECASE):
             hashref = re.compile(r"iframe\.php\?ref=([^&]+)&", re.DOTALL | re.IGNORECASE).findall(videosource)
-        elif re.search("videomega.tv/view.php", videosource, re.DOTALL | re.IGNORECASE):
+        elif re.search("view.php\?ref=", videosource, re.DOTALL | re.IGNORECASE):
             hashref = re.compile(r'view\.php\?ref=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)
         elif re.search("videomega.tv/cdn.php", videosource, re.DOTALL | re.IGNORECASE):
             hashref = re.compile(r'cdn\.php\?ref=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)
@@ -415,7 +419,7 @@ def playvideo(videosource, name, download=None, url=None):
         flashxsrc = getHtml2(flashxurl)
         progress.update( 60, "", "Grabbing video file", "" )
         flashxurl2 = re.compile('<a href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(flashxsrc)
-        flashxsrc2 = utils.getHtml(flashxurl2[0], flashxurl, openloadhdr)
+        flashxsrc2 = getHtml(flashxurl2[0], flashxurl, openloadhdr)
         progress.update( 70, "", "Grabbing video file", "" ) 
         flashxjs = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(flashxsrc2)
         progress.update( 80, "", "Getting video file from FlashX", "" )
@@ -490,6 +494,24 @@ def playvideo(videosource, name, download=None, url=None):
         sdpage = streamdefence(sdsrc)
         playvideo(sdpage, name, download, sdurl)
         return
+    elif vidhost == 'Filecrypt':
+        progress.update( 40, "", "Loading Filecrypt", "" )
+        fcurl = re.compile(r'filecrypt\.cc/Container/([^\.]+)\.html', re.DOTALL | re.IGNORECASE).findall(videosource)
+        fcurl = chkmultivids(fcurl)
+        fcurl = 'http://filecrypt.cc/Container/' + fcurl + ".html"
+        fcsrc = getHtml(fcurl, url)
+        fcmatch = re.compile(r"openLink.?'([\w\-]*)',", re.DOTALL | re.IGNORECASE).findall(fcsrc)
+        progress.update( 80, "", "Getting video file from Filecrypt", "" )
+        fcurls = ""
+        for fclink in fcmatch:
+            fcpage = "http://filecrypt.cc/Link/" + fclink + ".html"
+            fcpagesrc = getHtml(fcpage, fcurl)
+            fclink2 = re.search('<iframe .*? noresize src="(.*)"></iframe>', fcpagesrc)
+            if fclink2:
+                fcurl2 = getVideoLink(fclink2.group(1), fcpage)
+                fcurls = fcurls + " " + fcurl2
+        playvideo(fcurls, name, download, fcurl)
+        return        
     progress.close()
     playvid(videourl, name, download)
 

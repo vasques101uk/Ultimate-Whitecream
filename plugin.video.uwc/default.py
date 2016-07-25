@@ -464,7 +464,7 @@ if age:
     elif mode == 461: hentaihaven.List(url)
     elif mode == 462: hentaihaven.Playvid(url, name, download)
     elif mode == 463: hentaihaven.Categories(url)
-    elif mode == 464: hentaihaven.Search(url, keyword)    
+    elif mode == 464: hentaihaven.A2Z(url)    
 
     elif mode == 900: favorites.Favorites(fav,favmode,name,url,img)
     elif mode == 901: favorites.List()
