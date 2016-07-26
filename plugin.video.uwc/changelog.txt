@@ -1,3 +1,7 @@
+[B]Version 1.1.24[/B]
+Fixed: Openload (??)
+
+
 [B]Version 1.1.23[/B]
 Added: A to Z list for HentaiHaven
 Added: Filecrypt support (Pornkino)

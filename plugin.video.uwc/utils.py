@@ -30,7 +30,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.23"
+__version__ = "1.1.24"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -326,6 +326,8 @@ def playvideo(videosource, name, download=None, url=None):
         hosts.append('VideoMega')        
     if re.search('openload\.(?:co|io)?/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('OpenLoad')
+    if re.search('oload\.(?:co|io)?/', videosource, re.DOTALL | re.IGNORECASE):
+        hosts.append('OpenLoad')        
     if re.search('streamin\.to/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('Streamin')          
     if re.search('flashx\.tv/', videosource, re.DOTALL | re.IGNORECASE):
@@ -388,10 +390,10 @@ def playvideo(videosource, name, download=None, url=None):
         videourl = videourl + '|Referer=' + vmhost + '&User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
     elif vidhost == 'OpenLoad':
         progress.update( 40, "", "Loading Openload", "" )
-        openloadurl = re.compile(r"//(?:www\.)?openload\.(?:co|io)?/(?:embed|f)/([0-9a-zA-Z-_]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
+        openloadurl = re.compile(r"//(?:www\.)?o(:?pen)?load\.(?:co|io)?/(?:embed|f)/([0-9a-zA-Z-_]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
         openloadurl = chkmultivids(openloadurl)
         
-        openloadurl1 = 'http://openload.co/embed/%s/' % openloadurl
+        openloadurl1 = 'http://oload.co/embed/%s/' % openloadurl
 
         try:
             openloadsrc = getHtml(openloadurl1, '', openloadhdr)
