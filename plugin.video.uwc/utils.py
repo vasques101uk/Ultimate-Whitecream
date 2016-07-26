@@ -390,7 +390,7 @@ def playvideo(videosource, name, download=None, url=None):
         videourl = videourl + '|Referer=' + vmhost + '&User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
     elif vidhost == 'OpenLoad':
         progress.update( 40, "", "Loading Openload", "" )
-        openloadurl = re.compile(r"//(?:www\.)?o(:?pen)?load\.(?:co|io)?/(?:embed|f)/([0-9a-zA-Z-_]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
+        openloadurl = re.compile(r"//(?:www\.)?o(?:pen)?load\.(?:co|io)?/(?:embed|f)/([0-9a-zA-Z-_]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
         openloadurl = chkmultivids(openloadurl)
         
         openloadurl1 = 'http://oload.co/embed/%s/' % openloadurl
