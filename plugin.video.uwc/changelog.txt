@@ -1,3 +1,7 @@
+[B]Version 1.1.26[/B]
+Fixed: Openload (credits are in the py)
+
+
 [B]Version 1.1.25[/B]
 Fixed: Openload part 2 (??)
 

@@ -22,6 +22,7 @@ import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile, str
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon, sqlite3, urlparse, xbmcvfs, base64
 
 from jsunpack import unpack
+import png, math
 
 from StringIO import StringIO
 import gzip
@@ -30,7 +31,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.25"
+__version__ = "1.1.26"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -393,7 +394,7 @@ def playvideo(videosource, name, download=None, url=None):
         openloadurl = re.compile(r"//(?:www\.)?o(?:pen)?load\.(?:co|io)?/(?:embed|f)/([0-9a-zA-Z-_]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
         openloadurl = chkmultivids(openloadurl)
         
-        openloadurl1 = 'http://oload.co/embed/%s/' % openloadurl
+        openloadurl1 = 'http://openload.io/embed/%s/' % openloadurl
 
         try:
             openloadsrc = getHtml(openloadurl1, '', openloadhdr)
@@ -696,124 +697,93 @@ def _get_keyboard(default="", heading="", hidden=False):
  
  
 def decodeOpenLoad(html):
+    # If you want to use the code for openload please at least put the info from were you take it:
+    # for example: "Code take from plugin IPTVPlayer: "https://gitlab.com/iptvplayer-for-e2/iptvplayer-for-e2/"
+    # It will be very nice if you send also email to me samsamsam@o2.pl and inform were this code will be used
 
-    # decodeOpenLoad made by mortael, please leave this line for proper credit :)
-    aastring = re.compile("<script[^>]+>(ﾟωﾟﾉ[^<]+)<", re.DOTALL | re.IGNORECASE).findall(html)
-    hahadec = decodeOpenLoad2(aastring[0])
-    haha = re.compile(r"welikekodi_ya_rly = Math.round([^;]+);", re.DOTALL | re.IGNORECASE).findall(hahadec)[0]
-    haha = eval("int" + haha)
+    # Kodi version based on urlresolver
     
-    videourl1 = decodeOpenLoad2(aastring[haha])
+    imageData = re.search('''<img[^>]*?id="linkimg"[^>]*?src="([^"]+?)"''', html, re.IGNORECASE).group(1)
+    imageData = base64.b64decode(imageData.split('base64,')[-1])
+    _x, _y, pixel, _meta = png.Reader(bytes=imageData).read()
 
-    return videourl1
-    
-    
-def decodeOpenLoad2(aastring):
-    aastring = aastring.replace("(ﾟДﾟ)[ﾟεﾟ]+(oﾟｰﾟo)+ ((c^_^o)-(c^_^o))+ (-~0)+ (ﾟДﾟ) ['c']+ (-~-~1)+","")
-    aastring = aastring.replace("((ﾟｰﾟ) + (ﾟｰﾟ) + (ﾟΘﾟ))", "9")
-    aastring = aastring.replace("((ﾟｰﾟ) + (ﾟｰﾟ))","8")
-    aastring = aastring.replace("((ﾟｰﾟ) + (o^_^o))","7")
-    aastring = aastring.replace("((o^_^o) +(o^_^o))","6")
-    aastring = aastring.replace("((ﾟｰﾟ) + (ﾟΘﾟ))","5")
-    aastring = aastring.replace("(ﾟｰﾟ)","4")
-    aastring = aastring.replace("((o^_^o) - (ﾟΘﾟ))","2")
-    aastring = aastring.replace("(o^_^o)","3")
-    aastring = aastring.replace("(ﾟΘﾟ)","1")
-    aastring = aastring.replace("(+!+[])","1")
-    aastring = aastring.replace("(c^_^o)","0")
-    aastring = aastring.replace("(0+0)","0")
-    aastring = aastring.replace("(ﾟДﾟ)[ﾟεﾟ]","\\")
-    aastring = aastring.replace("(3 +3 +0)","6")
-    aastring = aastring.replace("(3 - 1 +0)","2")
-    aastring = aastring.replace("(!+[]+!+[])","2")
-    aastring = aastring.replace("(-~-~2)","4")
-    aastring = aastring.replace("(-~-~1)","3")
-    aastring = aastring.replace("(-~0)","1")
-    aastring = aastring.replace("(-~1)","2")
-    aastring = aastring.replace("(-~3)","4")
-    aastring = aastring.replace("(0-0)","0")
-    
-    decodestring = re.search(r"\\\+([^(]+)", aastring, re.DOTALL | re.IGNORECASE).group(1)
-    decodestring = "\\+"+ decodestring
-    decodestring = decodestring.replace("+","")
-    decodestring = decodestring.replace(" ","")
-    
-    decodestring = decode(decodestring)
-    decodestring = decodestring.replace("\\/","/")
-    
-    if 'toString' in decodestring:
-        base = re.compile(r"toString\(a\+(\d+)", re.DOTALL | re.IGNORECASE).findall(decodestring)[0]
-        base = int(base)
-        match = re.compile(r"(\(\d[^)]+\))", re.DOTALL | re.IGNORECASE).findall(decodestring)
-        for repl in match:
-            match1 = re.compile(r"(\d+),(\d+)", re.DOTALL | re.IGNORECASE).findall(repl)
-            base2 = base + int(match1[0][0])
-            repl2 = base10toN(int(match1[0][1]),base2)
-            decodestring = decodestring.replace(repl,repl2)
-        decodestring = decodestring.replace("+","")
-        decodestring = decodestring.replace("\"","")
-        decodestring = decodestring.replace("//","http://")
-        videourl = re.search(r"(http[^\}]+)", decodestring, re.DOTALL | re.IGNORECASE).group(1)
-        videourl = videourl.replace("https","http")
-    else:
-        return decodestring
-        
+    imageData = None
+    imageStr = ''
+    try:
+        for item in pixel:
+            for p in item:
+                imageStr += chr(p)
+    except:
+        pass
+
+    imageTabs = []
+    i = -1
+    for idx in range(len(imageStr)):
+        if imageStr[idx] == '\0':
+            break
+        if 0 == (idx % (12 * 20)):
+            imageTabs.append([])
+            i += 1
+            j = -1
+        if 0 == (idx % (20)):
+            imageTabs[i].append([])
+            j += 1
+        imageTabs[i][j].append(imageStr[idx])
+
+    data = getHtml('https://openload.co/assets/js/obfuscator/numbers.js', '', openloadhdr)
+    signStr = re.search('''['"]([^"^']+?)['"]''', data, re.IGNORECASE).group(1)
+
+    # split signature data
+    signTabs = []
+    i = -1
+    for idx in range(len(signStr)):
+        if signStr[idx] == '\0':
+            break
+        if 0 == (idx % (11 * 26)):
+            signTabs.append([])
+            i += 1
+            j = -1
+        if 0 == (idx % (26)):
+            signTabs[i].append([])
+            j += 1
+        signTabs[i][j].append(signStr[idx])
+
+    # get link data
+    linkData = {}
+    for i in [2, 3, 5, 7]:
+        linkData[i] = []
+        tmp = ord('c')
+        for j in range(len(signTabs[i])):
+            for k in range(len(signTabs[i][j])):
+                if tmp > 122:
+                    tmp = ord('b')
+                if signTabs[i][j][k] == chr(int(math.floor(tmp))):
+                    if len(linkData[i]) > j:
+                        continue
+                    tmp += 2.5
+                    if k < len(imageTabs[i][j]):
+                        linkData[i].append(imageTabs[i][j][k])
+    res = []
+    for idx in linkData:
+        res.append(''.join(linkData[idx]).replace(',', ''))
+
+    res = res[3] + '~' + res[1] + '~' + res[2] + '~' + res[0]
+    videoUrl = 'https://openload.co/stream/{0}?mime=true'.format(res)
+    dtext = videoUrl.replace('https', 'http')
     UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0'
     headers = {'User-Agent': UA }
     
-    req = urllib2.Request(videourl,None,headers)
+    req = urllib2.Request(dtext,None,headers)
     res = urllib2.urlopen(req)
-    videourl = res.geturl()
-    
-    
+    videourl = res.geturl() 
+    res.close()
     return videourl
+
 
 def decode(encoded):
     for octc in (c for c in re.findall(r'\\(\d{2,3})', encoded)):
         encoded = encoded.replace(r'\%s' % octc, chr(int(octc, 8)))
     return encoded.decode('utf8')
-
-
-def base10toN(num,n):
-    num_rep={10:'a',
-         11:'b',
-         12:'c',
-         13:'d',
-         14:'e',
-         15:'f',
-         16:'g',
-         17:'h',
-         18:'i',
-         19:'j',
-         20:'k',
-         21:'l',
-         22:'m',
-         23:'n',
-         24:'o',
-         25:'p',
-         26:'q',
-         27:'r',
-         28:'s',
-         29:'t',
-         30:'u',
-         31:'v',
-         32:'w',
-         33:'x',
-         34:'y',
-         35:'z'}
-    new_num_string=''
-    current=num
-    while current!=0:
-        remainder=current%n
-        if 36>remainder>9:
-            remainder_string=num_rep[remainder]
-        elif remainder>=36:
-            remainder_string='('+str(remainder)+')'
-        else:
-            remainder_string=str(remainder)
-        new_num_string=remainder_string+new_num_string
-        current=current/n
-    return new_num_string
 
 
 # videowood decode copied from: https://github.com/schleichdi2/OpenNfr_E2_Gui-5.3/blob/4e3b5e967344c3ddc015bc67833a5935fc869fd4/lib/python/Plugins/Extensions/MediaPortal/resources/hosters/videowood.py    
