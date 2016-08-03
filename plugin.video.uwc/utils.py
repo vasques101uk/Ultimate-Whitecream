@@ -31,7 +31,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.26"
+__version__ = "1.1.27"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -153,9 +153,6 @@ def downloadVideo(url, name):
 
         try:    resumable = 'bytes' in resp.headers['Accept-Ranges'].lower()
         except: resumable = False
-
-        #print "Download Header"
-        #print resp.headers
         if resumable:
             print "Download is resumable"
 
@@ -176,8 +173,6 @@ def downloadVideo(url, name):
         sleep   = 0
 
         print 'Download File Size : %dMB %s ' % (mb, dest)
-
-        #f = open(dest, mode='wb')
         f = xbmcvfs.File(dest, 'w')
 
         chunk  = None
@@ -357,6 +352,8 @@ def playvideo(videosource, name, download=None, url=None):
             vidhost = hosts[0]            
         else:
             vh = dialog.select('Videohost:', hosts)
+            if vh == -1:
+                return
             vidhost = hosts[vh]
     else:
         vidhost = hosts[0]
@@ -511,8 +508,11 @@ def playvideo(videosource, name, download=None, url=None):
             fcpagesrc = getHtml(fcpage, fcurl)
             fclink2 = re.search('<iframe .*? noresize src="(.*)"></iframe>', fcpagesrc)
             if fclink2:
-                fcurl2 = getVideoLink(fclink2.group(1), fcpage)
-                fcurls = fcurls + " " + fcurl2
+                try:
+                    fcurl2 = getVideoLink(fclink2.group(1), fcpage)
+                    fcurls = fcurls + " " + fcurl2
+                except:
+                    pass
         playvideo(fcurls, name, download, fcurl)
         return        
     progress.close()
@@ -538,6 +538,8 @@ def chkmultivids(videomatch):
             hashlist.append('Video ' + str(i))
             i += 1
         mvideo = dialog.select('Multiple videos found', hashlist)
+        if mvideo == -1:
+            return
         return videolist[mvideo]
     else:
         return videomatch[0]

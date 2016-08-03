@@ -54,7 +54,7 @@ def INDEX():
             addon.setSetting('uwccounter','true')
         except: pass
         
-    xbmcplugin.endOfDirectory(utils.addon_handle)
+    xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)
 
 def INDEXS():
     utils.addDir('[COLOR hotpink]WatchXXXFree[/COLOR]','http://www.watchxxxfree.com/page/1/',10,os.path.join(imgDir, 'wxf.png'),'')
@@ -81,7 +81,7 @@ def INDEXS():
     utils.addDir('[COLOR hotpink]K18[/COLOR]','http://k18.co/',230,os.path.join(imgDir, 'k18.png'),'')
     utils.addDir('[COLOR hotpink]Sexix[/COLOR]','http://sexix.net/',450,os.path.join(imgDir, 'sexix.png'),'') 
     utils.addDir('[COLOR hotpink]One list, to watch them all[/COLOR]','',5,'',1)
-    xbmcplugin.endOfDirectory(utils.addon_handle)
+    xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)
 
 def INDEXM():    
     utils.addDir('[COLOR hotpink]Xtheatre[/COLOR]','http://xtheatre.net/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
@@ -97,7 +97,7 @@ def INDEXM():
     utils.addDir('[COLOR hotpink]ParadiseHill[/COLOR]','http://www.paradisehill.tv/en/',250,os.path.join(imgDir, 'paradisehill.png'),'')
     utils.addDir('[COLOR hotpink]FreeOMovie[/COLOR]','http://www.freeomovie.com/',370,os.path.join(imgDir, 'freeomovie.png'),'')
     utils.addDir('[COLOR hotpink]Eroticage[/COLOR]','http://www.eroticage.net/',430,'','')
-    xbmcplugin.endOfDirectory(utils.addon_handle)
+    xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)
     
 def INDEXT():
     utils.addDir('[COLOR hotpink]TodayPorn[/COLOR]','http://www.todayporn.com/page1.html',90,os.path.join(imgDir, 'tp.png'),'')
@@ -112,19 +112,19 @@ def INDEXT():
     utils.addDir('[COLOR hotpink]AbsoluPorn[/COLOR]','http://www.absoluporn.com/en/',300,os.path.join(imgDir, 'absoluporn.gif'),'')
     utils.addDir('[COLOR hotpink]Anybunny[/COLOR]','http://anybunny.com/',320,os.path.join(imgDir, 'anybunny.png'),'')    
     utils.addDir('[COLOR hotpink]SpankBang[/COLOR]','http://spankbang.com/new_videos/',440,os.path.join(imgDir, 'spankbang.png'),'')	
-    xbmcplugin.endOfDirectory(utils.addon_handle)
+    xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)
     
 def INDEXW():
     utils.addDir('[COLOR hotpink]Chaturbate[/COLOR] [COLOR white]- webcams[/COLOR]','https://chaturbate.com/?page=1',220,os.path.join(imgDir, 'chaturbate.png'),'')
     utils.addDir('[COLOR hotpink]MyFreeCams[/COLOR] [COLOR white]- webcams[/COLOR]','https://www.myfreecams.com',270,os.path.join(imgDir, 'myfreecams.jpg'),'')
     utils.addDir('[COLOR hotpink]Cam4[/COLOR] [COLOR white]- webcams[/COLOR]','http://www.cam4.com',280,os.path.join(imgDir, 'cam4.png'),'')    
     utils.addDir('[COLOR hotpink]Streams[/COLOR] [COLOR white]- beta[/COLOR]','',8,'','')
-    xbmcplugin.endOfDirectory(utils.addon_handle)
+    xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)
     
 def INDEXH():
     utils.addDir('[COLOR hotpink]Hentaicraving[/COLOR]','http://www.hentaicraving.com/?genre=Uncensored',30,os.path.join(imgDir, 'hc.jpg'),'')
     utils.addDir('[COLOR hotpink]Hentaihaven[/COLOR]','http://hentaihaven.org/?sort=date',460,os.path.join(imgDir, 'hh.png'),'')
-    xbmcplugin.endOfDirectory(utils.addon_handle)    
+    xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)    
     
 def STREAMS():
     streamurl = 'http://bit.ly/uwcstreams'

@@ -1,3 +1,11 @@
+[B]Version 1.1.27[/B]
+Fixed: Tubepornclassic downloading
+Fixed: Chaturbate Krypton playback
+Fixed: Porndig Pornstars/Studios
+Fixed: Cancel works on all the select dialogs
+Changed: Disabled caching for the main menu's
+
+
 [B]Version 1.1.26[/B]
 Fixed: Openload (credits are in the py)
 

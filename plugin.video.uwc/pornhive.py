@@ -84,6 +84,8 @@ def PHVideo(url, name, download=None):
             siteurl = vidurls[0]
         elif len(sites) > 1:
             site = utils.dialog.select('Select video site', sites)
+            if site == -1:
+                return
             sitename = sites[site]
             siteurl = vidurls[site]
         else:
