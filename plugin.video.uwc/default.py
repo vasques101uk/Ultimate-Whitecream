@@ -23,7 +23,7 @@ import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre,
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, yourfreetube
 import xtasie, streampleasure, chaturbate, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
 import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4, porndig, absoluporn, czechhd, xxxstreams
-import xxxsorg, eroticage, anybunny, spankbang, k18, sexix, hentaihaven
+import xxxsorg, eroticage, anybunny, spankbang, k18, sexix, hentaihaven, pornkinox
 
 socket.setdefaulttimeout(60)
 
@@ -97,6 +97,7 @@ def INDEXM():
     utils.addDir('[COLOR hotpink]ParadiseHill[/COLOR]','http://www.paradisehill.tv/en/',250,os.path.join(imgDir, 'paradisehill.png'),'')
     utils.addDir('[COLOR hotpink]FreeOMovie[/COLOR]','http://www.freeomovie.com/',370,os.path.join(imgDir, 'freeomovie.png'),'')
     utils.addDir('[COLOR hotpink]Eroticage[/COLOR]','http://www.eroticage.net/',430,'','')
+    utils.addDir('[COLOR hotpink]PornKinoX[/COLOR]','http://www.pornkinox.com',470,os.path.join(imgDir, 'pornkinox.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)
     
 def INDEXT():
@@ -465,6 +466,11 @@ if age:
     elif mode == 462: hentaihaven.Playvid(url, name, download)
     elif mode == 463: hentaihaven.Categories(url)
     elif mode == 464: hentaihaven.A2Z(url)    
+    elif mode == 470: pornkinox.Main()
+    elif mode == 471: pornkinox.List(url)
+    elif mode == 472: pornkinox.Playvid(url, name, download)
+    elif mode == 473: pornkinox.Search(url, keyword)
+    elif mode == 474: pornkinox.Categories(url)
 
     elif mode == 900: favorites.Favorites(fav,favmode,name,url,img)
     elif mode == 901: favorites.List()
