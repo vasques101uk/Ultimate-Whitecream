@@ -1,4 +1,5 @@
 [B]Version 1.1.28[/B]
+Added: PornkinoX (thanks anton40)
 Fixed: Anybunny video playback
 Fixed: Openload
 
