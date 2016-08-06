@@ -31,7 +31,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.27"
+__version__ = "1.1.28"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -732,7 +732,7 @@ def decodeOpenLoad(html):
             j += 1
         imageTabs[i][j].append(imageStr[idx])
 
-    data = getHtml('https://openload.co/assets/js/obfuscator/numbers.js', '', openloadhdr)
+    data = getHtml('https://openload.co/assets/js/obfuscator/n.js', '', openloadhdr)
     signStr = re.search('''['"]([^"^']+?)['"]''', data, re.IGNORECASE).group(1)
 
     # split signature data

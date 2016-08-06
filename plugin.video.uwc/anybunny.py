@@ -41,7 +41,7 @@ def List(url):
     match = re.compile(r"src='([^']+)' id=(\d+) alt='([^']+)'", re.DOTALL | re.IGNORECASE).findall(listhtml)
     for img, urlid, name in match:
         name = utils.cleantext(name)
-        videopage = "https://vartuc.com/kt_player/player.php?id=" + urlid
+        videopage = "https://vartuc.com/embed/" + urlid
         utils.addDownLink(name, videopage, 322, img, '')
     try:
         nextp = re.compile('href="([^"]+)">Next', re.DOTALL | re.IGNORECASE).findall(listhtml)
@@ -50,7 +50,10 @@ def List(url):
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 def Playvid(url, name, download=None):
-    videopage = utils.getHtml(url, url)
+    embedpage = utils.getHtml(url, url)
+    scripturl = re.compile("src='([^']+)", re.DOTALL | re.IGNORECASE).findall(embedpage)[0]
+    scripturl = "https://vartuc.com" + scripturl
+    videopage = utils.getHtml(scripturl, url)
     video_url = re.compile("video_url:([^}]+)", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
     match = re.compile(r'(ghb\w\w)="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
     for repl, repl2 in match:

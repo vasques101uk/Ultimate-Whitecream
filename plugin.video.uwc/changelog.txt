@@ -1,3 +1,8 @@
+[B]Version 1.1.28[/B]
+Fixed: Anybunny video playback
+Fixed: Openload
+
+
 [B]Version 1.1.27[/B]
 Fixed: Tubepornclassic downloading
 Fixed: Chaturbate Krypton playback
