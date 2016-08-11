@@ -1,5 +1,65 @@
 #EXTM3U
-#EXTINF:-1,-------------------Updated 23-04-2016-------------------
+#EXTINF:-1,-------------------Updated 11-08-2016-------------------
+http://nothi.ng
+#EXTINF:-1,ADULT=HOTCLUB1HD[18] by Crosat
+http://178.33.226.36:8000/live/olsi/olsi/912.ts
+#EXTINF:-1,ADULT=HOTCLUB2[18]
+http://178.33.226.36:8000/live/olsi/olsi/913.ts
+#EXTINF:-1,ADULT=HOTCLUB3[18]
+http://178.33.226.36:8000/live/olsi/olsi/914.ts
+#EXTINF:-1,ADULT=HOTCLUB4[18]
+http://178.33.226.36:8000/live/olsi/olsi/915.ts
+#EXTINF:-1,ADULT=HOTCLUB5[18]
+http://178.33.226.36:8000/live/olsi/olsi/916.ts
+#EXTINF:-1,ADULT=HOTCLUB6[18]
+http://178.33.226.36:8000/live/olsi/olsi/917.ts
+#EXTINF:-1,ADULT=HOTCLUB7[18]
+http://178.33.226.36:8000/live/olsi/olsi/918.ts
+#EXTINF:-1,ADULT=HOTCLUB8[18]
+http://178.33.226.36:8000/live/olsi/olsi/919.ts
+#EXTINF:-1,ADULT=HOTCLUB9[18]
+http://178.33.226.36:8000/live/olsi/olsi/920.ts
+#EXTINF:-1,ADULT=HOTCLUB10[18]
+http://178.33.226.36:8000/live/olsi/olsi/921.ts
+#EXTINF:-1,ADULT=VOD1[18]
+http://178.33.226.36:8000/live/olsi/olsi/783.ts
+#EXTINF:-1,ADULT=VOOD2[18]
+http://178.33.226.36:8000/live/olsi/olsi/784.ts
+#EXTINF:-1,ADULT=VOD3[18]
+http://178.33.226.36:8000/live/olsi/olsi/785.ts
+#EXTINF:-1,ADULT=VOD4[18]
+http://178.33.226.36:8000/live/olsi/olsi/786.ts
+#EXTINF:-1,ADULT=VOD5[18]
+http://178.33.226.36:8000/live/olsi/olsi/787.ts
+#EXTINF:-1,ADULT=VOD6[18]
+http://178.33.226.36:8000/live/olsi/olsi/788.ts
+#EXTINF:-1,ADULT=MIAMI_TV
+http://178.33.226.36:8000/live/olsi/olsi/790.ts
+#EXTINF:-1,ADULT=SEXVIEW
+http://178.33.226.36:8000/live/olsi/olsi/791.ts
+#EXTINF:-1,ADULT=DPSTAR1
+http://178.33.226.36:8000/live/olsi/olsi/792.ts
+#EXTINF:-1,ADULT=DPSTAR2
+http://178.33.226.36:8000/live/olsi/olsi/793.ts
+#EXTINF:-1,ADULT=DPSTAR3
+http://178.33.226.36:8000/live/olsi/olsi/794.ts
+#EXTINF:-1,ADULT=EROTIC_SHOWS3
+http://178.33.226.36:8000/live/olsi/olsi/795.ts
+#EXTINF:-1,ADULT=EROTIC_SHOWS2
+http://178.33.226.36:8000/live/olsi/olsi/796.ts
+#EXTINF:-1,ADULT=EROTIC_MOVIES
+http://178.33.226.36:8000/live/olsi/olsi/797.ts
+#EXTINF:-1,ADULT=Naked_Kitchen
+http://178.33.226.36:8000/live/olsi/olsi/798.ts
+#EXTINF:-1,ADULT=NAKED_NEWS
+http://178.33.226.36:8000/live/olsi/olsi/799.ts
+#EXTINF:-1,ADULT=YESILCAM_EROTIC3
+http://178.33.226.36:8000/live/olsi/olsi/800.ts
+#EXTINF:-1,ADULT=YESILCAM_EROTIC2
+http://178.33.226.36:8000/live/olsi/olsi/801.ts
+#EXTINF:-1,ADULT=YESILCAM_EROTIC1
+http://178.33.226.36:8000/live/olsi/olsi/802.ts
+#EXTINF:-1,-------------------Older streams-------------------
 http://nothi.ng
 #EXTINF:-1,Passion XXX
 http://publish.thewebstream.co:1935/leved/_definst_/passielivestream/playlist.m3u8
@@ -57,8 +117,6 @@ http://178.33.126.213:1935/cellcast/encoder32/.m3u8
 http://46.105.116.159:1935/cellcast/encoder72/.m3u8
 #EXTINF:-1,Babestation Blue
 http://178.33.126.213:1935/cellcast/encoder32/.m3u8
-#EXTINF:-1,-------------------Older streams-------------------
-http://nothi.ng
 #EXTINF:-1,NUART
 http://80.77.52.6:3719/udp/226.0.5.6:12345
 #EXTINF:-1,PRIVATE COM
