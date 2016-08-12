@@ -27,7 +27,7 @@ progress = utils.progress
 def Main():
     utils.addDir('[COLOR hotpink]Search[/COLOR]','http://pornkinox.to/?s=', 473, '', '')
     utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://pornkinox.to/', 474, '', '')
-    List('http://pornkino.to/')
+    List('http://pornkinox.to/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
