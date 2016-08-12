@@ -31,7 +31,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.28"
+__version__ = "1.1.29"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -414,19 +414,41 @@ def playvideo(videosource, name, download=None, url=None):
     elif vidhost == 'FlashX':
         progress.update( 40, "", "Loading FlashX", "" )
         flashxurl = re.compile(r"//(?:www\.)?flashx\.tv/(?:embed-)?([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        flashxurl = chkmultivids(flashxurl)       
-        flashxurl = 'http://flashx.tv/embed-%s-670x400.html' % flashxurl
-        flashxsrc = getHtml2(flashxurl)
-        progress.update( 60, "", "Grabbing video file", "" )
-        flashxurl2 = re.compile('<a href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(flashxsrc)
-        flashxsrc2 = getHtml(flashxurl2[0], flashxurl, openloadhdr)
-        progress.update( 70, "", "Grabbing video file", "" ) 
-        flashxjs = re.compile("<script type='text/javascript'>([^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(flashxsrc2)
+        media_id = chkmultivids(flashxurl)       
+        flashxurl = 'http://www.flashx.tv/%s.html' % media_id
+        req = Request(flashxurl, None, headers)
+        flashx = urllib2.urlopen(req)
+        flashxcookie = flashx.info()['set-cookie']
+        flashxdata = flashx.read()
+        cfduid = re.search('cfduid=(.*?);', flashxcookie).group(1)
+        file_id = re.search("'file_id', '(.*?)'", flashxdata).group(1)
+        aff = re.search("'aff', '(.*?)'", flashxdata).group(1)
+        headers2 = { 'Referer': flashxurl,
+                    'Cookie': '__cfduid=' + cfduid + '; lang=1'}
+        surl = 'http://www.flashx.tv/code.js?c=' + file_id
+        dummy = getHtml(surl, flashxurl, headers2, NoCookie=True)
+        headers2 = { 'Referer': flashxurl,
+                    'Cookie': '__cfduid=' + cfduid + '; lang=1; file_id=' + file_id + '; aff=' + aff }
+        progress.update( 60, "", "Grabbing video file", "" )                    
+        flashxhtml = getHtml(flashxurl, flashxurl, headers, NoCookie=True)
+        fname = re.search('name="fname" value="(.*?)"', flashxhtml).group(1)
+        hash = re.search('name="hash" value="(.*?)"', flashxhtml).group(1)
+        fdata = { 'op': 'download1',
+                  'usr_login': '',
+                  'id': media_id,
+                  'fname': fname,
+                  'referer': '',
+                  'hash': hash,
+                  'imhuman': 'Proceed to video' }
+        furl = 'http://www.flashx.tv/dl?' + media_id
+        time.sleep(5)
+        progress.update( 70, "", "Grabbing video file", "" )        
+        flashxhtml2 = postHtml(furl, fdata, headers2, False, NoCookie=True)
+        flashxjs = re.compile('(eval\(function.*?)</script>', re.DOTALL | re.IGNORECASE).findall(flashxhtml2)
         progress.update( 80, "", "Getting video file from FlashX", "" )
         try: flashxujs = unpack(flashxjs[0])
         except: flashxujs = flashxjs[0]
-        videourl = re.compile(r'\[\{\s*?file:\s*?"([^"]+)",', re.DOTALL | re.IGNORECASE).findall(flashxujs)
-        videourl = videourl[-1]
+        videourl = re.compile('file:"([^"]+)"', re.DOTALL | re.IGNORECASE).findall(flashxujs)[0]
     elif vidhost == 'Mega3X':
         progress.update( 40, "", "Loading Mega3X", "" )
         mega3xurl = re.compile(r"(https?://(?:www\.)?mega3x.net/(?:embed-)?(?:[0-9a-zA-Z]+).html)", re.DOTALL | re.IGNORECASE).findall(videosource)
@@ -435,7 +457,7 @@ def playvideo(videosource, name, download=None, url=None):
         mega3xjs = re.compile("<script[^>]+>(eval[^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(mega3xsrc)
         progress.update( 80, "", "Getting video file from Mega3X", "" )
         mega3xujs = unpack(mega3xjs[0])
-        videourl = re.compile('file:\s?"([^"]+mp4)"', re.DOTALL | re.IGNORECASE).findall(mega3xujs)
+        videourl = re.compile('file:\s?"([^"]+m3u8)"', re.DOTALL | re.IGNORECASE).findall(mega3xujs)
         videourl = videourl[0]  
     elif vidhost == 'StreamCloud':
         progress.update( 40, "", "Opening Streamcloud", "" )
@@ -577,7 +599,7 @@ def getHtml(url, referer='', hdr=None, NoCookie=None, data=None):
     return data
 
     
-def postHtml(url, form_data={}, headers={}, compression=True):
+def postHtml(url, form_data={}, headers={}, compression=True, NoCookie=None):
     _user_agent = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.1 ' + \
                   '(KHTML, like Gecko) Chrome/13.0.782.99 Safari/535.1'
     req = urllib2.Request(url)
@@ -591,7 +613,10 @@ def postHtml(url, form_data={}, headers={}, compression=True):
         req.add_header('Accept-Encoding', 'gzip')
     response = urllib2.urlopen(req)
     data = response.read()
-    cj.save(cookiePath)
+    if not NoCookie:
+        try:
+            cj.save(cookiePath)
+        except: pass
     response.close()
     return data
 

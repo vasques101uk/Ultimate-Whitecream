@@ -33,7 +33,7 @@ def Main():
 
 def List(url):
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<article.+?class="loop-entry.+?>.+?<a href="(.+?)" title="(.+?)".+?><img class="cover" src="(.+?)".+?</a>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile('<article[^>]+>.+?<a href="([^"]+)" title="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, name, img in match:
         name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 472, img, '')

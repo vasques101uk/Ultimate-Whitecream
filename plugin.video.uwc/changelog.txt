@@ -1,3 +1,10 @@
+[B]Version 1.1.29[/B]
+Fixed: Cat3movie listing
+Fixed: Mega3x videohost
+Fixed: FlashX videohost (thanks gujal)
+Improved: PornKinoX listing
+
+
 [B]Version 1.1.28[/B]
 Added: PornkinoX (thanks anton40)
 Fixed: Anybunny video playback
