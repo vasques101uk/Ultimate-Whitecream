@@ -1,6 +1,8 @@
 #EXTM3U
 #EXTINF:-1,-------------------Updated 11-08-2016-------------------
 http://nothi.ng
+#EXTINF:-1,-------------------only 30 sec previews-----------------
+http://nothi.ng
 #EXTINF:-1,ADULT=HOTCLUB1HD[18] by Crosat
 http://178.33.226.36:8000/live/olsi/olsi/912.ts
 #EXTINF:-1,ADULT=HOTCLUB2[18]
