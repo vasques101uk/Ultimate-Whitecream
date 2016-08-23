@@ -1,3 +1,11 @@
+[B]Version 1.1.30[/B]
+Added: Datoporn (for Pelisxporno)
+Fixed: Openload (thanks pitoosie)
+Fixed: FlashX
+Improved: Keeplinks
+Removed: Anybunny (couldn't get it to work)
+
+
 [B]Version 1.1.29[/B]
 Fixed: Cat3movie listing
 Fixed: Mega3x videohost
