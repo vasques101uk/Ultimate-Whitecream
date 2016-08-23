@@ -429,7 +429,7 @@ def playvideo(videosource, name, download=None, url=None):
         aff = re.search("'aff', '(.*?)'", flashxdata).group(1)
         headers2 = { 'Referer': flashxurl,
                     'Cookie': '; lang=1'}
-        surl = 'http://www.flashx.tv/code.js?c=' + file_id
+        surl = 'http://www.flashx.tv/coding.js?c=' + file_id
         dummy = getHtml(surl, flashxurl, headers2)
         headers2 = { 'Referer': flashxurl,
                     'Cookie': 'lang=1; file_id=' + file_id + '; aff=' + aff }
