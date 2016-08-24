@@ -1,3 +1,9 @@
+[B]Version 1.1.31[/B]
+Anybunny is back :)
+Improved: FlashX
+Fixed: stupid bug I added, Tubepornclassic works again
+
+
 [B]Version 1.1.30[/B]
 Added: Datoporn (for Pelisxporno)
 Fixed: Openload (thanks pitoosie)

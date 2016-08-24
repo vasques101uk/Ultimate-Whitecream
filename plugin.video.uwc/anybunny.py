@@ -69,19 +69,15 @@ def Playvid(url, name, download=None):
     embedpage = utils.getHtml(vartucurl, url)
     scripturl = re.compile("src='([^']+)", re.DOTALL | re.IGNORECASE).findall(embedpage)[0]
     scripturl = "https://vartuc.com" + scripturl
-    xbmc.log(scripturl)
     videopage = utils.getHtml(scripturl, vartucurl, vartuchdr)
-    xbmc.log(videopage)
     video_url = re.compile("video_url:(.*?),video", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
-    match = re.compile(r'(ghb\w\w)="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
+    match = re.compile(r'(gh\w\w\w)="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
     for repl, repl2 in match:
         video_url = video_url.replace(repl,repl2)
     video_url = video_url.replace("\"","")
     videourl = video_url.replace("+","")
     
     videourl = utils.getVideoLink(videourl, '', vartuchdr2)
-    
-    xbmc.log(videourl)
 
     if download == 1:
         utils.downloadVideo(videourl, name)
