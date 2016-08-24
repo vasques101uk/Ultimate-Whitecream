@@ -429,7 +429,7 @@ def playvideo(videosource, name, download=None, url=None):
         aff = re.search("'aff', '(.*?)'", flashxdata).group(1)
         headers2 = { 'Referer': flashxurl,
                     'Cookie': '; lang=1'}
-        surl = 'http://www.flashx.tv/coding.js?c=' + file_id
+        surl = re.search('src="(.*?\?c=' + file_id + ')',flashxdata).group(1)
         dummy = getHtml(surl, flashxurl, headers2)
         headers2 = { 'Referer': flashxurl,
                     'Cookie': 'lang=1; file_id=' + file_id + '; aff=' + aff }
@@ -655,7 +655,7 @@ def getVideoLink(url, referer, hdr=None, data=None):
     else:
         req2 = Request(url, data, hdr)
     if len(referer) > 1:
-        req.add_header('Referer', referer)
+        req2.add_header('Referer', referer)
     url2 = urlopen(req2).geturl()
     return url2
 
