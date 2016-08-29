@@ -23,7 +23,7 @@ import utils, hdporn, porntrex, nudeflix, hentaicraving, watchxxxfree, xtheatre,
 import elreyx, thepornnation, xvideospanish, pelisxporno, hqporner, videomegaporn, streamxxx, yourfreetube
 import xtasie, streampleasure, chaturbate, pornkino, justporn, hdzog, cat3movie, tubepornclassic, paradisehill
 import freeomovie, hclips, pornhub, mrsexe, erotik, favorites, myfreecams, cam4, porndig, absoluporn, czechhd, xxxstreams
-import xxxsorg, eroticage, anybunny, spankbang, k18, sexix, hentaihaven, pornkinox
+import xxxsorg, eroticage, anybunny, spankbang, k18, sexix, hentaihaven, pornkinox, camsoda
 
 socket.setdefaulttimeout(60)
 
@@ -119,6 +119,7 @@ def INDEXW():
     utils.addDir('[COLOR hotpink]Chaturbate[/COLOR] [COLOR white]- webcams[/COLOR]','https://chaturbate.com/?page=1',220,os.path.join(imgDir, 'chaturbate.png'),'')
     utils.addDir('[COLOR hotpink]MyFreeCams[/COLOR] [COLOR white]- webcams[/COLOR]','https://www.myfreecams.com',270,os.path.join(imgDir, 'myfreecams.jpg'),'')
     utils.addDir('[COLOR hotpink]Cam4[/COLOR] [COLOR white]- webcams[/COLOR]','http://www.cam4.com',280,os.path.join(imgDir, 'cam4.png'),'')    
+    utils.addDir('[COLOR hotpink]Camsoda[/COLOR] [COLOR white]- webcams[/COLOR]','http://www.camsoda.com',475,os.path.join(imgDir, 'camsoda.png'),'')    
     utils.addDir('[COLOR hotpink]Streams[/COLOR] [COLOR white]- beta[/COLOR]','',8,'','')
     xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)
     
@@ -471,6 +472,10 @@ if age:
     elif mode == 472: pornkinox.Playvid(url, name, download)
     elif mode == 473: pornkinox.Search(url, keyword)
     elif mode == 474: pornkinox.Categories(url)
+    elif mode == 475: camsoda.Main()
+    elif mode == 476: camsoda.List(url)
+    elif mode == 478: camsoda.Playvid(url, name)
+    elif mode == 479: camsoda.clean_database(True)
 
     elif mode == 900: favorites.Favorites(fav,favmode,name,url,img)
     elif mode == 901: favorites.List()
