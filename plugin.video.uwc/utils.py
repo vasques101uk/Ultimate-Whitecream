@@ -429,7 +429,7 @@ def playvideo(videosource, name, download=None, url=None):
         aff = re.search("'aff', '(.*?)'", flashxdata).group(1)
         headers2 = { 'Referer': flashxurl,
                     'Cookie': '; lang=1'}
-        surl = re.search('src="(.*?\?c=' + file_id + ')',flashxdata).group(1)
+        surl = re.search('src="(.*?' + file_id + ')',flashxdata).group(1)
         dummy = getHtml(surl, flashxurl, headers2)
         headers2 = { 'Referer': flashxurl,
                     'Cookie': 'lang=1; file_id=' + file_id + '; aff=' + aff }
@@ -753,13 +753,14 @@ def decodeOpenLoad(html):
     hiddenurl = HTMLParser().unescape(re.search('hiddenurl">(.+?)<\/span>', html, re.IGNORECASE).group(1))
     
     s = []
-    for i in hiddenurl:
+    for idx, i in enumerate(hiddenurl):
         j = ord(i)
         if (j>=33 & j<=126):
-            s.append(chr(33 + ((j + 14) % 94)))
-        else:
-            s.append(chr(j))
-    res = ''.join(s)    
+            j = 33 + ((j + 14) % 94))
+        if idx == len(hiddenurl) - 1:
+            j += 1
+        s.append(chr(j))
+    res = ''.join(s)
     
     videoUrl = 'https://openload.co/stream/{0}?mime=true'.format(res)
     dtext = videoUrl.replace('https', 'http')
