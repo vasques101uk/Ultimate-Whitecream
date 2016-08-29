@@ -450,8 +450,8 @@ def playvideo(videosource, name, download=None, url=None):
         flashxhtml2 = postHtml(furl, fdata, headers2, False)
         flashxjs = re.compile('(eval\(function.*?)</script>', re.DOTALL | re.IGNORECASE).findall(flashxhtml2)
         progress.update( 80, "", "Getting video file from FlashX", "" )
-        try: flashxujs = unpack(flashxjs[0])
-        except: flashxujs = flashxjs[0]
+        try: flashxujs = unpack(flashxjs[1])
+        except: flashxujs = flashxjs[1]
         videourl = re.compile('file:"([^"]+)"', re.DOTALL | re.IGNORECASE).findall(flashxujs)[0]
     elif vidhost == 'Mega3X':
         progress.update( 40, "", "Loading Mega3X", "" )
@@ -756,7 +756,7 @@ def decodeOpenLoad(html):
     for idx, i in enumerate(hiddenurl):
         j = ord(i)
         if (j>=33 & j<=126):
-            j = 33 + ((j + 14) % 94))
+            j = 33 + ((j + 14) % 94)
         if idx == len(hiddenurl) - 1:
             j += 1
         s.append(chr(j))
