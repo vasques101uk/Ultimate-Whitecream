@@ -14,7 +14,7 @@
 '''
 
 import urllib, urllib2, re, cookielib, os, sys, socket
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon, random
 
 import utils, sqlite3, json
 
@@ -35,11 +35,10 @@ def List(url):
     
     for name, img in match:
         name = utils.cleantext(name)
-        videourl = "https://www.camsoda.com/api/v1/video/vtoken/" + name + "?username=guest_52978"
+        videourl = "https://www.camsoda.com/api/v1/video/vtoken/" + name + "?username=guest_" + str(random.randrange(100, 55555))
         img = "https:" + img.replace("\\","").strip()
         utils.addDownLink(name, videourl, 478, img, '', noDownload=True)
     xbmcplugin.endOfDirectory(utils.addon_handle)
-
 
 def clean_database(showdialog=False):
     conn = sqlite3.connect(xbmc.translatePath("special://database/Textures13.db"))
