@@ -31,7 +31,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.32"
+__version__ = "1.1.33"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -752,13 +752,17 @@ def decodeOpenLoad(html):
     from HTMLParser import HTMLParser
     hiddenurl = HTMLParser().unescape(re.search('hiddenurl">(.+?)<\/span>', html, re.IGNORECASE).group(1))
     
+    aastring = re.compile("<script[^>]+>(ﾟωﾟﾉ[^\n]+)\n", re.DOTALL | re.IGNORECASE).findall(html)[0]
+    aastring = decodeAA(aastring)
+    magicnumber = re.compile(r"charCodeAt\(\d+?\)\s*?\+\s*?(\d+?)\)", re.DOTALL | re.IGNORECASE).findall(aastring)[0]
+    
     s = []
     for idx, i in enumerate(hiddenurl):
         j = ord(i)
         if (j>=33 & j<=126):
             j = 33 + ((j + 14) % 94)
         if idx == len(hiddenurl) - 1:
-            j += 1
+            j += int(magicnumber)
         s.append(chr(j))
     res = ''.join(s)
     
@@ -774,10 +778,49 @@ def decodeOpenLoad(html):
     return videourl
 
 
+def decodeAA(aastring):
+    aastring = aastring.replace("(ﾟДﾟ)[ﾟεﾟ]+(oﾟｰﾟo)+ ((c^_^o)-(c^_^o))+ (-~0)+ (ﾟДﾟ) ['c']+ (-~-~1)+","")
+    aastring = aastring.replace("((ﾟｰﾟ) + (ﾟｰﾟ) + (ﾟΘﾟ))", "9")
+    aastring = aastring.replace("((ﾟｰﾟ) + (ﾟｰﾟ))","8")
+    aastring = aastring.replace("((ﾟｰﾟ) + (o^_^o))","7")
+    aastring = aastring.replace("((o^_^o) +(o^_^o))","6")
+    aastring = aastring.replace("((ﾟｰﾟ) + (ﾟΘﾟ))","5")
+    aastring = aastring.replace("(ﾟｰﾟ)","4")
+    aastring = aastring.replace("((o^_^o) - (ﾟΘﾟ))","2")
+    aastring = aastring.replace("(o^_^o)","3")
+    aastring = aastring.replace("(ﾟΘﾟ)","1")
+    aastring = aastring.replace("(+!+[])","1")
+    aastring = aastring.replace("(c^_^o)","0")
+    aastring = aastring.replace("(0+0)","0")
+    aastring = aastring.replace("(ﾟДﾟ)[ﾟεﾟ]","\\")
+    aastring = aastring.replace("(3 +3 +0)","6")
+    aastring = aastring.replace("(3 - 1 +0)","2")
+    aastring = aastring.replace("(!+[]+!+[])","2")
+    aastring = aastring.replace("(-~-~2)","4")
+    aastring = aastring.replace("(-~-~1)","3")
+    aastring = aastring.replace("(-~0)","1")
+    aastring = aastring.replace("(-~1)","2")
+    aastring = aastring.replace("(-~3)","4")
+    aastring = aastring.replace("(0-0)","0")
+    
+  
+    decodestring = re.search(r"\\\+([^(]+)", aastring, re.DOTALL | re.IGNORECASE).group(1)
+    decodestring = "\\+"+ decodestring
+    decodestring = decodestring.replace("+","")
+    decodestring = decodestring.replace(" ","")
+    
+    decodestring = decode(decodestring)
+    decodestring = decodestring.replace("\\/","/")
+    
+    return decodestring
+
+
 def decode(encoded):
+    s = []
     for octc in (c for c in re.findall(r'\\(\d{2,3})', encoded)):
-        encoded = encoded.replace(r'\%s' % octc, chr(int(octc, 8)))
-    return encoded.decode('utf8')
+        s.append(chr(int(octc, 8)))
+        #encoded = encoded.replace(r'\%s' % octc, chr(int(octc, 8)))
+    return ''.join(s)
 
 
 # videowood decode copied from: https://github.com/schleichdi2/OpenNfr_E2_Gui-5.3/blob/4e3b5e967344c3ddc015bc67833a5935fc869fd4/lib/python/Plugins/Extensions/MediaPortal/resources/hosters/videowood.py    

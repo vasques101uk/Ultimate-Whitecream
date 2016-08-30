@@ -1,3 +1,7 @@
+[B]Version 1.1.33[/B]
+Fixed: Openload (again)
+
+
 [B]Version 1.1.32[/B]
 Added: Camsode (thanks hdgdl)
 Changed: Cam4 video playback (thanks hdgdl)
