@@ -30,13 +30,14 @@ def Main():
 
 
 def List(url):
-    listjson = utils.getHtml(url, '')
-    match = re.compile('"username":"([^"]+)","display_name":"[^"]+","slug":"[^"]+","age":[^"]+,"gender":"[^"]+","accepts_tokens":[^"]+,"rating":[^"]+,"thumb":"([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listjson)
-    
-    for name, img in match:
-        name = utils.cleantext(name)
-        videourl = "https://www.camsoda.com/api/v1/video/vtoken/" + name + "?username=guest_" + str(random.randrange(100, 55555))
-        img = "https:" + img.replace("\\","").strip()
+    if utils.addon.getSetting("chaturbate") == "true":
+        clean_database()
+    response = urllib2.urlopen(url)
+    data = json.load(response)
+    for camgirl in data['results']:
+        name = camgirl['username'] + " [" + camgirl['quality'] + "]" + " [" + camgirl['status'] + "]"
+        videourl = "https://www.camsoda.com/api/v1/video/vtoken/" + camgirl['username'] + "?username=guest_" + str(random.randrange(100, 55555))
+        img = "https:" + camgirl['thumb']
         utils.addDownLink(name, videourl, 478, img, '', noDownload=True)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -57,14 +58,16 @@ def clean_database(showdialog=False):
 
 
 def Playvid(url, name):
-    listjson = utils.getHtml(url, '')
-    match = re.compile('"status":1,"token":"([^"]+)","app":"([^"]+)","origin_servers":.*,"edge_servers":\["([^"]+).*,"private_servers":.*,"mjpeg_server":"[^"]+","stream_name":"([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listjson)
-    for token, app, server, stream in match:
-       videourl = "https://" + server + "/" + app + "/mp4:" + stream + "_mjpeg/playlist.m3u8?token=" + token
-       iconimage = xbmc.getInfoImage("ListItem.Thumb")
-       listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-       listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-       listitem.setProperty("IsPlayable","true")
+    response = urllib2.urlopen(url)
+    data = json.load(response)
+    if "camhouse" in data['stream_name']:
+       videourl = "https://camhouse.camsoda.com/" + data['app'] + "/mp4:" + data['stream_name'] + "_mjpeg/playlist.m3u8?token=" + data['token']
+    else:
+       videourl = "https://" + data['edge_servers'][1] + "/" + data['app'] + "/mp4:" + data['stream_name'] + "_mjpeg/playlist.m3u8?token=" + data['token']
+    iconimage = xbmc.getInfoImage("ListItem.Thumb")
+    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+    listitem.setProperty("IsPlayable","true")
     if int(sys.argv[1]) == -1:
        pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
        pl.clear()
@@ -73,5 +76,4 @@ def Playvid(url, name):
     else:
        listitem.setPath(str(videourl))
        xbmcplugin.setResolvedUrl(utils.addon_handle, True, listitem)
-
 
