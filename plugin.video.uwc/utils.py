@@ -31,7 +31,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.33"
+__version__ = "1.1.34"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -537,7 +537,7 @@ def playvideo(videosource, name, download=None, url=None):
         fcurl = chkmultivids(fcurl)
         fcurl = 'http://filecrypt.cc/Container/' + fcurl + ".html"
         fcsrc = getHtml(fcurl, url)
-        fcmatch = re.compile(r"openLink.?'([\w\-]*)',", re.DOTALL | re.IGNORECASE).findall(fcsrc)
+        fcmatch = re.compile(r"onclick=\"openLink.?'([\w\-]*)',", re.DOTALL | re.IGNORECASE).findall(fcsrc)
         progress.update( 80, "", "Getting video file from Filecrypt", "" )
         fcurls = ""
         for fclink in fcmatch:
@@ -750,11 +750,13 @@ def _get_keyboard(default="", heading="", hidden=False):
 def decodeOpenLoad(html):
     # by pitoosie
     from HTMLParser import HTMLParser
+    from jjdecode import JJDecoder
     hiddenurl = HTMLParser().unescape(re.search('hiddenurl">(.+?)<\/span>', html, re.IGNORECASE).group(1))
     
-    aastring = re.compile("<script[^>]+>(ﾟωﾟﾉ[^\n]+)\n", re.DOTALL | re.IGNORECASE).findall(html)[0]
-    aastring = decodeAA(aastring)
-    magicnumber = re.compile(r"charCodeAt\(\d+?\)\s*?\+\s*?(\d+?)\)", re.DOTALL | re.IGNORECASE).findall(aastring)[0]
+    
+    jjstring = re.compile("<script[^>]+>(j=~[^\n]+)\n", re.DOTALL | re.IGNORECASE).findall(html)[0]
+    jjstring = JJDecoder(jjstring).decode()
+    magicnumber = re.compile(r"charCodeAt\(\d+?\)\s*?\+\s*?(\d+?)\)", re.DOTALL | re.IGNORECASE).findall(jjstring)[0]
     
     s = []
     for idx, i in enumerate(hiddenurl):
@@ -775,7 +777,10 @@ def decodeOpenLoad(html):
     res = urllib2.urlopen(req)
     videourl = res.geturl() 
     res.close()
-    return videourl
+    if 'pigeons.mp4' in videourl.lower():
+        return
+    else:
+        return videourl
 
 
 def decodeAA(aastring):
