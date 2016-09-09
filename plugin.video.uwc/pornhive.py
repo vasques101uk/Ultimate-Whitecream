@@ -69,7 +69,7 @@ def PHCat(url):
 def PHVideo(url, name, download=None):
     progress.create('Play video', 'Searching videofile.')
     progress.update( 10, "", "Loading video page", "" )
-    Supported_hosts = ['Openload.io', 'StreamCloud', 'NowVideo', 'www.nowvideo.sx', 'FlashX', 'www.flashx.tv', 'flashx.tv',  'streamcloud.eu', 'streamin.to', 'videowood.tv', 'www.keeplinks.eu', 'openload.co']
+    Supported_hosts = ['Openload.io', 'StreamCloud', 'NowVideo', 'www.nowvideo.sx', 'FlashX', 'www.flashx.tv', 'flashx.tv',  'streamcloud.eu', 'streamin.to', 'videowood.tv', 'www.keeplinks.eu', 'openload.co', 'datoporn.com', 'gr8movies.org', 'pornoworld.freeforumzone.com']
     videopage = utils.getHtml(url, '')
     match = re.compile(r'data-id="([^"]+)" target="_blank" title="Watch it on ([\w.]+)', re.DOTALL | re.IGNORECASE).findall(videopage)
     if len(match) > 1:
@@ -109,11 +109,21 @@ def PHVideo(url, name, download=None):
         playurl = getNowVideo(outurl)        
     elif "penload" in sitename:
         progress.update( 30, "", "Getting Openload", "" )
-        progress.close()
-        utils.PLAYVIDEO(outurl, name, download)
+        outurl1 = utils.getVideoLink(outurl, '')
+        utils.playvideo(outurl1, name, download, outurl)
         return
     elif "videowood" in sitename:
         progress.update( 30, "", "Getting Videowood", "" )
+        progress.close()
+        utils.PLAYVIDEO(outurl, name, download)
+        return
+    elif "gr8movies" in sitename:
+        progress.update( 30, "", "Getting Gr8movies", "" )
+        progress.close()
+        utils.PLAYVIDEO(outurl, name, download)
+        return
+    elif "freeforumzone" in sitename:
+        progress.update( 30, "", "Getting pornoworld", "" )
         progress.close()
         utils.PLAYVIDEO(outurl, name, download)
         return        
@@ -122,13 +132,18 @@ def PHVideo(url, name, download=None):
         streaming = utils.getHtml(outurl, '')
         outurl=re.compile("action='([^']+)'").findall(streaming)[0]
         progress.close()
-        utils.playvideo(outurl, name, download)
+        utils.playvideo(outurl, name, download, outurl)
         return
     elif 'keeplinks' in sitename:
         progress.update( 30, "", "Getting Keeplinks", "" )
         outurl2 = getKeeplinks(outurl)
         utils.playvideo(outurl2, name, download, outurl)
         return
+    elif "datoporn" in sitename:
+        progress.update( 30, "", "Getting Datoporn", "" )
+        outurl1 = utils.getVideoLink(outurl, '')
+        utils.playvideo(outurl1, name, download, outurl)
+        return        
     else:
         progress.close()
         utils.notify('Sorry','This host is not supported.')
