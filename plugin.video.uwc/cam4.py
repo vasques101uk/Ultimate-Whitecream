@@ -21,6 +21,8 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, sqlite3
 
+mobileagent = {'User-Agent': 'Mozilla/5.0 (Linux; U; Android 2.2; en-us; Droid Build/FRG22D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1'}
+
 def Main():
     utils.addDir('[COLOR red]Refresh Cam4 images[/COLOR]','',283,'',Folder=False)
     utils.addDir('[COLOR hotpink]Featured[/COLOR]','http://www.cam4.com/featured/1',281,'',1)
@@ -64,18 +66,14 @@ def List(url, page):
 
 
 def Playvid(url, name):
-    listhtml = utils.getHtml(url, '')
-    match = re.compile('<param value="[^"]+" name="flashvars"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    videoAppUrl = re.compile('videoAppUrl=([^&]+)', re.DOTALL | re.IGNORECASE).findall(match[0])
-    videoPlayUrl = re.compile('videoPlayUrl=([^&]+)', re.DOTALL | re.IGNORECASE).findall(match[0])
+    listhtml = utils.getHtml(url, '', mobileagent)
+    match = re.compile('<video id=Cam4HLSPlayer class="SD" controls autoplay src="([^"]+)"> </video>', re.DOTALL | re.IGNORECASE).findall(listhtml)
     if match:
-       videourl = videoAppUrl[0] + ' live=true swfurl=http://edgecast.cam4s.com/client/Cam4Chatless_1.114_guest.swf'
+       videourl = match[0]
        iconimage = xbmc.getInfoImage("ListItem.Thumb")
        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
        listitem.setProperty("IsPlayable","true")
-       listitem.setProperty("pageurl", url)
-       listitem.setProperty("playpath", videoPlayUrl[0] + "?playToken=null")
        if int(sys.argv[1]) == -1:
          pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
          pl.clear()
