@@ -31,7 +31,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.35"
+__version__ = "1.1.36"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -429,7 +429,7 @@ def playvideo(videosource, name, download=None, url=None):
         aff = re.search("'aff', '(.*?)'", flashxdata).group(1)
         headers2 = { 'Referer': flashxurl,
                     'Cookie': '; lang=1'}
-        surl = re.search('src="(.*?' + file_id + ')',flashxdata).group(1)
+        surl = re.search('src="(.*?' + file_id + ')',flashxdata, re.IGNORECASE).group(1)
         dummy = getHtml(surl, flashxurl, headers2)
         headers2 = { 'Referer': flashxurl,
                     'Cookie': 'lang=1; file_id=' + file_id + '; aff=' + aff }
@@ -753,8 +753,28 @@ def decodeOpenLoad(html):
     from jjdecode import JJDecoder
     hiddenurl = HTMLParser().unescape(re.search('hiddenurl">(.+?)<\/span>', html, re.IGNORECASE).group(1))
     
+    jjstring = re.compile('a="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(html)[1]
+    shiftint =  re.compile(r";\}\((\d+)\)", re.DOTALL | re.IGNORECASE).findall(html)[1]
     
-    jjstring = re.compile("<script[^>]+>(j=~[^\n]+)\n", re.DOTALL | re.IGNORECASE).findall(html)[0]
+    def shiftChar(a):
+        a = a.group()
+        if a <= "Z":
+            b = 90
+        else:
+            b = 122
+        c = ord(a) + int(shiftint)
+        if b >= c:
+            a = c
+        else:
+            a = c - 26
+        return chr(a)    
+   
+    jjstring = re.sub(r'[a-zA-Z]', shiftChar, jjstring)
+    jjstring = urllib.unquote_plus(jjstring)
+    jjstring = jjstring.replace('0','j')
+    jjstring = jjstring.replace('1','_')
+    jjstring = jjstring.replace('2','__')
+    jjstring = jjstring.replace('3','___')    
     jjstring = JJDecoder(jjstring).decode()
     magicnumber = re.compile(r"charCodeAt\(\d+?\)\s*?\+\s*?(\d+?)\)", re.DOTALL | re.IGNORECASE).findall(jjstring)[0]
     
