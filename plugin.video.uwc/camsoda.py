@@ -35,8 +35,8 @@ def List(url):
     response = urllib2.urlopen(url)
     data = json.load(response)
     for camgirl in data['results']:
-        name = camgirl['username'] + " [" + camgirl['quality'] + "]" + " [" + camgirl['status'] + "]"
-        videourl = "https://www.camsoda.com/api/v1/video/vtoken/" + camgirl['username'] + "?username=guest_" + str(random.randrange(100, 55555))
+        name = camgirl['slug'] + " [" + camgirl['status'] + "]"
+        videourl = "https://www.camsoda.com/api/v1/video/vtoken/" + camgirl['slug'] + "?username=guest_" + str(random.randrange(100, 55555))
         img = "https:" + camgirl['thumb']
         utils.addDownLink(name, videourl, 478, img, '', noDownload=True)
     xbmcplugin.endOfDirectory(utils.addon_handle)

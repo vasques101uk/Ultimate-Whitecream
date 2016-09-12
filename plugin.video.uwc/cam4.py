@@ -21,7 +21,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 import utils, sqlite3
 
-mobileagent = {'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13D15 Safari/601.1'}
+mobileagent = {'User-Agent': 'Mozilla/5.0 (Linux; U; Android 2.2; en-us; Droid Build/FRG22D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1'}
 
 def Main():
     utils.addDir('[COLOR red]Refresh Cam4 images[/COLOR]','',283,'',Folder=False)
