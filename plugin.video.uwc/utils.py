@@ -31,7 +31,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.36"
+__version__ = "1.1.37"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -748,10 +748,10 @@ def _get_keyboard(default="", heading="", hidden=False):
  
  
 def decodeOpenLoad(html):
-    # by pitoosie
+    # fixed by the openload guy ;)  based on work by pitoosie
     from HTMLParser import HTMLParser
     from jjdecode import JJDecoder
-    hiddenurl = HTMLParser().unescape(re.search('hiddenurl">(.+?)<\/span>', html, re.IGNORECASE).group(1))
+    hiddenurl = HTMLParser().unescape(re.search("</span>[^>]+>([^<]+).*?streamurl", html, re.DOTALL | re.IGNORECASE).group(1))
     
     jjstring = re.compile('a="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(html)[1]
     shiftint =  re.compile(r";\}\((\d+)\)", re.DOTALL | re.IGNORECASE).findall(html)[1]
