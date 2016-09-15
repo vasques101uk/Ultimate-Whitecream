@@ -1,3 +1,10 @@
+[B]Version 1.1.38[/B]
+Added: Cloudflare support (fixes K18)
+Fixed: CzechHD
+Fixed: xxxstreams(eu) pagination
+Fixed: Openload
+
+
 [B]Version 1.1.37[/B]
 Fixed: Openload
 

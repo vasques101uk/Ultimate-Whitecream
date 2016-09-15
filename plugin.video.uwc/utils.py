@@ -19,7 +19,7 @@
 '''
 
 import urllib, urllib2, re, cookielib, os.path, sys, socket, time, tempfile, string
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon, sqlite3, urlparse, xbmcvfs, base64
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon, sqlite3, urlparse, xbmcvfs, base64, cloudflare
 
 from jsunpack import unpack
 
@@ -31,7 +31,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.37"
+__version__ = "1.1.38"
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -68,13 +68,13 @@ if not os.path.exists(profileDir):
     os.makedirs(profileDir)
 
 urlopen = urllib2.urlopen
-cj = cookielib.LWPCookieJar()
+cj = cookielib.LWPCookieJar(xbmc.translatePath(cookiePath))
 Request = urllib2.Request
 
 if cj != None:
     if os.path.isfile(xbmc.translatePath(cookiePath)):
         try:
-            cj.load(xbmc.translatePath(cookiePath))
+            cj.load()
         except:
             try:
                 os.remove(xbmc.translatePath(cookiePath))
@@ -82,7 +82,8 @@ if cj != None:
             except:
                 dialog.ok('Oh oh','The Cookie file is locked, please restart Kodi')
                 pass
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+    cookie_handler = urllib2.HTTPCookieProcessor(cj)
+    opener = urllib2.build_opener(cookie_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler())
 else:
     opener = urllib2.build_opener()
 
@@ -400,6 +401,9 @@ def playvideo(videosource, name, download=None, url=None):
         try:
             openloadsrc = getHtml(openloadurl1, '', openloadhdr)
             progress.update( 80, "", "Getting video file from OpenLoad", "")
+            if 'We are sorry!' in openloadsrc:
+                notify('Oh oh','Video is deleted from Openload')
+                return                
             videourl = decodeOpenLoad(openloadsrc)
             videourl = videourl + '|Referer='+ openloadurl1 + '&User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
         except:
@@ -594,28 +598,33 @@ def PlayStream(name, url):
 
 
 def getHtml(url, referer='', hdr=None, NoCookie=None, data=None):
-    if not hdr:
-        req = Request(url, data, headers)
-    else:
-        req = Request(url, data, hdr)
-    if len(referer) > 1:
-        req.add_header('Referer', referer)
-    if data:
-        req.add_header('Content-Length', len(data))
-    response = urlopen(req, timeout=60)
-    if response.info().get('Content-Encoding') == 'gzip':
-        buf = StringIO( response.read())
-        f = gzip.GzipFile(fileobj=buf)
-        data = f.read()
-        f.close()
-    else:
-        data = response.read()    
-    if not NoCookie:
-        # Cope with problematic timestamp values on RPi on OpenElec 4.2.1
-        try:
-            cj.save(cookiePath)
-        except: pass
-    response.close()
+    try:
+        if not hdr:
+            req = Request(url, data, headers)
+        else:
+            req = Request(url, data, hdr)
+        if len(referer) > 1:
+            req.add_header('Referer', referer)
+        if data:
+            req.add_header('Content-Length', len(data))
+        response = urlopen(req, timeout=60)
+        if response.info().get('Content-Encoding') == 'gzip':
+            buf = StringIO( response.read())
+            f = gzip.GzipFile(fileobj=buf)
+            data = f.read()
+            f.close()
+        else:
+            data = response.read()    
+        if not NoCookie:
+            # Cope with problematic timestamp values on RPi on OpenElec 4.2.1
+            try:
+                cj.save(cookiePath)
+            except: pass
+        response.close()
+    except urllib2.HTTPError as e:
+        data = e.read()
+        if e.code == 503 and 'cf-browser-verification' in data:
+            data = cloudflare.solve(url,cj, USER_AGENT)
     return data
 
     
@@ -745,13 +754,14 @@ def _get_keyboard(default="", heading="", hidden=False):
     if keyboard.isConfirmed():
         return unicode(keyboard.getText(), "utf-8")
     return default
- 
- 
+
+
 def decodeOpenLoad(html):
     # fixed by the openload guy ;)  based on work by pitoosie
     from HTMLParser import HTMLParser
     from jjdecode import JJDecoder
-    hiddenurl = HTMLParser().unescape(re.search("</span>[^>]+>([^<]+).*?streamurl", html, re.DOTALL | re.IGNORECASE).group(1))
+    
+    hiddenurl = HTMLParser().unescape(re.search("</span>[^>]+>([^<]+)</sp.*?streamurl", html, re.DOTALL | re.IGNORECASE).group(1))
     
     jjstring = re.compile('a="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(html)[1]
     shiftint =  re.compile(r";\}\((\d+)\)", re.DOTALL | re.IGNORECASE).findall(html)[1]
@@ -768,7 +778,7 @@ def decodeOpenLoad(html):
         else:
             a = c - 26
         return chr(a)    
-   
+    
     jjstring = re.sub(r'[a-zA-Z]', shiftChar, jjstring)
     jjstring = urllib.unquote_plus(jjstring)
     jjstring = jjstring.replace('0','j')
@@ -776,6 +786,7 @@ def decodeOpenLoad(html):
     jjstring = jjstring.replace('2','__')
     jjstring = jjstring.replace('3','___')    
     jjstring = JJDecoder(jjstring).decode()
+    
     magicnumber = re.compile(r"charCodeAt\(\d+?\)\s*?\+\s*?(\d+?)\)", re.DOTALL | re.IGNORECASE).findall(jjstring)[0]
     
     s = []
