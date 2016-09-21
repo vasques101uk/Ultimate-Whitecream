@@ -22,7 +22,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "mortael"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.39"
+__version__ = "1.1.40"
 
 import urllib
 import urllib2
@@ -863,13 +863,14 @@ def decodeOpenLoad(html):
     videourl = res.geturl()
     res.close()
     
+    #doesnt work
     filename = re.compile('tion" content="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(html)[0]    
     filename = urllib.quote_plus(cleanse_title(filename))
 
     if filename in videourl:
         return videourl
     else:
-        return 'pigeons'
+        return videourl
 
 
 def decodeAA(aastring):
