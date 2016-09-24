@@ -1,3 +1,33 @@
+[B]Version 1.1.41[/B]
+Fixed: Pigeon fix
+
+
+[B]Version 1.1.40[/B]
+Fixed: Openload mistake
+
+
+[B]Version 1.1.39[/B]
+Fixed: xxxstreams(org)
+Changed: internal code changes
+
+
+[B]Version 1.1.38[/B]
+Added: Cloudflare support (fixes K18)
+Fixed: CzechHD
+Fixed: xxxstreams(eu) pagination
+Fixed: Openload
+
+
+[B]Version 1.1.37[/B]
+Fixed: Openload
+
+
+[B]Version 1.1.36[/B]
+Fixed: Camsoda/Cam4 (thanks hdgdl)
+Fixed: Openload
+Fixed: FlashX
+
+
 [B]Version 1.1.35[/B]
 Improved: More supported hosts for pornhive
 
