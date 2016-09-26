@@ -73,7 +73,7 @@ def List(url, page):
 
 def Playvid(url, name):
     listhtml = utils.getHtml(url, '', mobileagent)
-    match = re.compile('Cam4HLSPlayer.*src="([^"]+)"> </video>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile("(http[^']+m3u8)", re.DOTALL | re.IGNORECASE).findall(listhtml)
     if match:
        videourl = match[0]
        iconimage = xbmc.getInfoImage("ListItem.Thumb")
