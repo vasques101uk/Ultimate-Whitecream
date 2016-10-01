@@ -118,6 +118,7 @@ def INDEXT():
     utils.addDir('[COLOR hotpink]AbsoluPorn[/COLOR]','http://www.absoluporn.com/en/',300,os.path.join(imgDir, 'absoluporn.gif'),'')
     utils.addDir('[COLOR hotpink]Anybunny[/COLOR]','http://anybunny.com/',320,os.path.join(imgDir, 'anybunny.png'),'')    
     utils.addDir('[COLOR hotpink]SpankBang[/COLOR]','http://spankbang.com/new_videos/',440,os.path.join(imgDir, 'spankbang.png'),'')	
+    utils.addDir('[COLOR hotpink]Amateur Cool[/COLOR]','http://www.amateurcool.com/most-recent//',490,os.path.join(imgDir, 'amateurcool.png'),'')	
     xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)
     
 def INDEXW():
@@ -486,6 +487,10 @@ if age:
     elif mode == 481: naked.List(url)
     elif mode == 482: naked.Playvid(url, name)
     elif mode == 483: naked.clean_database(True)
+    elif mode == 490: amateurcool.Main()
+    elif mode == 491: amateurcool.List(url)
+    elif mode == 492: amateurcool.Playvid(url, name)
+    elif mode == 493: amateurcool.Categories()
 
     elif mode == 900: favorites.Favorites(fav,favmode,name,url,img)
     elif mode == 901: favorites.List()
