@@ -75,7 +75,7 @@ def Playvid(url, name):
     if "camhouse" in data['stream_name']:
        videourl = "https://camhouse.camsoda.com/" + data['app'] + "/mp4:" + data['stream_name'] + "_mjpeg/playlist.m3u8?token=" + data['token']
     else:
-       videourl = "https://" + data['edge_servers'][1] + "/" + data['app'] + "/mp4:" + data['stream_name'] + "_mjpeg/playlist.m3u8?token=" + data['token']
+       videourl = "https://" + data['edge_servers'][0] + "/" + data['app'] + "/mp4:" + data['stream_name'] + "_mjpeg/playlist.m3u8?token=" + data['token']
     iconimage = xbmc.getInfoImage("ListItem.Thumb")
     listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
