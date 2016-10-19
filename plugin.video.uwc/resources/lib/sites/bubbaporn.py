@@ -26,12 +26,12 @@ from resources.lib import utils
 
 @utils.url_dispatcher.register('90')
 def TPMain():
-    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.todayporn.com/channels/',93,'','')
-    utils.addDir('[COLOR hotpink]Pornstars[/COLOR]','http://www.todayporn.com/pornstars/page1.html',95,'','')
-    utils.addDir('[COLOR hotpink]Top Rated[/COLOR]','http://www.todayporn.com/top-rated/a/page1.html',91,'','')
-    utils.addDir('[COLOR hotpink]Most Viewed[/COLOR]','http://www.todayporn.com/most-viewed/a/page1.html',91,'','')
-    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.todayporn.com/search/page1.html?q=',94,'','')
-    TPList('http://www.todayporn.com/page1.html',1)
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.bubbaporn.com/channels/',93,'','')
+    utils.addDir('[COLOR hotpink]Pornstars[/COLOR]','http://www.bubbaporn.com/pornstars/page1.html',95,'','')
+    utils.addDir('[COLOR hotpink]Top Rated[/COLOR]','http://www.bubbaporn.com/top-rated/a/page1.html',91,'','')
+    utils.addDir('[COLOR hotpink]Most Viewed[/COLOR]','http://www.bubbaporn.com/most-viewed/a/page1.html',91,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.bubbaporn.com/search/page1.html?q=',94,'','')
+    TPList('http://www.bubbaporn.com/page1.html',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -45,7 +45,7 @@ def TPList(url, page=1):
     match = re.compile('prefix="([^"]+)[^<]+[^"]+"([^"]+)">([^<]+)<[^"]+[^>]+>([^\s]+)\s', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for thumb, videourl, name, duration in match:
         name = utils.cleantext(name)
-        videourl = "http://www.todayporn.com" + videourl
+        videourl = "http://www.bubbaporn.com" + videourl
         thumb = thumb + "1.jpg"
         name = name + " [COLOR deeppink]" + duration + "[/COLOR]"
         utils.addDownLink(name, videourl, 92, thumb, '')
@@ -59,7 +59,7 @@ def TPList(url, page=1):
 @utils.url_dispatcher.register('92', ['url', 'name'], ['download'])
 def TPPlayvid(url, name, download=None):
     videopage = utils.getHtml(url, '')
-    match = re.compile(r"url: '([^']+)',\s+f", re.DOTALL | re.IGNORECASE).findall(videopage)
+    match = re.compile('<source src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
     if match:
         videourl = match[0]
         if download == 1:
@@ -76,7 +76,7 @@ def TPCat(url):
     caturl = utils.getHtml(url, '')
     match = re.compile('<img src="([^"]+)"[^<]+<[^"]+"([^"]+)">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(caturl)
     for thumb, caturl, cat in match:
-        caturl = "http://www.todayporn.com" + caturl + "page1.html"
+        caturl = "http://www.bubbaporn.com" + caturl + "page1.html"
         utils.addDir(cat, caturl, 91, thumb, 1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -86,7 +86,7 @@ def TPPornstars(url, page=1):
     pshtml = utils.getHtml(url, '')
     pornstars = re.compile("""img" src='([^']+)'[^<]+<[^"]+"([^"]+)"[^>]+>([^<]+)<.*?total[^>]+>([^<]+)<""", re.DOTALL | re.IGNORECASE).findall(pshtml)
     for img, psurl, title, videos in pornstars:
-        psurl = "http://www.todayporn.com" + psurl + "page1.html"
+        psurl = "http://www.bubbaporn.com" + psurl + "page1.html"
         title = title + " [COLOR deeppink]" + videos + "[/COLOR]" 
         utils.addDir(title, psurl, 91, img, 1)
     if re.search('Next &raquo;</a>', pshtml, re.DOTALL | re.IGNORECASE):

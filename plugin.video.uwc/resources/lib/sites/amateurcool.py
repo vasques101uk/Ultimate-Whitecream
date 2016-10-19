@@ -31,7 +31,11 @@ def Main():
 
 @utils.url_dispatcher.register('491', ['url'])
 def List(url):
-    listhtml = utils.getHtml(url, '')
+    try:
+        listhtml = utils.getHtml(url, '')
+    except:
+        utils.notify('Oh oh','It looks like this website is down.')
+        return None
     match = re.compile(r'data-video="(.+?)">.+?<img src="(.+?)" alt="(.+?)".+?<span>(.+?) Video</span>', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, img, name, duration in match:
         name = utils.cleantext(name + ' [COLOR deeppink]' +  duration + '[/COLOR]' )

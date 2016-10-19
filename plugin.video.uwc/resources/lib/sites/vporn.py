@@ -33,7 +33,11 @@ def Main():
 @utils.url_dispatcher.register('501', ['url'])
 def List(url):
     xbmc.log("List: " + url)
-    listhtml = utils.getHtml(url, '')
+    try:
+        listhtml = utils.getHtml(url, '')
+    except:
+        utils.notify('Oh oh','It looks like this website is down.')
+        return None
     match = re.compile(r'<a href="(.+?)" class="thumb"><img src="(.+?)" alt="(.+?)"').findall(listhtml)
     for videopage, img, name in match:
         name = utils.cleantext(name)
