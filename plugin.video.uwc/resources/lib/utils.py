@@ -58,13 +58,13 @@ USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/
 headers = {'User-Agent': USER_AGENT,
            'Accept': '*/*',
            'Connection': 'keep-alive'}
-           
+
 openloadhdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
        'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
        'Accept-Encoding': 'none',
        'Accept-Language': 'en-US,en;q=0.8',
-       'Connection': 'keep-alive'}           
+       'Connection': 'keep-alive'}
 
 addon_handle = int(sys.argv[1])
 addon = xbmcaddon.Addon(id=__scriptid__)
@@ -112,7 +112,7 @@ urllib2.install_opener(opener)
 favoritesdb = os.path.join(profileDir, 'favorites.db')
 
 class StopDownloading(Exception):
-    def __init__(self, value): self.value = value 
+    def __init__(self, value): self.value = value
     def __str__(self): return repr(self.value)
 
 def downloadVideo(url, name):
@@ -130,7 +130,7 @@ def downloadVideo(url, name):
             total = float(filesize) / (1024 * 1024)
             mbs = '%.02f MB of %.02f MB' % (currently_downloaded, total)
             e = 'Speed: %.02f Kb/s ' % kbps_speed
-            e += 'ETA: %02d:%02d' % divmod(eta, 60) 
+            e += 'ETA: %02d:%02d' % divmod(eta, 60)
             dp.update(percent,'',mbs,e)
         except:
             percent = 100
@@ -139,7 +139,7 @@ def downloadVideo(url, name):
             dp.close()
             raise StopDownloading('Stopped Downloading')
 
-            
+
     def getResponse(url, headers2, size):
         try:
             if size > 0:
@@ -151,13 +151,13 @@ def downloadVideo(url, name):
             resp = urlopen(req, timeout=30)
             return resp
         except:
-            return None    
+            return None
 
     def doDownload(url, dest, dp):
 
         try: headers = dict(urlparse.parse_qsl(url.rsplit('|', 1)[1]))
         except: headers = dict('')
-        
+
         if 'openload' in url:
             headers = openloadhdr
 
@@ -210,7 +210,7 @@ def downloadVideo(url, name):
             chunk = None
             error = False
 
-            try:        
+            try:
                 chunk  = resp.read(size)
                 if not chunk:
                     if percent < 99:
@@ -276,7 +276,7 @@ def downloadVideo(url, name):
                 else:
                     #use existing response
                     pass
-    
+
 
     def clean_filename(s):
         if not s:
@@ -284,7 +284,7 @@ def downloadVideo(url, name):
         badchars = '\\/:*?\"<>|\''
         for c in badchars:
             s = s.replace(c, '')
-        return s;            
+        return s;
 
     download_path = addon.getSetting('download_path')
     if download_path == '':
@@ -300,7 +300,7 @@ def downloadVideo(url, name):
         name = name.split("[")[0]
         dp.create("Ultimate Whitecream Download",name[:50])
         tmp_file = tempfile.mktemp(dir=download_path, suffix=".mp4")
-        tmp_file = xbmc.makeLegalFilename(tmp_file)        
+        tmp_file = xbmc.makeLegalFilename(tmp_file)
         start = time.clock()
         try:
             #urllib.urlretrieve(url,tmp_file,lambda nb, bs, fs, url=url: _pbhook(nb,bs,fs,url,dp))
@@ -326,11 +326,11 @@ def notify(header=None, msg='', duration=5000):
     if header is None: header = 'Ultimate Whitecream'
     builtin = "XBMC.Notification(%s,%s, %s, %s)" % (header, msg, duration, uwcicon)
     xbmc.executebuiltin(builtin)
-    
-    
+
+
 def kodilog(logvar):
     xbmc.log(str(logvar))
-    
+
 
 def PLAYVIDEO(url, name, download=None):
     progress.create('Play video', 'Searching videofile.')
@@ -362,19 +362,19 @@ def playvideo(videosource, name, download=None, url=None):
     if re.search('datoporn.com', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('Datoporn')
     if re.search('<source', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Direct Source')        
+        hosts.append('Direct Source')
     if not 'keeplinks' in url:
         if re.search('keeplinks\.eu/p', videosource, re.DOTALL | re.IGNORECASE):
-            hosts.append('Keeplinks <--') 
+            hosts.append('Keeplinks <--')
     if re.search('filecrypt.cc/Container', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Filecrypt')              
+        hosts.append('Filecrypt')
     if len(hosts) == 0:
         progress.close()
         notify('Oh oh','Couldn\'t find any video')
         return
     elif len(hosts) > 1:
         if addon.getSetting("dontask") == "true":
-            vidhost = hosts[0]            
+            vidhost = hosts[0]
         else:
             vh = dialog.select('Videohost:', hosts)
             if vh == -1:
@@ -387,7 +387,7 @@ def playvideo(videosource, name, download=None, url=None):
         progress.update( 40, "", "Loading Openload", "" )
         openloadurl = re.compile(r"//(?:www\.)?o(?:pen)?load\.(?:co|io)?/(?:embed|f)/([0-9a-zA-Z-_]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
         openloadurl = chkmultivids(openloadurl)
-        
+
         openloadurl1 = 'http://openload.io/embed/%s/' % openloadurl
         progress.update( 50, "", "Loading Openload", "Sending it to urlresolver" )
         try:
@@ -413,7 +413,7 @@ def playvideo(videosource, name, download=None, url=None):
     elif vidhost == 'FlashX':
         progress.update( 40, "", "Loading FlashX", "" )
         flashxurl = re.compile(r"//(?:www\.)?flashx\.tv/(?:embed-)?([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        media_id = chkmultivids(flashxurl)       
+        media_id = chkmultivids(flashxurl)
         flashxurl = 'http://www.flashx.tv/%s.html' % media_id
         progress.update( 50, "", "Loading FlashX", "Sending it to urlresolver" )
         video = urlresolver.resolve(flashxurl)
@@ -450,7 +450,7 @@ def playvideo(videosource, name, download=None, url=None):
     elif vidhost == 'StreamCloud':
         progress.update( 40, "", "Opening Streamcloud", "" )
         streamcloudurl = re.compile(r"//(?:www\.)?streamcloud\.eu?/([0-9a-zA-Z-_/.]+html)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        streamcloudurl = chkmultivids(streamcloudurl)        
+        streamcloudurl = chkmultivids(streamcloudurl)
         streamcloudurl = "http://streamcloud.eu/" + streamcloudurl
         progress.update( 50, "", "Getting Streamcloud page", "" )
         schtml = postHtml(streamcloudurl)
@@ -458,7 +458,7 @@ def playvideo(videosource, name, download=None, url=None):
         match = re.compile('<input.*?name="(.*?)".*?value="(.*?)">', re.DOTALL | re.IGNORECASE).findall(schtml)
         for name, value in match:
             form_values[name] = value.replace("download1","download2")
-        progress.update( 60, "", "Grabbing video file", "" )    
+        progress.update( 60, "", "Grabbing video file", "" )
         newscpage = postHtml(streamcloudurl, form_data=form_values)
         videourl = re.compile('file:\s*"(.+?)",', re.DOTALL | re.IGNORECASE).findall(newscpage)[0]
 
@@ -493,7 +493,7 @@ def playvideo(videosource, name, download=None, url=None):
            'Accept-Encoding': 'none',
            'Accept-Language': 'en-US,en;q=0.8',
            'Connection': 'keep-alive',
-           'Cookie': 'flag['+kllinkid+'] = 1;'} 
+           'Cookie': 'flag['+kllinkid+'] = 1;'}
         klpage = getHtml(kllink, klurl, klheader)
         playvideo(klpage, name, download, klurl)
         return
@@ -535,7 +535,7 @@ def playvideo(videosource, name, download=None, url=None):
         progress.update( 40, "", "Loading Direct source", "" )
         dsurl = re.compile("""<source.*?src=(?:"|')([^"']+)[^>]+>""", re.DOTALL | re.IGNORECASE).findall(videosource)
         dsurl = chkmultivids(dsurl)
-        videourl = dsurl        
+        videourl = dsurl
     progress.close()
     playvid(videourl, name, download)
 
@@ -589,7 +589,7 @@ def getHtml(url, referer='', hdr=None, NoCookie=None, data=None):
             data = f.read()
             f.close()
         else:
-            data = response.read()    
+            data = response.read()
         if not NoCookie:
             # Cope with problematic timestamp values on RPi on OpenElec 4.2.1
             try:
@@ -600,9 +600,11 @@ def getHtml(url, referer='', hdr=None, NoCookie=None, data=None):
         data = e.read()
         if e.code == 503 and 'cf-browser-verification' in data:
             data = cloudflare.solve(url,cj, USER_AGENT)
+        else:
+            raise urllib2.HTTPError()
     return data
 
-    
+
 def postHtml(url, form_data={}, headers={}, compression=True, NoCookie=None):
     _user_agent = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.1 ' + \
                   '(KHTML, like Gecko) Chrome/13.0.782.99 Safari/535.1'
@@ -624,15 +626,15 @@ def postHtml(url, form_data={}, headers={}, compression=True, NoCookie=None):
     response.close()
     return data
 
-    
+
 def getHtml2(url):
     req = Request(url)
     response = urlopen(req, timeout=60)
     data = response.read()
     response.close()
-    return data 
+    return data
 
-    
+
 def getVideoLink(url, referer, hdr=None, data=None):
     if not hdr:
         req2 = Request(url, data, headers)
@@ -642,8 +644,8 @@ def getVideoLink(url, referer, hdr=None, data=None):
         req2.add_header('Referer', referer)
     url2 = urlopen(req2).geturl()
     return url2
-    
-    
+
+
 def parse_query(query):
     toint = ['page', 'download', 'favmode', 'channel', 'section']
     q = {'mode': '0'}
@@ -658,7 +660,7 @@ def parse_query(query):
                 q[key] = queries[key][0]
         else:
             q[key] = queries[key]
-    return q    
+    return q
 
 
 def cleantext(text):
@@ -674,7 +676,7 @@ def cleantext(text):
     text = text.replace('&ntilde;','ñ')
     text = text.replace('&rsquo;','\'')
     return text
-    
+
 
 
 def addDownLink(name, url, mode, iconimage, desc='', stream=None, fav='add', noDownload=False):
@@ -719,7 +721,7 @@ def addDownLink(name, url, mode, iconimage, desc='', stream=None, fav='add', noD
     liz.addContextMenuItems(contextMenuItems, replaceItems=False)
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=False)
     return ok
-    
+
 
 def addDir(name, url, mode, iconimage, page=None, channel=None, section=None, keyword='', Folder=True):
     u = (sys.argv[0] +
@@ -739,7 +741,7 @@ def addDir(name, url, mode, iconimage, page=None, channel=None, section=None, ke
         liz.setArt({'poster': iconimage})
     liz.setArt({'fanart': fanart})
     liz.setInfo(type="Video", infoLabels={"Title": name})
-    
+
     if len(keyword) >= 1:
         keyw = (sys.argv[0] +
             "?mode=" + str('904') +
@@ -749,7 +751,7 @@ def addDir(name, url, mode, iconimage, page=None, channel=None, section=None, ke
         liz.addContextMenuItems(contextMenuItems, replaceItems=False)
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=Folder)
     return ok
-    
+
 def _get_keyboard(default="", heading="", hidden=False):
     """ shows a keyboard and returns a value """
     keyboard = xbmc.Keyboard(default, heading, hidden)
@@ -760,7 +762,7 @@ def _get_keyboard(default="", heading="", hidden=False):
 
 
 
-# videowood decode copied from: https://github.com/schleichdi2/OpenNfr_E2_Gui-5.3/blob/4e3b5e967344c3ddc015bc67833a5935fc869fd4/lib/python/Plugins/Extensions/MediaPortal/resources/hosters/videowood.py    
+# videowood decode copied from: https://github.com/schleichdi2/OpenNfr_E2_Gui-5.3/blob/4e3b5e967344c3ddc015bc67833a5935fc869fd4/lib/python/Plugins/Extensions/MediaPortal/resources/hosters/videowood.py
 def videowood(data):
     parse = re.search('(....ωﾟ.*?);</script>', data)
     if parse:
@@ -837,8 +839,8 @@ def streamdefence(html):
     else:
         decoded = base64.b64decode(html)
     return streamdefence(decoded)
-        
-        
+
+
 def searchDir(url, mode, page=None):
     conn = sqlite3.connect(favoritesdb)
     c = conn.cursor()
@@ -886,7 +888,7 @@ def delallKeyword():
     c.execute("DELETE FROM keywords;")
     conn.commit()
     conn.close()
-    
+
 @url_dispatcher.register('904', ['keyword'])
 def delKeyword(keyword):
     xbmc.log('keyword: ' + keyword)
