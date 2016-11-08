@@ -45,7 +45,7 @@ def List(url):
     data = json.loads(response)
     for camgirl in data['results']:
         name = camgirl['slug'] + " [" + camgirl['status'] + "]"
-        videourl = "https://www.camsoda.com/api/v1/video/vtoken/" + camgirl['slug'] + "?username=guest_" + str(random.randrange(100, 55555))
+        videourl = "https://www.camsoda.com/api/v1/video/vtoken/" + camgirl['slug']
         img = "https:" + camgirl['thumb']
         utils.addDownLink(name, videourl, 478, img, '', noDownload=True)
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -56,12 +56,12 @@ def clean_database(showdialog=True):
     conn = sqlite3.connect(xbmc.translatePath("special://database/Textures13.db"))
     try:
         with conn:
-            list = conn.execute("SELECT id, cachedurl FROM texture WHERE url LIKE '%%%s%%';" % "m.camsoda.com")
+            list = conn.execute("SELECT id, cachedurl FROM texture WHERE url LIKE '%%%s%%';" % ".camsoda.com")
             for row in list:
                 conn.execute("DELETE FROM sizes WHERE idtexture LIKE '%s';" % row[0])
                 try: os.remove(xbmc.translatePath("special://thumbnails/" + row[1]))
                 except: pass
-            conn.execute("DELETE FROM texture WHERE url LIKE '%%%s%%';" % "m.camsoda.com")
+            conn.execute("DELETE FROM texture WHERE url LIKE '%%%s%%';" % ".camsoda.com")
             if showdialog:
                 utils.notify('Finished','Camsoda images cleared')
     except:
@@ -70,6 +70,7 @@ def clean_database(showdialog=True):
 
 @utils.url_dispatcher.register('478', ['url', 'name'])
 def Playvid(url, name):
+    url = url + "?username=guest_" + str(random.randrange(100, 55555))
     response = utils.getHtml(url)
     data = json.loads(response)
     if "camhouse" in data['stream_name']:
