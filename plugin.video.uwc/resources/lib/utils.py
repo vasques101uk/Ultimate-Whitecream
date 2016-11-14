@@ -467,18 +467,25 @@ def playvideo(videosource, name, download=None, url=None):
         jlurl = re.compile(r'jetload\.tv/([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)
         jlurl = chkmultivids(jlurl)
         jlurl = "http://jetload.tv/" + jlurl
-        jlsrc = getHtml(jlurl, url)
-        videourl = re.compile(r'file: "([^"]+)', re.DOTALL | re.IGNORECASE).findall(jlsrc)
-        videourl = videourl[0]
+        progress.update( 50, "", "Loading Jetload", "Sending it to urlresolver" )
+        video = urlresolver.resolve(jlurl)
+        if video:
+            progress.update( 80, "", "Loading Jetload", "Found the video" )
+            videourl = video
+        # jlsrc = getHtml(jlurl, url)
+        # videourl = re.compile(r'file: "([^"]+)', re.DOTALL | re.IGNORECASE).findall(jlsrc)
+        # videourl = videourl[0]
 
     elif vidhost == 'Videowood':
         progress.update( 40, "", "Loading Videowood", "" )
         vwurl = re.compile(r"//(?:www\.)?videowood\.tv/(?:embed|video)/([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
         vwurl = chkmultivids(vwurl)
         vwurl = 'http://www.videowood.tv/embed/' + vwurl
-        vwsrc = getHtml(vwurl, url)
-        progress.update( 80, "", "Getting video file from Videowood", "" )
-        videourl = videowood(vwsrc)
+        progress.update( 50, "", "Loading Videowood", "Sending it to urlresolver" )
+        video = urlresolver.resolve(vwurl)
+        if video:
+            progress.update( 80, "", "Loading Videowood", "Found the video" )
+            videourl = video
 
     elif vidhost == 'Keeplinks <--':
         progress.update( 40, "", "Loading Keeplinks", "" )
@@ -678,6 +685,10 @@ def cleantext(text):
     return text
 
 
+def cleanhtml(raw_html):
+    cleanr = re.compile('<.*?>')
+    cleantext = re.sub(cleanr, '', raw_html)
+    return cleantext
 
 def addDownLink(name, url, mode, iconimage, desc='', stream=None, fav='add', noDownload=False):
     contextMenuItems = []
