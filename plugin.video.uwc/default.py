@@ -132,7 +132,6 @@ def INDEXW():
     utils.addDir('[COLOR hotpink]Cam4[/COLOR] [COLOR white]- webcams[/COLOR]','http://www.cam4.com',280,os.path.join(imgDir, 'cam4.png'),'')    
     utils.addDir('[COLOR hotpink]Camsoda[/COLOR] [COLOR white]- webcams[/COLOR]','http://www.camsoda.com',475,os.path.join(imgDir, 'camsoda.png'),'')    
     utils.addDir('[COLOR hotpink]naked.com[/COLOR] [COLOR white]- webcams[/COLOR]','http://www.naked.com',480,os.path.join(imgDir, 'naked.png'),'')    
-    utils.addDir('[COLOR hotpink]Streams[/COLOR] [COLOR white]- beta[/COLOR]','',8,'','')
     xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)
 
 @utils.url_dispatcher.register('3')    
@@ -141,14 +140,6 @@ def INDEXH():
     utils.addDir('[COLOR hotpink]Hentaihaven[/COLOR]','http://hentaihaven.org/?sort=date',460,os.path.join(imgDir, 'hh.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)    
 
-@utils.url_dispatcher.register('8')    
-def STREAMS():
-    streamurl = 'http://bit.ly/uwcstreams'
-    streamlist = utils.getHtml(streamurl, '')
-    match = re.compile('#.+,(.+?)\n(.+?)\n').findall(streamlist)
-    for name, url in match:
-        utils.addDownLink(name, url, 9, '', '', True)
-    xbmcplugin.endOfDirectory(utils.addon_handle)
 
 @utils.url_dispatcher.register('5', ['page'])
 def ONELIST(page=1):
