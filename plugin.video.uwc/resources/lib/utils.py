@@ -2,7 +2,7 @@
 
 '''
     Ultimate Whitecream
-    Copyright (C) 2015 mortael
+    Copyright (C) 2015 Whitecream
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,9 +19,9 @@
 '''
 
 __scriptname__ = "Ultimate Whitecream"
-__author__ = "mortael"
+__author__ = "Whitecream"
 __scriptid__ = "plugin.video.uwc"
-__credits__ = "mortael, Fr33m1nd, anton40, NothingGnome"
+__credits__ = "Whitecream, Fr33m1nd, anton40, NothingGnome"
 __version__ = "1.1.44"
 
 import urllib

@@ -1,6 +1,6 @@
 '''
     Ultimate Whitecream
-    Copyright (C) 2016 mortael, hdgdl
+    Copyright (C) 2016 Whitecream, hdgdl
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
