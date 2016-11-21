@@ -40,7 +40,7 @@ def List(url):
     except:
         utils.notify('Oh oh','It looks like this website is down.')
         return None
-    model_list = re.compile('int-each-hml">\s+<a class ="linkHandlerClass" title="([^"]+)" href="([^"]+)" target="">\s+<span[^<]+[^>]+>\s+<span[^<]+[^>]+>\s+<img[^<]+src="([^"]+)">\s+', re.DOTALL | re.IGNORECASE).findall(data)
+    model_list = re.compile('each-model">\s+<div[^<]+[^>]+>\s+<a  title="([^"]+)" href="([^"]+)" target="">\s+<span[^<]+[^>]+>\s+<img[^<]+src="([^"]+)">', re.DOTALL | re.IGNORECASE).findall(data)
     for model, url, img in model_list:
         name = model.replace("'s webcam","").strip()
         videourl = "http://new.naked.com" + url
