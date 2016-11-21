@@ -22,7 +22,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "Whitecream"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "Whitecream, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.44"
+__version__ = "1.1.45"
 
 import urllib
 import urllib2
@@ -45,7 +45,7 @@ import xbmcaddon
 import xbmcvfs
 import cloudflare
 from jsunpack import unpack
-import urlresolver
+
 
 from url_dispatcher import URL_Dispatcher
 
@@ -160,10 +160,14 @@ def downloadVideo(url, name):
 
         if 'openload' in url:
             headers = openloadhdr
+            
+        if 'spankbang.com' in url:
+            url = getVideoLink(url,url)
 
         url = url.split('|')[0]
         file = dest.rsplit(os.sep, 1)[-1]
         resp = getResponse(url, headers, 0)
+
 
         if not resp:
             xbmcgui.Dialog().ok("Ultimate Whitecream", 'Download failed', 'No response from server')
@@ -340,6 +344,7 @@ def PLAYVIDEO(url, name, download=None):
 
 
 def playvideo(videosource, name, download=None, url=None):
+    import urlresolver
     hosts = []
     if re.search('openload\.(?:co|io)?/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('OpenLoad')

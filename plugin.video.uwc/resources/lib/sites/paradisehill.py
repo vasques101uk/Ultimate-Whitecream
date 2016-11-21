@@ -76,7 +76,7 @@ def Search(url, keyword=None):
         utils.searchDir(url, 254)
     else:
         title = keyword.replace(' ','+')
-        searchUrl = searchUrl + title
+        searchUrl = searchUrl + title + '&page=1'
         List(searchUrl, 1)
 
 

@@ -51,12 +51,7 @@ def INDEX():
     download_path = addon.getSetting('download_path')
     if download_path != '' and os.path.exists(download_path):
         utils.addDir('[COLOR hotpink]Whitecream[/COLOR] [COLOR white]Download Folder[/COLOR]',download_path,4,os.path.join(rootDir, 'icon.png'),'')
-        
-    if not addon.getSetting('uwccounter') == 'true':
-        try:
-            counterpage = utils.getVideoLink('http://bit.ly/uwccounter','http://UWC-' + utils.__version__ + '.com')
-            addon.setSetting('uwccounter','true')
-        except: pass
+    utils.addDir('[COLOR white]Follow[/COLOR] [COLOR hotpink]Whitecream[/COLOR] [COLOR white]on Twitter:[/COLOR] [COLOR blue]@Whitecream_UWC[/COLOR]','','',os.path.join(rootDir, 'icon.png'),'', Folder=False)    
         
     xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)
 

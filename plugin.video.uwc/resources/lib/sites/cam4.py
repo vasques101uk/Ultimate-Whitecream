@@ -20,6 +20,7 @@ import re
 import os
 import sys
 import sqlite3
+import urllib
 
 import xbmc
 import xbmcplugin
@@ -84,7 +85,7 @@ def Playvid(url, name):
     listhtml = utils.getHtml(url, '', mobileagent)
     match = re.compile('src="(http[^"]+m3u8)', re.DOTALL | re.IGNORECASE).findall(listhtml)
     if match:
-       videourl = match[0] + "|User-Agent=Mozilla%2F5.0%20(Linux%3B%20U%3B%20Android%202.2%3B%20en-us%3B%20Droid%20Build%2FFRG22D)%20AppleWebKit%2F533.1%20(KHTML%2C%20like%20Gecko)%20Version%2F4.0%20Mobile%20Safari%2F533.1"
+       videourl = match[0] + "|User-Agent=" + urllib.quote_plus(mobileagent['User-Agent'])
        iconimage = xbmc.getInfoImage("ListItem.Thumb")
        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
