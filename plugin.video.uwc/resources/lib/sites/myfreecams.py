@@ -43,6 +43,7 @@ def List(url):
         name = utils.cleantext(name)
         img = img + 'jpg'
         url = img[32:-17]
+        img = img.replace('90x90','300x300')
         if len(url) == 7:
             url = '10' + url
         else:
