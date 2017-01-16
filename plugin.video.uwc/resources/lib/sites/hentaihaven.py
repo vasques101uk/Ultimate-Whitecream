@@ -39,7 +39,7 @@ def List(url):
         utils.notify('Oh oh','It looks like this website is down.')
         return None
     listhtml = listhtml.replace('\\','')
-    match1 = re.compile('<a class="thumbnail-image" href="([^"]+)".*?data-src="([^"]+)"(.*?)<h3>[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match1 = re.compile('<a\s+class="thumbnail-image" href="([^"]+)".*?data-src="([^"]+)"(.*?)<h3>[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, img, other, name in match1:
         name = utils.cleantext(name)
         if 'uncensored' in other:
@@ -60,7 +60,10 @@ def List(url):
 @utils.url_dispatcher.register('462', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
     videopage = utils.getHtml(url)
-    videourl = re.compile('class="btn btn-1 btn-1e" href="([^"]+)" target="_blank"', re.DOTALL | re.IGNORECASE).findall(videopage)[0]
+    if "<source" in videopage:
+        videourl = re.compile('<source.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)[0]
+    else:
+        videourl = re.compile('class="btn btn-1 btn-1e" href="([^"]+)" target="_blank"', re.DOTALL | re.IGNORECASE).findall(videopage)[0]
     if videourl:
         utils.playvid(videourl, name, download)
     else:
