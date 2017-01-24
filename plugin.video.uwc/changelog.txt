@@ -1,7 +1,5 @@
-Next update:
-More artwork (cat/search)
-Fixes: Hentaihaven
-Fixes: Chaturbate
+[B]Version 1.1.49[/B]
+Fixed: Hentaihaven, Chaturbate
 
 
 [B]Version 1.1.48[/B]
