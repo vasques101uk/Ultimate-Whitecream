@@ -30,10 +30,11 @@ def Main():
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 	
-@utils.url_dispatcher.register('611', ['url'])
-def List(url):
+@utils.url_dispatcher.register('611', ['url'], ['page'])
+def List(url, page=1):
     try:
-        response = utils.getHtml(url, '')
+        postRequest = {'page' : str(page)}
+        response = utils.postHtml(url, form_data=postRequest,headers={},compression=False)
     except:
         utils.notify('Oh oh','It looks like this website is down.')
         return None
@@ -41,12 +42,14 @@ def List(url):
     for video, img, name in match:
         name = utils.cleantext(name)
         img = "https:/" + img
-        utils.addDownLink(name, video, 612, img, '', noDownload=True)
+        utils.addDownLink(name, video, 612, img, '')
+    npage = page + 1
+    utils.addDir('Next Page (' + str(npage) + ')', url, 611, '', npage)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-@utils.url_dispatcher.register('612', ['url', 'name'])
-def Playvid(url, name):
+@utils.url_dispatcher.register('612', ['url', 'name'], ['download'])
+def Playvid(url, name, download=None):
     url = url.replace("_", "&id=")
     response = utils.getHtml('http://daxab.com/player/?oid=' + url + '&color=f12b24', 'https://daxab.com/')
 
@@ -73,18 +76,10 @@ def Playvid(url, name):
     if match_1080: 
         videourl = match_1080[0].replace("\\","")
         
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    listitem.setProperty("IsPlayable","true")
-    if int(sys.argv[1]) == -1:
-      pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-      pl.clear()
-      pl.add(videourl, listitem)
-      xbmc.Player().play(pl)
+    if videourl:
+        utils.playvid(videourl, name, download)
     else:
-      listitem.setPath(str(videourl))
-      xbmcplugin.setResolvedUrl(utils.addon_handle, True, listitem)
+        utils.notify('Oh oh','Couldn\'t find a video')
 
 		 
 @utils.url_dispatcher.register('613', ['url'], ['keyword'])
