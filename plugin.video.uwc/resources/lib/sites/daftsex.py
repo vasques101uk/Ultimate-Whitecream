@@ -31,7 +31,7 @@ def Main():
 
 	
 @utils.url_dispatcher.register('611', ['url'], ['page'])
-def List(url, page=1):
+def List(url, page=0):
     try:
         postRequest = {'page' : str(page)}
         response = utils.postHtml(url, form_data=postRequest,headers={},compression=False)
