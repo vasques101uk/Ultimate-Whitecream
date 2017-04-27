@@ -22,7 +22,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "Whitecream"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "Whitecream, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.52"
+__version__ = "1.1.53"
 
 import urllib
 import urllib2
@@ -384,7 +384,9 @@ def playvideo(videosource, name, download=None, url=None):
     if re.search('dato\.?porn.\.?', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('Datoporn')
     if re.search('zstream\.to/', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('ZStream')        
+        hosts.append('ZStream')
+    if re.search('rapidvideo\.com/', videosource, re.DOTALL | re.IGNORECASE):
+        hosts.append('Rapidvideo')        
     if re.search('vidlox\.tv', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('Vidlox')        
     if re.search('<source', videosource, re.DOTALL | re.IGNORECASE):
@@ -569,6 +571,10 @@ def playvideo(videosource, name, download=None, url=None):
         return
         
     elif vidhost == 'Vidlox':
+        if sys.version_info < (2, 7, 9):
+            progress.close()
+            notify('Oh oh','Python version to old, update to Krypton')
+            return
         progress.update( 40, "", "Loading Vidlox", "" )
         vlurl = re.compile(r"(?://|\.)vidlox\.tv/(?:embed-|)([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
         media_id = chkmultivids(vlurl)
@@ -588,6 +594,21 @@ def playvideo(videosource, name, download=None, url=None):
         video = urlresolver.resolve(zstreamurl)
         if video:
             progress.update( 80, "", "Loading ZStream", "Found the video" )
+            videourl = video
+
+    elif vidhost == 'Rapidvideo':
+        if sys.version_info < (2, 7, 9):
+            progress.close()
+            notify('Oh oh','Python version to old, update to Krypton')
+            return
+        progress.update( 40, "", "Loading Rapidvideo", "" )
+        rpvideourl = re.compile(r"(?://|\.)(?:rapidvideo|raptu)\.com/(?:embed/|e/|\?v=)?([0-9A-Za-z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
+        rpvideourl = chkmultivids(rpvideourl)
+        rpvideourl = 'http://www.raptu.com/embed/%s' % rpvideourl
+        progress.update( 50, "", "Loading Rapidvideo", "Sending it to urlresolver")
+        video = urlresolver.resolve(rpvideourl)
+        if video:
+            progress.update( 80, "", "Loading Rapidvideo", "Found the video" )
             videourl = video
 
     elif vidhost == 'Direct Source':

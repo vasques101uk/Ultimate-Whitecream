@@ -79,7 +79,6 @@ def INDEXS():
     utils.addDir('[COLOR hotpink]XXX Streams (org)[/COLOR]','http://xxxstreams.org/',420,os.path.join(imgDir, 'xxxsorg.png'),'')
     utils.addDir('[COLOR hotpink]K18[/COLOR]','http://k18.co/',230,os.path.join(imgDir, 'k18.png'),'')
     utils.addDir('[COLOR hotpink]Sexix[/COLOR]','http://sexix.net/',450,os.path.join(imgDir, 'sexix.png'),'')
-    utils.addDir('[COLOR hotpink]HDPoz[/COLOR]','http://hdpoz.com/',510,'','')
     utils.addDir('[COLOR hotpink]daftsex[/COLOR]','https://daftsex.com/',610,'','')
 
     utils.addDir('[COLOR hotpink]One list, to watch them all[/COLOR]','',5,'',1)
