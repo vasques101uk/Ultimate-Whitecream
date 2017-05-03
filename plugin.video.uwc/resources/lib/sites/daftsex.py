@@ -59,7 +59,7 @@ def Playvid(url, name, download=None):
     ckey = re.compile('c_key: "([^"]+)",', re.DOTALL | re.IGNORECASE).findall(response)
 
     response = utils.getHtml ("https://crazycloud.ru/method/video.get?callback=jQuery31108732364196646363_1490030654100&token=" + token[0] + "&videos=" + videos[0] + "&extra_key=" + extra_key[0] + "&ckey=" + ckey[0] + "&_=1490030654101", "https://daxab.com/")
-
+    videourl = ""
     match_240 = re.compile('"mp4_240":"([^"]+)', re.DOTALL | re.IGNORECASE).findall(response)
     match_360 = re.compile('"mp4_360":"([^"]+)', re.DOTALL | re.IGNORECASE).findall(response)
     match_480 = re.compile('"mp4_480":"([^"]+)', re.DOTALL | re.IGNORECASE).findall(response)
