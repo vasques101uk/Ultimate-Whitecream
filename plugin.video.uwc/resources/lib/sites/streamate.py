@@ -43,7 +43,7 @@ def List(url):
         return None
     model_list = json.loads(data)
     for camgirl in model_list['Results']:
-        img = "http://streamate.com/thumb/snap/" + str(camgirl['PerformerId']) + ".jpg"
+        img = "http://m1.nsimg.net/media/snap/" + str(camgirl['PerformerId']) + ".jpg"
         performerID = str(camgirl['PerformerId'])
         name = camgirl['Nickname']
         utils.addDownLink(name, performerID, 518, img, '', noDownload=True)
@@ -55,12 +55,12 @@ def clean_database(showdialog=True):
     conn = sqlite3.connect(xbmc.translatePath("special://database/Textures13.db"))
     try:
         with conn:
-            list = conn.execute("SELECT id, cachedurl FROM texture WHERE url LIKE '%%%s%%';" % "streamate.com")
+            list = conn.execute("SELECT id, cachedurl FROM texture WHERE url LIKE '%%%s%%';" % "m1.nsimg.net")
             for row in list:
                 conn.execute("DELETE FROM sizes WHERE idtexture LIKE '%s';" % row[0])
                 try: os.remove(xbmc.translatePath("special://thumbnails/" + row[1]))
                 except: pass
-            conn.execute("DELETE FROM texture WHERE url LIKE '%%%s%%';" % "streamate.com")
+            conn.execute("DELETE FROM texture WHERE url LIKE '%%%s%%';" % "m1.nsimg.net")
             if showdialog:
                 utils.notify('Finished','streamate.com images cleared')
     except:
