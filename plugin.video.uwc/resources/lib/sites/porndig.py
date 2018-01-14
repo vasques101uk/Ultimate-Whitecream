@@ -36,16 +36,29 @@ headers = {'User-Agent': USER_AGENT,
            'Accept-Language': 'en-US,en;q=0.8,nl;q=0.6',
            'Connection': 'keep-alive'}
 
-pdreferer = 'http://www.porndig.com/videos/'
+headers['Cookie'] = addon.getSetting('pd_cookie')
+
+pdreferer = 'https://www.porndig.com/videos/'
+
+class UrlOpenerPD(urllib.FancyURLopener):
+    version = USER_AGENT
+
+
+def set_cookie():
+    opener = UrlOpenerPD()
+    req = opener.open(pdreferer)
+    headers['Cookie'] = [x[12:] for x in req.info().headers if x.startswith('Set-Cookie')][0].split(';')[0]
+    addon.setSetting('pd_cookie', headers['Cookie'])
 
 
 @utils.url_dispatcher.register('290', ['name'])
 def Main(name):
+    set_cookie()
     if 'Amateurs' in name:
         addon.setSetting('pdsection', '1')
     else:
         addon.setSetting('pdsection', '0')
-    utils.addDir('[COLOR hotpink]Categories[/COLOR]', 'http://www.porndig.com/videos/', 293, '', '')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]', 'https://www.porndig.com/videos/', 293, '', '')
     if addon.getSetting("pdsection") == '0':
         utils.addDir('[COLOR hotpink]Studios[/COLOR]', 'https://www.porndig.com/studios/load_more_studios', 294, '', 0)
         utils.addDir('[COLOR hotpink]Pornstars[/COLOR]', 'https://www.porndig.com/pornstars/load_more_pornstars', 295, '', 0)
@@ -55,10 +68,10 @@ def Main(name):
 @utils.url_dispatcher.register('293', ['url'])
 def Categories(caturl):
     if addon.getSetting("pdsection") == '1':
-        caturl = 'http://www.porndig.com/amateur/videos/'
+        caturl = 'https://www.porndig.com/amateur/videos/'
     urldata = utils.getHtml(caturl, pdreferer, headers, data='')
     urldata = re.compile(
-        '<select name="filter_1" class="js_loader_category_select js_category_select filter_select_item">(.*?)</select>',
+        '<select name="filter_1" class="js_loader_category_select js_category_select filter_select_item custom_select">(.*?)</select>',
         re.DOTALL | re.IGNORECASE).findall(urldata)
     reobj = re.compile(r'value="(\d+)"[^>]*?>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(urldata[0])
     for catchannel, catname in reobj:
@@ -94,6 +107,7 @@ def CatListData(page, channel):
               'filters[filter_type]': sort,
               'filters[filter_period]': '',
               'offset': offset,
+              'quantity': 100,
               'category_id[]': channel}
     return urllib.urlencode(values)
 
@@ -153,7 +167,7 @@ def Pornstars(url, page=1):
                        re.DOTALL | re.IGNORECASE).findall(urldata)
     for ID, studio, videos in match:
         title = studio + " Videos: [COLOR deeppink]" + videos + "[/COLOR]"
-        img = "http://static-push.porndig.com/media/default/pornstars/pornstar_" + ID + ".jpg"
+        img = "https://static-push.porndig.com/media/default/pornstars/pornstar_" + ID + ".jpg"
         utils.addDir(title, '', 291, img, 0, ID, 2)
         i += 1
     if i >= 60:
@@ -172,7 +186,7 @@ def Studios(url, page=1):
                        re.DOTALL | re.IGNORECASE).findall(urldata)
     for ID, studio, videos in match:
         title = studio + " Videos: [COLOR deeppink]" + videos + "[/COLOR]"
-        img = "http://static-push.porndig.com/media/default/studios/studio_" + ID + ".jpg"
+        img = "https://static-push.porndig.com/media/default/studios/studio_" + ID + ".jpg"
         utils.addDir(title, '', 291, img, 0, ID, 1)
         i += 1
     if i >= 60:
@@ -182,7 +196,7 @@ def Studios(url, page=1):
 
 
 @utils.url_dispatcher.register('291', ['channel', 'section'], ['page'])
-def List(channel, section, page=1):
+def List(channel, section, page=0):
     if section == 0:
         data = VideoListData(page, channel)
         maxresult = 100
@@ -198,7 +212,6 @@ def List(channel, section, page=1):
     try:
         urldata = utils.getHtml("https://www.porndig.com/posts/load_more_posts", pdreferer, headers, data=data)
     except:
-        
         return None
     urldata = ParseJson(urldata)
     i = 0
@@ -213,14 +226,14 @@ def List(channel, section, page=1):
                 hd = " [COLOR orange]HD[/COLOR] "
         else:
             hd = " "
-        url = "http://www.porndig.com" + url
+        url = "https://www.porndig.com" + url
         name = name + hd + "[COLOR deeppink]" + duration + "[/COLOR]"
         utils.addDownLink(name, url, 292, img, '')
         i += 1
-    if i >= maxresult:
+    if i >= maxresult and channel:
         page += 1
         name = 'Page ' + str(page)
-        utils.addDir(name, '', 291, '', page, channel, section)
+        utils.addDir(name, '', 291, page=page, channel=channel, section=section)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 

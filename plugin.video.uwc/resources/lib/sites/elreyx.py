@@ -46,8 +46,6 @@ def EXList(url):
         return None
     match = re.compile('notice_image">.*?<a title="([^"]+)" href="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for name, videopage, img in match:
-        imgid = re.compile('(\d+)', re.DOTALL | re.IGNORECASE).findall(img)[0]
-        img = 'http://images.panelporn.com/' + imgid + '.jpg'
         utils.addDownLink(name, videopage, 112, img, '')
     try:
         nextp=re.compile("<a href='([^']+)' title='([^']+)'>&raquo;</a>", re.DOTALL | re.IGNORECASE).findall(listhtml)
@@ -73,7 +71,7 @@ def EXSearch(url, keyword=None):
 @utils.url_dispatcher.register('113', ['url'])
 def EXCat(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('<div id="categories">(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match = re.compile('<div id="categories" class="hidden-xs">(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(cathtml)
     match1 = re.compile('href="([^"]+)[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[0])
     for catpage, name in match1:
         utils.addDir(name, catpage, 111, '')
@@ -102,7 +100,7 @@ def EXPlayvid(url, name, download=None):
 @utils.url_dispatcher.register('115', ['url'])
 def EXPornstars(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('<div id="pornstars">(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match = re.compile('<div id="pornstars" class="hidden-xs">(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(cathtml)
     match1 = re.compile('href="([^"]+)[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[0])
     for catpage, name in match1:
         utils.addDir(name, catpage, 111, '')
@@ -112,7 +110,7 @@ def EXPornstars(url):
 @utils.url_dispatcher.register('116', ['url'])
 def EXMovies(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('<div id="movies">(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match = re.compile('<div id="movies" class="hidden-xs">(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(cathtml)
     match1 = re.compile('href="([^"]+)[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[0])
     for catpage, name in match1:
         utils.addDir(name, catpage, 117, '')
@@ -122,11 +120,9 @@ def EXMovies(url):
 @utils.url_dispatcher.register('117', ['url'])
 def EXMoviesList(url):
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<div class="content">(.*?)<!-- end of content -->', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    match1 = re.compile('<td.*?<a title="([^"]+)" href="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(match[0])
-    for name, videopage, img in match1:
-        imgid = re.compile('(\d+)', re.DOTALL | re.IGNORECASE).findall(img)[0]
-        img = 'http://images.panelporn.com/' + imgid + '.jpg'    
+    match = re.compile('<div class="container_neus">(.*?)<div id="pagination">', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match1 = re.compile('<a title="([^"]+)" href="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(match[0])
+    for name, videopage, img in match1:  
         utils.addDownLink(name, videopage, 112, img, '')
     try:
         nextp=re.compile("<a href='([^']+)' title='([^']+)'>&raquo;</a>", re.DOTALL | re.IGNORECASE).findall(listhtml)

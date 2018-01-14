@@ -1,8 +1,28 @@
-[B]Version 1.1.55[/B]
-Fixed: Porntrex listing - next page categories (private videos are hidden)
-Fixed: Porn00
-Fixed: Czechhd
+[B]Version 1.1.56[/B]
+Fixed: WatchXXXFree
+Fixed: Beeg
+Fixed: ElReyX
+Fixed: XvideoSpanish
+Fixed: HQPorner
+Fixed: StreamXXX
+Fixed: Xtasie
+Fixed: Ero-tik
+Fixed: K18
+Fixed: DaftSex
+Fixed: CzechHD (renamed to Czech3x)
+Fixed: Xtheatre
+Fixed: PelisxPorno
+Fixed: Eroticage
+Fixed: SpankBang
+Fixed: AmateurCool
+Fixed: Vporn
+Fixed: xHamster
+Fixed: Porndig
+Fixed: CamSoda
 Fixed: HDZog
-Fixed: ParadiseHill
-Fixed: Other stuff I forgot
-Removed: Nudeflix                                                                                                     
+Fixed: TubePornClassic categories
+Fixed: PornHub video listing
+Fixed: Milf.nl video listing
+Fixed: HQPorner preview images
+Removed: HentaiHaven
+General video source fixes

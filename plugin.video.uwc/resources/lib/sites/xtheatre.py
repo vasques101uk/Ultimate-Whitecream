@@ -29,11 +29,11 @@ sortlistxt = [addon.getLocalizedString(30022), addon.getLocalizedString(30023), 
 
 @utils.url_dispatcher.register('20')
 def XTMain():
-    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://xtheatre.net/categories/',22,'','')
-    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://xtheatre.net/page/1/?s=',24,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','https://xxxmoviestream.com/categories/',22,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','https://xxxmoviestream.com/page/1/?s=',24,'','')
     Sort = '[COLOR hotpink]Current sort:[/COLOR] ' + sortlistxt[int(addon.getSetting("sortxt"))]
     utils.addDir(Sort, '', 25, '', '')    
-    XTList('http://xtheatre.net/category/movies/page/1/',1)
+    XTList('https://xxxmoviestream.com/category/movies/page/1/',1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -48,7 +48,7 @@ def XTCat(url):
     cathtml = utils.getHtml(url, '')
     match = re.compile('src="([^"]+)"[^<]+</noscript>.*?<a href="([^"]+)"[^<]+<span>([^<]+)</s.*?">([^<]+)', re.DOTALL | re.IGNORECASE).findall(cathtml)
     for img, catpage, name, videos in match:
-        catpage = catpage + 'page/1/'
+        catpage = catpage
         name = name + ' [COLOR deeppink]' + videos + '[/COLOR]'
         utils.addDir(name, catpage, 21, img, 1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -76,9 +76,9 @@ def XTList(url, page=1):
     try:
         listhtml = utils.getHtml(url, '')
     except:
-        
         return None
-    match = re.compile(r'src="([^"]+?)" class="attachment.*?<a href="([^"]+)" title="([^"]+)".*?<div class="right">(.*?)</div>\s+</li>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile('src="([^"]+)" class="attachment-thumb_site.*?<a href="([^"]+)"[^<]+<span>([^<]+).*?">.*?<p>([^<]+)', re.DOTALL | re.IGNORECASE).findall(listhtml)
+
     for img, videopage, name, desc in match:
         name = utils.cleantext(name)
         desc = utils.cleanhtml(desc)

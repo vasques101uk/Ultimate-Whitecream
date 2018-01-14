@@ -25,37 +25,40 @@ from resources.lib import utils
 
 cookie = {'Cookie': 'lang=en; search_video=%7B%22sort%22%3A%22da%22%2C%22duration%22%3A%22%22%2C%22channels%22%3A%22%3B0.1.2%22%2C%22quality%22%3A0%2C%22date%22%3A%22%22%7D;'}
 
+header = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0',
+       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+       'Accept-Encoding': 'gzip, deflate, br',
+       'Accept-Language': 'en-US,en;q=0.5'}
+
 @utils.url_dispatcher.register('505')
 def Main():
-    utils.addDir('[COLOR hotpink]Categories - Straight[/COLOR]','https://xhamster.com/channels.php',508,'','')
-    utils.addDir('[COLOR hotpink]Categories - Gay[/COLOR]','https://xhamster.com/channels-gay',508,'','')
-    utils.addDir('[COLOR hotpink]Categories - Shemale[/COLOR]','https://xhamster.com/channels-shemale',508,'','')
+    utils.addDir('[COLOR hotpink]Categories - Straight[/COLOR]','https://xhamster.com/categories',508,'','')
+    utils.addDir('[COLOR hotpink]Categories - Gay[/COLOR]','https://xhamster.com/gay/categories',508,'','')
+    utils.addDir('[COLOR hotpink]Categories - Shemale[/COLOR]','https://xhamster.com/shemale/categories',508,'','')
     utils.addDir('[COLOR hotpink]Search[/COLOR]','https://xhamster.com/search.php?q=',509,'','')
-    List('https://xhamster.com/last50.php')
+    List('https://xhamster.com/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 	
 @utils.url_dispatcher.register('506', ['url'])
 def List(url):
     try:
-        response = utils.getHtml(url, '', cookie)
+        response = utils.getHtml(url, '', header)
     except:
-        
         return None
-    match = re.compile(r'<a href="([^"]+)[^>]+hRotator[^\']+\'([^\']+)[^"]+"([^"]+)[^<]+[^>]+><b>([0-9:]+)<', re.DOTALL | re.IGNORECASE).findall(response)
-    for video, img, name, runtime in match:
-        name = runtime + " - " + utils.cleantext(name)
+    match0 = re.compile('<head>(.*?)</head>.*?index-videos.*?>(.*?)<footer>', re.DOTALL | re.IGNORECASE).findall(response)
+    header_block = match0[0][0]
+    main_block = match0[0][1]
+    match = re.compile('thumb-image-container" href="([^"]+)".*?<i class="thumb-image-container__icon([^>]+)>.*?src="([^"]+)".*?alt="([^"]+)".*?duration">([^<]+)</div', re.DOTALL | re.IGNORECASE).findall(main_block)
+    for video, hd, img, name, length in match:
+        hd = ' [COLOR orange]HD[/COLOR]' if 'hd' in hd else ''
+        name = utils.cleantext(name) + hd + ' [COLOR hotpink]' + length + '[/COLOR]'
         utils.addDownLink(name, video, 507, img, '')
-    currentpage = re.compile("class='pager'.*<span>([0-9]+)</span><a", re.DOTALL | re.IGNORECASE).findall(response)
-    if currentpage:
-       npage = int(currentpage[0]) + 1
-       if ".html" in url: 
-           next = url.replace('-'+str(currentpage[0])+'.html','-'+str(npage)+'.html') ##normal page
-       else:
-           if "page=" not in url:
-               url = url + "&page=" + str(currentpage[0])
-           next = url.replace('page='+str(currentpage[0]),'page='+str(npage)) ##search page
-       utils.addDir('Next Page ('+str(npage)+')', next, 506, '', npage)
+    try:
+        next_page = re.compile('<link rel="next" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(header_block)[0]
+        utils.addDir('Next Page', next_page, 506, '')
+    except:
+        pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -70,9 +73,10 @@ def Playvid(url, name, download=None):
 
 @utils.url_dispatcher.register('508', ['url'])
 def Categories(url):
-    cathtml = utils.getHtml(url, '', cookie)
-    match = re.compile('<a  href="(.+?)">([^<]+)<').findall(cathtml)
-    for url, name in match[0:]:
+    cathtml = utils.getHtml(url, '', header)
+    match0 = re.compile('<div class="letter-blocks page">(.*?)<footer>', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match = re.compile('<a href="(.+?)" >([^<]+)<').findall(match0[0])
+    for url, name in match:
         utils.addDir(name, url, 506, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     

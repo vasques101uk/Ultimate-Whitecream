@@ -88,15 +88,15 @@ def WXFList(url, page=1, onelist=None):
         listhtml = utils.getHtml(url, '')
     except Exception as e:
         return None
-    match = re.compile('data-lazy-src="([^"]+)".*?<a href="([^"]+)" title="([^"]+)".*?<p>([^<]+)</p>', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile('src="([^"]+)" class="attachment-thumb_site.*?<a href="([^"]+)" title="([^"]+)".*?<p>([^<]+)</p>', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for img, videopage, name, desc in match:
         name = utils.cleantext(name)
         desc = utils.cleantext(desc)
         utils.addDownLink(name, videopage, 13, img, desc)
     if not onelist:
         if re.search('<link rel="next"', listhtml, re.DOTALL | re.IGNORECASE):
-            npage = page + 1        
-            url = url.replace('/page/'+str(page)+'/','/page/'+str(npage)+'/')
+            npage = page + 1
+            url = url.replace('/page/' + str(page) + '/', '/page/' + str(npage) + '/')
             utils.addDir('Next Page ('+str(npage)+')', url, 11, '', npage)
         xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -111,4 +111,4 @@ def getWXFSortMethod():
                    1: 'rate',
                    2: 'views'}
     sortvalue = addon.getSetting("sortwxf")
-    return sortoptions[int(sortvalue)]    
+    return sortoptions[int(sortvalue)]

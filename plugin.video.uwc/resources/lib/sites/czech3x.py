@@ -24,9 +24,9 @@ from resources.lib import utils
     
 @utils.url_dispatcher.register('310')
 def Main():
-    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://czechhd.net/',313,'','')
-    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://czechhd.net/?s=',314,'','')
-    List('http://czechhd.net')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://czech3x.net/',313,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://czech3x.net/?s=',314,'','')
+    List('http://czech3x.net')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -35,7 +35,6 @@ def List(url):
     try:
         listhtml = utils.getHtml(url, '')
     except:
-        
         return None
     match = re.compile('<div id="main">(.*?)<div id="sidebar', re.DOTALL | re.IGNORECASE).findall(listhtml)[0]
     match1 = re.compile(r'data-id="\d+" title="([^"]+)" href="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(match)
@@ -45,7 +44,8 @@ def List(url):
     try:
         nextp = re.compile('href="([^"]+)" >Next', re.DOTALL | re.IGNORECASE).findall(match)
         utils.addDir('Next Page', nextp[0], 311,'')
-    except: pass
+    except:
+        pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -57,7 +57,7 @@ def Playvid(url, name, download=None):
 @utils.url_dispatcher.register('313', ['url'])
 def Categories(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('<a href="(http://czechhd.net/category/[^"]+)" >([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match = re.compile('<a href="(http://czech3x.net/category/[^"]+)" >([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
     for catpage, name in match:
         utils.addDir(name, catpage, 311, '')    
     xbmcplugin.endOfDirectory(utils.addon_handle)

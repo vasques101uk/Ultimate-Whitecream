@@ -44,7 +44,7 @@ rootDir = utils.rootDir
 def INDEX():
     utils.addDir('[COLOR hotpink]Whitecream[/COLOR] [COLOR white]Scenes[/COLOR]','',1,os.path.join(rootDir, 'icon.png'),'')
     utils.addDir('[COLOR hotpink]Whitecream[/COLOR] [COLOR white]Movies[/COLOR]','',2,os.path.join(rootDir, 'icon.png'),'')
-    utils.addDir('[COLOR hotpink]Whitecream[/COLOR] [COLOR white]Hentai[/COLOR]','',3,os.path.join(rootDir, 'icon.png'),'')
+    #utils.addDir('[COLOR hotpink]Whitecream[/COLOR] [COLOR white]Hentai[/COLOR]','',3,os.path.join(rootDir, 'icon.png'),'')
     utils.addDir('[COLOR hotpink]Whitecream[/COLOR] [COLOR white]Tubes[/COLOR]','',6,os.path.join(rootDir, 'icon.png'),'')
     utils.addDir('[COLOR hotpink]Whitecream[/COLOR] [COLOR white]Webcams & Streams[/COLOR]','',7,os.path.join(rootDir, 'icon.png'),'')
     utils.addDir('[COLOR hotpink]Whitecream[/COLOR] [COLOR white]Favorites[/COLOR]','',901,os.path.join(rootDir, 'icon.png'),'')
@@ -62,7 +62,7 @@ def INDEXS():
     utils.addDir('[COLOR hotpink]Porn00[/COLOR]','http://www.porn00.com/page/1/',64,os.path.join(imgDir, 'p00.png'),'')
     utils.addDir('[COLOR hotpink]Beeg[/COLOR]','http://beeg.com/page-1',80,os.path.join(imgDir, 'bg.png'),'')
     utils.addDir('[COLOR hotpink]ElReyX[/COLOR]','http://elreyx.com/index1.html',110,os.path.join(imgDir, 'elreyx.png'),'')
-    utils.addDir('[COLOR hotpink]XvideoSpanish[/COLOR]','http://www.xvideospanish.com/',130,os.path.join(imgDir, 'xvideospanish.png'),'')
+    utils.addDir('[COLOR hotpink]XvideoSpanish[/COLOR]','http://www.xvideospanish.net/',130,os.path.join(imgDir, 'xvideospanish.png'),'')
     utils.addDir('[COLOR hotpink]HQPorner[/COLOR]','http://hqporner.com/hdporn/1',150,os.path.join(imgDir, 'hqporner.png'),'')
     utils.addDir('[COLOR hotpink]VideoMegaPorn[/COLOR]','http://www.videomegaporn.com/index.html',160,os.path.join(imgDir, 'videomegaporn.png'),'')
     utils.addDir('[COLOR hotpink]StreamXXX[/COLOR]','http://streamxxx.tv/category/clips/',170,os.path.join(imgDir, 'streamxxx.png'),'')
@@ -72,12 +72,12 @@ def INDEXS():
     utils.addDir('[COLOR hotpink]HD Zog[/COLOR]','http://www.hdzog.com/new/',340,os.path.join(imgDir, 'hdzog.png'),'')    
     utils.addDir('[COLOR hotpink]Mr Sexe[/COLOR]','http://www.mrsexe.com/',400,os.path.join(imgDir, 'mrsexe.png'),'')
     utils.addDir('[COLOR hotpink]Ero-tik[/COLOR]','http://www.ero-tik.com/',260,os.path.join(imgDir, 'erotik.png'),'')
-    utils.addDir('[COLOR hotpink]CzechHD[/COLOR]','http://czechhd.net/',310,os.path.join(imgDir, 'czechhd.png'),'')     
+    utils.addDir('[COLOR hotpink]Czech3x[/COLOR]','http://czech3x.net/',310,os.path.join(imgDir, 'czechhd.png'),'')     
     utils.addDir('[COLOR hotpink]XXX Streams (eu)[/COLOR]','http://xxxstreams.eu/',410,os.path.join(imgDir, 'xxxstreams.png'),'')
     utils.addDir('[COLOR hotpink]XXX Streams (org)[/COLOR]','http://xxxstreams.org/',420,os.path.join(imgDir, 'xxxsorg.png'),'')
     utils.addDir('[COLOR hotpink]K18[/COLOR]','http://k18.co/',230,os.path.join(imgDir, 'k18.png'),'')
     utils.addDir('[COLOR hotpink]Sexix[/COLOR]','http://sexix.net/',450,os.path.join(imgDir, 'sexix.png'),'')
-    utils.addDir('[COLOR hotpink]daftsex[/COLOR]','https://daftsex.com/',610,'','')
+    utils.addDir('[COLOR hotpink]DaftSex[/COLOR]','https://daftsex.com/',610,os.path.join(imgDir, 'daftsex.png'),'')
 
     utils.addDir('[COLOR hotpink]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)
@@ -105,7 +105,7 @@ def INDEXT():
     utils.addDir('[COLOR hotpink]Sextube.nl[/COLOR] [COLOR orange](Dutch)[/COLOR]','http://www.sextube.nl/videos/nieuw',100,os.path.join(imgDir, 'sextube.png'),2)
     utils.addDir('[COLOR hotpink]TubePornClassic[/COLOR]','http://www.tubepornclassic.com/latest-updates/',360,os.path.join(imgDir, 'tubepornclassic.png'),'')
     utils.addDir('[COLOR hotpink]HClips[/COLOR]','http://www.hclips.com/latest-updates/',380,os.path.join(imgDir, 'hclips.png'),'')
-    utils.addDir('[COLOR hotpink]PornHub[/COLOR]','http://www.pornhub.com/newest.html',390,os.path.join(imgDir, 'pornhub.png'),'')
+    utils.addDir('[COLOR hotpink]PornHub[/COLOR]','https://www.pornhub.com/newest.html',390,os.path.join(imgDir, 'pornhub.png'),'')
     utils.addDir('[COLOR hotpink]Porndig[/COLOR] [COLOR white]Professional[/COLOR]','http://www.porndig.com',290,os.path.join(imgDir, 'porndig.png'),'')
     utils.addDir('[COLOR hotpink]Porndig[/COLOR] [COLOR white]Amateurs[/COLOR]','http://www.porndig.com',290,os.path.join(imgDir, 'porndig.png'),'')
     utils.addDir('[COLOR hotpink]AbsoluPorn[/COLOR]','http://www.absoluporn.com/en/',300,os.path.join(imgDir, 'absoluporn.gif'),'')
@@ -127,12 +127,12 @@ def INDEXW():
         utils.addDir('[COLOR hotpink]streamate.com[/COLOR] [COLOR white]- webcams[/COLOR]','http://www.streammate.com',515,os.path.join(imgDir, 'streamate.png'),'')
     utils.addDir('[COLOR hotpink]bongacams.com[/COLOR] [COLOR white]- webcams[/COLOR]','http://www.bongacams.com',520,os.path.join(imgDir, 'bongacams.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)
-
+'''
 @utils.url_dispatcher.register('3')
 def INDEXH():
     utils.addDir('[COLOR hotpink]Hentaihaven[/COLOR]','http://hentaihaven.org/?sort=date',460,os.path.join(imgDir, 'hh.png'),'')
     xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)    
-
+'''
 
 @utils.url_dispatcher.register('5', ['page'])
 def ONELIST(page=1):

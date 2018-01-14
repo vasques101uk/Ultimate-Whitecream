@@ -27,8 +27,8 @@ progress = utils.progress
 @utils.url_dispatcher.register('200')
 def XTCMain():
     utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://xtasie.com/video-porn-categories/',203,'','')
-    utils.addDir('[COLOR hotpink]Top Rated[/COLOR]','http://xtasie.com/top-rated-porn-videos/page/1/',201,'','')
-    utils.addDir('[COLOR hotpink]Most Rated[/COLOR]','http://xtasie.com/most-viewed-porn-videos/page/1/',201,'','')
+    utils.addDir('[COLOR hotpink]Top Rated[/COLOR]','http://xtasie.com/top-rated-porn-videos/',201,'','')
+    utils.addDir('[COLOR hotpink]Most Viewed[/COLOR]','http://xtasie.com/most-viewed-porn-videos/',201,'','')
     utils.addDir('[COLOR hotpink]Search[/COLOR]','http://xtasie.com/?s=',204,'','')
     XTCList('http://xtasie.com/porn-video-list/page/1/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -39,17 +39,17 @@ def XTCList(url):
     try:
         listhtml = utils.getHtml(url, '')
     except:
-        
         return None
-    match = re.compile(r'<div class="image-holder">\s+<a href="([^"]+)".*?><img.*?data-original="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile('<a href="([^"]+)".*?><img.*?data-original="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, img, name in match:
         name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 202, img, '')
     try:
-        nextp=re.compile('<a class="next page-numbers" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+        nextp=re.compile('<link rel="next" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
         next = nextp[0]
         utils.addDir('Next Page', next, 201,'')
-    except: pass
+    except:
+        pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 

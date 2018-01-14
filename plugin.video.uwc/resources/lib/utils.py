@@ -22,7 +22,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "Whitecream"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "Whitecream, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.55"
+__version__ = "1.1.56"
 
 import urllib
 import urllib2
@@ -365,7 +365,7 @@ def playvideo(videosource, name, download=None, url=None):
     videourl=None
     if re.search('openload\.(?:co|io)?/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('OpenLoad')
-    if re.search('oload\.(?:co|io|tv)?/', videosource, re.DOTALL | re.IGNORECASE):
+    if re.search('oload\.(?:co|io|tv|stream|info)?/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('OpenLoad')
     if re.search('streamin\.to/', videosource, re.DOTALL | re.IGNORECASE):
         hosts.append('Streamin')
@@ -417,7 +417,7 @@ def playvideo(videosource, name, download=None, url=None):
 
     if vidhost == 'OpenLoad':
         progress.update( 40, "", "Loading Openload", "" )
-        openloadurl = re.compile(r"//(?:www\.)?o(?:pen)?load\.(?:co|io|tv)?/(?:embed|f)/([0-9a-zA-Z-_]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
+        openloadurl = re.compile(r"//(?:www\.)?o(?:pen)?load\.(?:co|io|tv|stream|info)?/(?:embed|f)/([0-9a-zA-Z-_]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
         openloadurl = chkmultivids(openloadurl)
 
         openloadurl1 = 'http://openload.io/embed/%s/' % openloadurl
@@ -458,15 +458,15 @@ def playvideo(videosource, name, download=None, url=None):
         mega3xurl = re.compile(r"(https?://(?:www\.)?mega3x.net/(?:embed-)?(?:[0-9a-zA-Z]+).html)", re.DOTALL | re.IGNORECASE).findall(videosource)
         mega3xurl = chkmultivids(mega3xurl)
         mega3xsrc = getHtml(mega3xurl,'', openloadhdr)
-        mega3xjs = re.compile("<script[^>]+>(eval[^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(mega3xsrc)
+        mega3xjs = re.compile("<script[^>]+>(eval.*?)</sc", re.DOTALL | re.IGNORECASE).findall(mega3xsrc)
         progress.update( 80, "", "Getting video file from Mega3X", "" )
         mega3xujs = unpack(mega3xjs[0])
-        videourl = re.compile('file:\s?"([^"]+m3u8)"', re.DOTALL | re.IGNORECASE).findall(mega3xujs)
+        videourl = re.compile(',"(http.*?mp4)"', re.DOTALL | re.IGNORECASE).findall(mega3xujs)
         videourl = videourl[0]
 
     elif vidhost == 'Datoporn':
         progress.update( 40, "", "Loading Datoporn", "" )
-        datourl = re.compile(r"//(?:www\.)?dato\.?porn(?:.com)?/(?:embed-)?([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
+        datourl = re.compile(r"//(?:www\.)?dato\.?porn\.(?:co|com)?/(?:embed-)?([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
         datourl = chkmultivids(datourl)
         datourl = "http://datoporn.com/embed-" + datourl + ".html"
         datosrc = getHtml(datourl,'', openloadhdr)
@@ -548,7 +548,7 @@ def playvideo(videosource, name, download=None, url=None):
             sdurl = chkmultivids(sdurl)
             sdurl = 'http://www.streamdefence.com/view.php?ref=' + sdurl
         else:
-            sdurl = re.compile(r'.strdef\.world/([^\?]+)\?', re.DOTALL | re.IGNORECASE).findall(videosource)[0]
+            sdurl = re.compile(r'.strdef\.world/([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)[0]
             sdurl = 'https://www.strdef.world/' + sdurl
         sdsrc = getHtml(sdurl, url)
         progress.update( 80, "", "Getting video file from Streamdefence", "" )
@@ -795,7 +795,7 @@ def cleantext(text):
     text = text.replace('&#039;','`')
     text = text.replace('&ntilde;','ñ')
     text = text.replace('&rsquo;','\'')
-    return text
+    return text.strip()
 
 
 def cleanhtml(raw_html):
@@ -849,7 +849,7 @@ def addDownLink(name, url, mode, iconimage, desc='', stream=None, fav='add', noD
     return ok
 
 
-def addDir(name, url, mode, iconimage, page=None, channel=None, section=None, keyword='', Folder=True):
+def addDir(name, url, mode, iconimage=None, page=None, channel=None, section=None, keyword='', Folder=True):
     u = (sys.argv[0] +
          "?url=" + urllib.quote_plus(url) +
          "&mode=" + str(mode) +
@@ -859,7 +859,7 @@ def addDir(name, url, mode, iconimage, page=None, channel=None, section=None, ke
          "&keyword=" + urllib.quote_plus(keyword) +
          "&name=" + urllib.quote_plus(name))
     ok = True
-    if len(iconimage) < 1:
+    if not iconimage:
         iconimage = uwcicon
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setArt({'thumb': iconimage, 'icon': iconimage})

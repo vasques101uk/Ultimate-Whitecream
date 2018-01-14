@@ -38,7 +38,6 @@ def List(url):
     try:
         listhtml = utils.getHtml(url, '')
     except:
-        
         return None
     match = re.compile('<div class="thumb">.*?href="([^"]+)".*?src="([^"]+)".*?alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, img, name in match:
@@ -66,7 +65,7 @@ def Search(url, keyword=None):
 @utils.url_dispatcher.register('143', ['url'])
 def Categories(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('<li id="categories-2"(.*?)</ul>', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match = re.compile('<li id="categories"(.*?)</ul>', re.DOTALL | re.IGNORECASE).findall(cathtml)
     match1 = re.compile('href="([^"]+)[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[0])
     for catpage, name in match1:
         utils.addDir(name, catpage, 141, '')

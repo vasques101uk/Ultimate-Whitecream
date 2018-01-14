@@ -26,11 +26,11 @@ progress = utils.progress
 
 @utils.url_dispatcher.register('260')
 def EROMain():
-    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.ero-tik.com',263,'','')
-    utils.addDir('[COLOR hotpink]Top Rated[/COLOR]','http://www.ero-tik.com/topvideos.html?page=1',261,'','')
-    utils.addDir('[COLOR hotpink]Most Liked[/COLOR]','http://www.ero-tik.com/topvideos.html?do=rating&page=1',261,'','')
-    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.ero-tik.com/search.php?keywords=',264,'','')
-    EROList('http://www.ero-tik.com/newvideos.html?page=1')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','https://www.ero-tik.com',263,'','')
+    utils.addDir('[COLOR hotpink]Top Rated[/COLOR]','https://www.ero-tik.com/topvideos.html?page=1',261,'','')
+    utils.addDir('[COLOR hotpink]Most Liked[/COLOR]','https://www.ero-tik.com/topvideos.html?do=rating&page=1',261,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','https://www.ero-tik.com/search.php?keywords=',264,'','')
+    EROList('https://www.ero-tik.com/newvideos.html?page=1')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -50,7 +50,7 @@ def EROList(url):
         if re.search('http', nextp, re.DOTALL | re.IGNORECASE):
             next = nextp
         else:
-            next = "http://www.ero-tik.com/" + nextp
+            next = "https://www.ero-tik.com/" + nextp
         utils.addDir('Next Page', next, 261,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -72,7 +72,7 @@ def EROSearch(url, keyword=None):
 def EROCat(url):
     cathtml = utils.getHtml(url, '')
     match = re.compile('<ul class="dropdown-menu">(.*?)</ul>', re.DOTALL | re.IGNORECASE).findall(cathtml)[0]
-    match1 = re.compile('href="(http://www.ero-tik.com/browse-[^"]+)"[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match)
+    match1 = re.compile('href="(https://www.ero-tik.com/browse-[^"]+)"[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match)
     for catpage, name in match1:
         utils.addDir(name, catpage, 261, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)

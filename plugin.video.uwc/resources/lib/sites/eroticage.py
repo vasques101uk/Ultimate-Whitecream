@@ -57,7 +57,7 @@ def Playvid(url, name, download=None):
 @utils.url_dispatcher.register('433', ['url'])
 def Categories(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile("href='([^']+)' class='tag[^>]+>([^<]+)<").findall(cathtml)
+    match = re.compile('href="([^"]+)" class="tag[^>]+>([^<]+)<').findall(cathtml)
     for catpage, name in match:
         utils.addDir(name, catpage, 431, '')    
     xbmcplugin.endOfDirectory(utils.addon_handle)

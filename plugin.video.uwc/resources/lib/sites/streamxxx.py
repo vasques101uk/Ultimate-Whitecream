@@ -28,33 +28,25 @@ progress = utils.progress
 @utils.url_dispatcher.register('170')
 def Main():
     utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://streamxxx.tv/', 177, '', '')
-    #utils.addDir('[COLOR hotpink]Tags[/COLOR]','http://streamxxx.tv/', 173, '', '')
-    utils.addDir('[COLOR hotpink]Search Overall[/COLOR]','http://streamxxx.tv/?s=', 174, '', '')
-    utils.addDir('[COLOR hotpink]Search Scenes[/COLOR]','http://streamxxx.tv/?cat=3673&s=', 174, '', '')
+    utils.addDir('[COLOR hotpink]Tags[/COLOR]','http://streamxxx.tv/', 173, '', '')
+    utils.addDir('[COLOR hotpink]Scenes[/COLOR]','http://streamxxx.tv/category/clips/', 170, '', '')
     utils.addDir('[COLOR hotpink]Movies[/COLOR]','http://streamxxx.tv/category/movies-xxx/', 175, '', '')
     utils.addDir('[COLOR hotpink]International Movies[/COLOR]','http://streamxxx.tv/category/movies-xxx/international-movies/', 176, '', '')
+    utils.addDir('[COLOR hotpink]Search Overall[/COLOR]','http://streamxxx.tv/?s=', 174, '', '')
+    utils.addDir('[COLOR hotpink]Search Scenes[/COLOR]','http://streamxxx.tv/?cat=5562&s=', 174, '', '')
     List('http://streamxxx.tv/category/clips/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 @utils.url_dispatcher.register('175')
 def MainMovies():
-    #utils.addDir('[COLOR hotpink]Tags[/COLOR]','http://streamxxx.tv/', 173, '', '')
-    utils.addDir('[COLOR hotpink]Search Overall[/COLOR]','http://streamxxx.tv/&s=', 174, '', '')
-    utils.addDir('[COLOR hotpink]Search Movies[/COLOR]','http://streamxxx.tv/?cat=2212&s=', 174, '', '')
-    utils.addDir('[COLOR hotpink]International Movies[/COLOR]','http://streamxxx.tv/category/movies-xxx/international-movies/', 176, '', '')
-    utils.addDir('[COLOR hotpink]Scenes[/COLOR]','http://streamxxx.tv/category/clips/', 170, '', '')
+
     List('http://streamxxx.tv/category/movies-xxx/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 @utils.url_dispatcher.register('176')
 def MainInternationalMovies():
-    utils.addDir('[COLOR hotpink]Tags[/COLOR]','http://streamxxx.tv/', 173, '', '')
-    utils.addDir('[COLOR hotpink]Search Overall[/COLOR]','http://streamxxx.tv/?s=', 174, '', '')
-    utils.addDir('[COLOR hotpink]Search International Movies[/COLOR]','http://streamxxx.tv/?cat=21&s=', 174, '', '')
-    utils.addDir('[COLOR hotpink]Movies[/COLOR]','http://streamxxx.tv/category/movies/', 175, '', '')
-    utils.addDir('[COLOR hotpink]Scenes[/COLOR]','http://streamxxx.tv/category/clips/', 170, '', '')
     List('http://streamxxx.tv/category/movies/international-movies/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -66,14 +58,14 @@ def List(url):
     except:
         
         return None
-    match = re.compile(r'<div class="quadrato">\s*?<a href="([^"]+)"\s*?title="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile('<h2 class="st-loop-entry-title">.*?<a href="([^"]+)".*?title="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, name, img in match:
         name = utils.cleantext(name)
         if videopage.startswith('/'):
             videopage = 'http://streamxxx.tv/' + videopage
         utils.addDownLink(name, videopage, 172, img, '')
     try:
-        nextp=re.compile(r"""current(?:"|')>\d+</span><a.*?href=(?:"|')([^'"]+)""", re.DOTALL | re.IGNORECASE).findall(listhtml)[0]
+        nextp=re.compile('<a class="next page-numbers" href="([^"]+)">Next', re.DOTALL | re.IGNORECASE).findall(listhtml)[0]
         utils.addDir('Next Page', nextp, 171,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -85,7 +77,7 @@ def Search(url, keyword=None):
     if not keyword:
         utils.searchDir(url, 174)
     else:
-        title = keyword.replace(' ','+')
+        title = keyword.replace(' ', '+')
         searchUrl = searchUrl + title
         print "Searching URL: " + searchUrl
         List(searchUrl)
@@ -106,7 +98,7 @@ def Categories(url):
 def Tags(url):
     html = utils.getHtml(url, '')
     match = re.compile('<div class="tagcloud">(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(html)
-    match1 = re.compile("href='([^']+)[^>]+>([^<]+)<", re.DOTALL | re.IGNORECASE).findall(match[0])
+    match1 = re.compile('href="([^"]+)[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[0])
     for catpage, name in match1:
         utils.addDir(name, catpage, 171, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)

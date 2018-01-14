@@ -26,7 +26,7 @@ from resources.lib import utils
 
 progress = utils.progress
 
-base_url = 'http://spankbang.com'
+base_url = 'https://spankbang.com'
 main_mode = 440
 list_mode =  441
 play_mode = 442
@@ -36,9 +36,9 @@ search_mode = 444
 
 @utils.url_dispatcher.register('440')
 def Main():
-    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://spankbang.com/s/', search_mode, '', '')
-    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://spankbang.com/categories', categories_mode, '', '')
-    List('http://spankbang.com/new_videos/1/')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','https://spankbang.com/s/', search_mode, '', '')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','https://spankbang.com/categories', categories_mode, '', '')
+    List('https://spankbang.com/new_videos/1/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -48,16 +48,16 @@ def List(url):
     try:
         listhtml = utils.getHtml(url, '')
     except:
-        
         return None
-    match = re.compile(r'<a href="([^"]+)" class="thumb">\s*?<img src="([^"]+)" alt="([^"]+)" class="cover".*?</span>(.*?)i-len"><i class="fa fa-clock-o"></i>([^<]+)<', re.DOTALL).findall(listhtml)
+    main_block = re.compile('<main id="container">(.*?)</main>', re.DOTALL).findall(listhtml)[0]
+    match = re.compile('<a href="([^"]+)" class="thumb.*?<img src="([^"]+)" alt="([^"]+)" class="cover.*?</span>(.*?)i-len"><i class="fa fa-clock-o"></i>([^<]+)<', re.DOTALL).findall(main_block)
     for videopage, img, name, hd, duration in match:
         if hd.find('HD') > 0:
             hd = " [COLOR orange]HD[/COLOR] "
         else:
             hd = " "
         name = utils.cleantext(name) + hd + "[COLOR deeppink]" + duration + "m[/COLOR]"
-        utils.addDownLink(name, base_url + videopage, play_mode, 'http:' + img, '')
+        utils.addDownLink(name, base_url + videopage, play_mode, 'https:' + img, '')
     try:
         nextp=re.compile('<li class="active"><a>.+?</a></li><li><a href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
         utils.addDir('Next Page', base_url + nextp[0], list_mode,'')

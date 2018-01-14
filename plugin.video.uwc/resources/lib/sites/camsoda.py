@@ -40,14 +40,13 @@ def List(url):
     try:
         response = utils.getHtml(url)
     except:
-        
         return None
     data = json.loads(response)
     for camgirl in data['results']:
-        name = camgirl['slug'] + " [" + camgirl['status'] + "]"
-        videourl = "https://www.camsoda.com/api/v1/video/vtoken/" + camgirl['slug']
-        img = "https:" + camgirl['thumb']
-        utils.addDownLink(name, videourl, 478, img, '', noDownload=True)
+        name = utils.cleanhtml(camgirl['display_name']).encode("ascii", errors="ignore")
+        videourl = "https://www.camsoda.com/api/v1/video/vtoken/" + camgirl['username']
+        img = "https:" + camgirl['thumb_small']
+        utils.addDownLink(name, videourl, 478, img,  camgirl['subject_html'], noDownload=True)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 

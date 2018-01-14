@@ -24,7 +24,7 @@ import xbmcplugin
 import xbmcgui
 from resources.lib import utils
 
-sitelist = ['http://www.poldertube.nl', 'http://www.milf.nl', 'http://www.sextube.nl']
+sitelist = ['https://www.poldertube.nl', 'https://porno.milf.nl/', 'https://www.sextube.nl']
 
 
 @utils.url_dispatcher.register('100', ['url'], ['page'])
@@ -46,7 +46,7 @@ def NLVIDEOLIST(url, page=1):
     except:
         
         return None
-    match = re.compile(r'<article([^>]*)>.*?href="([^"]+)".*?src="([^"]+)".*?<h3>([^<]+)<.*?duration">[^\d]+([^\s<]+)(?:\s|<)', re.DOTALL | re.IGNORECASE).findall(link)
+    match = re.compile(r'<article([^>]*)>.*?href="([^"]+)".*?src="([^"]+)".*?alt="([^"]+).*?duration">[^\d]+([^\s<]+)(?:\s|<)', re.DOTALL | re.IGNORECASE).findall(link)
     for hd, url, img, name, duration in match:
         if len(hd) > 2:
             hd = " [COLOR orange]HD[/COLOR] "

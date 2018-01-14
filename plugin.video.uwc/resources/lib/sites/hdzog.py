@@ -30,11 +30,11 @@ progress = utils.progress
 
 @utils.url_dispatcher.register('340')
 def Main():
-    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.hdzog.com/search/?q=', 343, '', '')
-    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.hdzog.com/categories/', 344, '', '')
-    utils.addDir('[COLOR hotpink]Channels[/COLOR]','http://www.hdzog.com/channels/', 345, '', '')
-    utils.addDir('[COLOR hotpink]Models[/COLOR]','http://www.hdzog.com/models/', 346, '', '')
-    List('http://www.hdzog.com/new/')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','https://www.hdzog.com/search/?q=', 343, '', '')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','https://www.hdzog.com/categories/', 344, '', '')
+    utils.addDir('[COLOR hotpink]Channels[/COLOR]','https://www.hdzog.com/channels/', 345, '', '')
+    utils.addDir('[COLOR hotpink]Models[/COLOR]','https://www.hdzog.com/models/', 346, '', '')
+    List('https://www.hdzog.com/new/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -45,14 +45,14 @@ def List(url):
     except:
         
         return None
-    match = re.compile(r'<li>\s+<a href="([^"]+)" title="([^"]+)">\s+<[^<]+<img src="([^"]+)".*?time">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for videopage, name, img, duration in match:
+    match = re.compile('<li>\s+<a href="([^"]+)".*?<img.*?src="([^"]+)" alt="([^"]+)".*?time">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for videopage, img, name, duration in match:
         name = utils.cleantext(name)
         name = name + " [COLOR deeppink]" + duration + "[/COLOR]"
         utils.addDownLink(name, videopage, 342, img, '')
     try:
         nextp=re.compile('<a href="(.+?)" title="Next Page" data-page-num.+?>Next page').findall(listhtml)
-        utils.addDir('Next Page', 'http://www.hdzog.com' + nextp[0], 341,'')
+        utils.addDir('Next Page', 'https://www.hdzog.com' + nextp[0], 341,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -113,7 +113,7 @@ def Models(url):
 @utils.url_dispatcher.register('342', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
     videopage = utils.getHtml(url, '')
-    videourl = re.compile(r"'label': '\d{3,4}p',\s+'file': '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
+    videourl = re.compile('video_url="(.+?)"', re.DOTALL | re.IGNORECASE).findall(videopage)
     videourl = videourl[-1]
     if download == 1:
         utils.downloadVideo(videourl, name)

@@ -39,16 +39,15 @@ def List(url):
     try:
         listhtml = utils.getHtml(url, '')
     except:
-        
         return None
     cookieString = getCookiesString()
-    match = re.compile(r'class="content-list-thumb">\s+<a href="([^"]+)" title="([^"]+)">.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile('class="content-list-thumb">.*?<a href="([^"]+)" title="([^"]+)".*?>.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, name, img in match:
         name = utils.cleantext(name)
         img = img + "|Cookie=" + urllib.quote(cookieString) + "&User-Agent=" + urllib.quote(utils.USER_AGENT)
         utils.addDownLink(name, videopage, 232, img, '')
     try:
-        nextp=re.compile('next page-numbers" href="([^"]+)">&raquo;', re.DOTALL | re.IGNORECASE).findall(listhtml)[0]
+        nextp=re.compile('next page-numbers" href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)[0]
         utils.addDir('Next Page', nextp, 231,'')
     except: pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -96,4 +95,3 @@ def Playvid(url, name, download=None):
     progress.update( 10, "", "Loading video page", "" )
     videopage = utils.getHtml(url, '')
     utils.playvideo(videopage, name, download, url)
-

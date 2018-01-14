@@ -37,12 +37,12 @@ addon = utils.addon
 
 
 def BGVersion():
-    bgpage = utils.getHtml('http://beeg.com','')
+    bgpage = utils.getHtml('https://beeg.com','')
     bgversion = re.compile(r"cpl/(\d+)\.js", re.DOTALL | re.IGNORECASE).findall(bgpage)[0]
     bgsavedversion = addon.getSetting('bgversion')
-    if bgversion <> bgsavedversion:
+    if bgversion != bgsavedversion or not addon.getSetting('bgsalt'):
         addon.setSetting('bgversion',bgversion)
-        bgjspage = utils.getHtml('http://static.beeg.com/cpl/'+bgversion+'.js','http://beeg.com')
+        bgjspage = utils.getHtml('https://beeg.com/static/cpl/'+bgversion+'.js','https://beeg.com')
         bgsalt = re.compile('beeg_salt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(bgjspage)[0]
         addon.setSetting('bgsalt',bgsalt)
 
@@ -51,10 +51,9 @@ def BGVersion():
 def BGMain():
     BGVersion()
     bgversion = addon.getSetting('bgversion')
-
-    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://api2.beeg.com/api/v6/'+bgversion+'/index/main/0/pc',83,'','')
-    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://api2.beeg.com/api/v6/'+bgversion+'/index/main/0/pc?query=',84,'','')
-    BGList('http://api2.beeg.com/api/v6/'+bgversion+'/index/main/0/pc')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','https://beeg.com/api/v6/'+bgversion+'/index/main/0/pc',83,'','')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]','https://beeg.com/api/v6/'+bgversion+'/index/main/0/pc?query=',84,'','')
+    BGList('https://beeg.com/api/v6/'+bgversion+'/index/main/0/pc')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -64,18 +63,15 @@ def BGList(url):
     try:
         listjson = utils.getHtml(url,'')
     except:
-        
         return None
-
     match = re.compile(r'\{"title":"([^"]+)","id":"([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listjson)
-
     for title, videoid in match:
-        img = "http://img.beeg.com/236x177/" + videoid +  ".jpg"
-        videopage = "https://api.beeg.com/api/v6/"+bgversion+"/video/" + videoid
+        img = "https://img.beeg.com/236x177/" + videoid +  ".jpg"
+        videopage = "https://beeg.com/api/v6/" + bgversion + "/video/" + videoid
         name = title.encode("utf8")
         utils.addDownLink(name, videopage, 82, img, '')
     try:
-        page=re.compile('http://api2.beeg.com/api/v6/'+bgversion+'/index/[^/]+/([0-9]+)/pc', re.DOTALL | re.IGNORECASE).findall(url)[0]
+        page=re.compile('https://beeg.com/api/v6/' + bgversion + '/index/[^/]+/([0-9]+)/pc', re.DOTALL | re.IGNORECASE).findall(url)[0]
         page = int(page)
         npage = page + 1
         jsonpage = re.compile(r'pages":(\d+)', re.DOTALL | re.IGNORECASE).findall(listjson)[0]
@@ -154,7 +150,7 @@ def BGCat(url):
     tags = re.compile(r'"nonpopular":\[(.*?)\]', re.DOTALL | re.IGNORECASE).findall(caturl)[0]
     tags = re.compile('"([^"]+)"', re.DOTALL | re.IGNORECASE).findall(tags)
     for tag in tags:
-        videolist = "http://api2.beeg.com/api/v6/"+bgversion+"/index/tag/0/mobile?tag=" + tag.encode("utf8")
+        videolist = "https://beeg.com/api/v6/"+bgversion+"/index/tag/0/mobile?tag=" + tag.encode("utf8")
         name = tag.encode("utf8")
         name = name[:1].upper() + name[1:]
         utils.addDir(name, videolist, 81, '')

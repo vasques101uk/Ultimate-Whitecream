@@ -36,21 +36,21 @@ def List(url):
     try:
         listhtml = utils.getHtml(url, '')
     except:
-        
         return None
-    match = re.compile(r'class="thumb"><img src="([^"]+)".*?<span class="time">(.*?)(\d+:[^\s]+).*?href="([^"]+)" title="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for img, hd, duration, videopage, name in match:
+    match = re.compile('class="thumb">.*?href="([^"]+)".*?class="time">([^<]+)</span>.*?span class="hd([^<]+)</span>.*?<img src="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for videopage, duration, hd, img, name in match:
         name = utils.cleantext(name)
-        if hd.find('HD') > 0:
+        if hd.find('is-hd') > 0:
             hd = " [COLOR orange]HD[/COLOR] "
         else:
             hd = " "
         name = name + hd + "[COLOR deeppink]" + duration + "[/COLOR]"
         utils.addDownLink(name, videopage, 502, img, '')
     try:
-        nextp = re.compile('<a class="next" href="(.+?)">').findall(listhtml)
-        utils.addDir('Next Page', nextp[0], 501,'')
-    except: pass
+        nextp = re.compile('<link rel="next" href="(.+?)">').findall(listhtml)
+        utils.addDir('Next Page', nextp[0], 501, '')
+    except:
+        pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 @utils.url_dispatcher.register('502', ['url', 'name'], ['download'])
@@ -59,7 +59,7 @@ def Playvid(url, name, download=None):
         utils.downloadVideo(url, name)
     else:
         page = utils.getHtml(url, '')
-        match = re.compile(r'videoUrlMedium = "(.+?)"', re.DOTALL | re.IGNORECASE).findall(page)
+        match = re.compile('video id="vporn-video-player".*?<source src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(page)
         iconimage = xbmc.getInfoImage("ListItem.Thumb")
         listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
@@ -68,9 +68,10 @@ def Playvid(url, name, download=None):
 @utils.url_dispatcher.register('503')
 def Categories():
     cathtml = utils.getHtml('https://www.vporn.com/', '')
-    match = re.compile('<li><a href="/cat/(.+?)"><img .*>(.+?)</a></li>').findall(cathtml)
-    for catid, name in match[1:]:
-        catpage = "https://www.vporn.com/cat/"+ catid
+    cat_block = re.compile('<div class="cats-all categories-list">(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(cathtml)[0]
+    match = re.compile('<a href="([^"]+)".*?title="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(cat_block)
+    for cat, name in match[1:]:
+        catpage = "https://www.vporn.com"+ cat
         utils.addDir(name, catpage, 501, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
     

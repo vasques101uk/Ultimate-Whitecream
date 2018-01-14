@@ -25,8 +25,8 @@ from resources.lib import utils
 
 @utils.url_dispatcher.register('490')
 def Main():
-    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://anybunny.com/',493,'','')
-    List('http://www.amateurcool.com/most-recent/')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]','https://www.amateurcool.com/most-recent/',493,'','')
+    List('https://www.amateurcool.com/most-recent/')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 @utils.url_dispatcher.register('491', ['url'])
@@ -34,7 +34,6 @@ def List(url):
     try:
         listhtml = utils.getHtml(url, '')
     except:
-        
         return None
     match = re.compile(r'data-video="(.+?)">.+?<img src="(.+?)" alt="(.+?)".+?<span>(.+?) Video</span>', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, img, name, duration in match:
@@ -44,7 +43,8 @@ def List(url):
         nextp = re.compile('<a href=\'(.+?)\' class="next">').findall(listhtml)
         xbmc.log(nextp[0])
         utils.addDir('Next Page', url[:url.rfind('/')+1] + nextp[0], 491,'')
-    except: pass
+    except:
+        pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 @utils.url_dispatcher.register('492', ['url', 'name'], ['download'])
@@ -57,11 +57,11 @@ def Playvid(videourl, name, download=None):
         listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
         xbmc.Player().play(videourl, listitem)
 
-@utils.url_dispatcher.register('493')
-def Categories():
-    cathtml = utils.getHtml('http://www.amateurcool.com/most-recent/', '')
-    match = re.compile("<a href=\'http://www.amateurcool.com/channels/(.+?)\'>(.+?)</a>").findall(cathtml)
-    for catid, name in match:
-        catpage = "http://www.amateurcool.com/channels/"+ catid
+@utils.url_dispatcher.register('493', ['url'])
+def Categories(url):
+    cathtml = utils.getHtml(url, '')
+    category_list = re.compile('<ul class="right-categories">(.*?)</ul>', re.DOTALL | re.IGNORECASE).findall(cathtml)[0]
+    match = re.compile("<a href='([^']+)'>([^<]+)</a>", re.DOTALL | re.IGNORECASE).findall(category_list)
+    for catpage, name in match:
         utils.addDir(name, catpage, 491, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
