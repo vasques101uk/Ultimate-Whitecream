@@ -22,6 +22,9 @@ import xbmc
 import xbmcplugin
 import xbmcgui
 from resources.lib import utils
+from random import randint
+
+progress = utils.progress
 
 
 @utils.url_dispatcher.register('50')    
@@ -39,32 +42,55 @@ def PTList(url, page=1, onelist=None):
     try:
         listhtml = utils.getHtml(url, '')
     except:
-        utils.notify('Oh oh','It looks like this website is down.')
+        
         return None
     match = re.compile('class="video-item.*?href="([^"]+)" title="([^"]+)".*?original="([^"]+)"(.*?)clock-o"></i>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, name, img, hd, duration in match:
         name = utils.cleantext(name)
+        if 'private' in hd:
+            continue
         if hd.find('HD') > 0:
             hd = " [COLOR orange]HD[/COLOR] "
         else:
             hd = " "
         name = name + hd + "[COLOR deeppink]" + duration + "[/COLOR]"
+        if img.startswith('//'): img = 'http:' + img
+        
+        imgint = randint(1,10)
+        newimg = str(imgint) + '.jpg'
+        img = img.replace('1.jpg',newimg)
         utils.addDownLink(name, videopage, 52, img, '')
     if not onelist:
         if re.search('<li class="next">', listhtml, re.DOTALL | re.IGNORECASE):
-            npage = page + 1        
-            url = url.replace('/'+str(page)+'/','/'+str(npage)+'/')
+            npage = page + 1
+            if '/categories/' in url:
+                url = url.replace('from='+str(page),'from='+str(npage))
+            else:
+                url = url.replace('/'+str(page)+'/','/'+str(npage)+'/')
             utils.addDir('Next Page ('+str(npage)+')', url, 51, '', npage)
         xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 @utils.url_dispatcher.register('52', ['url', 'name'], ['download'])
 def PTPlayvid(url, name, download=None):
+
+    progress.create('Play video', 'Searching videofile.')
+    progress.update( 25, "", "Loading video page", "" )
+
     videopage = utils.getHtml(url, '')
     match = re.compile("video_alt_url2: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
     match2 = re.compile("video_alt_url: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
-    try: videourl = match[0]
-    except: videourl = match2[0]
+    match3 = re.compile("video_url: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
+    try:
+        videourl = match[0]
+    except:
+        try:
+            videourl = match2[0]
+        except:
+            videourl = match3[0]
+    
+    progress.update( 75, "", "Video found", "" )
+    progress.close()
 
     if download == 1:
         utils.downloadVideo(videourl, name)
@@ -80,6 +106,7 @@ def PTCat(url):
     cathtml = utils.getHtml(url, '')
     match = re.compile('<a class="item" href="([^"]+)" title="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(cathtml)
     for catpage, name, img in match:
+        catpage = catpage + '?mode=async&function=get_block&block_id=list_videos_common_videos_list&sort_by=post_date&from=1'
         utils.addDir(name, catpage, 51, img, 1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 

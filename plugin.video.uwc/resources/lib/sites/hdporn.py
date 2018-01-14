@@ -51,7 +51,7 @@ def PAQList(url, page=1, onelist=None):
     try:
         listhtml = utils.getHtml(url, '')
     except:
-        utils.notify('Oh oh','It looks like this website is down.')
+        
         return None
     if 'pornaq' in url:
         match = re.compile(r'<h2>\s+<a title="([^"]+)" href="([^"]+)".*?src="([^"]+)" class="attachment-primary-post-thumbnail', re.DOTALL | re.IGNORECASE).findall(listhtml)
@@ -85,11 +85,12 @@ def GetAlternative(url, alternative):
 @utils.url_dispatcher.register('62', ['url', 'name'], ['download'])
 def PPlayvid(url, name, download=None, alternative=1):
 
-    def playvid():
+    def playvid(videourl, referer):
         progress.close()
         if download == 1:
             utils.downloadVideo(videourl, name)
         else:
+            videourl = videourl + "|referer="+ referer
             iconimage = xbmc.getInfoImage("ListItem.Thumb")
             listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
             listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
@@ -98,16 +99,25 @@ def PPlayvid(url, name, download=None, alternative=1):
     progress.create('Play video', 'Searching videofile.')
     progress.update( 25, "", "Loading video page", "" )
     
+    if progress.iscanceled():
+        progress.close()
+        return
     videopage = utils.getHtml(url, '', '', True)
     if re.search('o(?:pen)?load', videopage, re.DOTALL | re.IGNORECASE):
         progress.close()
         utils.PLAYVIDEO(url, name, download)
-    elif re.search('server/\?t=', videopage, re.DOTALL | re.IGNORECASE):
-        match = re.compile(r'/server/\?t=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videopage)
-        match = "http://www.porn00.org/server/?t=" + match[0]
+    elif re.search('server|video/\?v=', videopage, re.DOTALL | re.IGNORECASE):
+        match = re.compile(r'/(server|video)/\?v=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videopage)
+        for folder, id in match:
+            if id != 22:
+                match = id
+                fold = folder
+        match = "http://www.porn00.org/"+fold+"/?v=" + id
+        
+
         progress.update( 50, "", "Opening porn00 video page", "" )
         iframepage = utils.getHtml(match, url)
-        video720 = re.compile(r'file: "([^"]+)",\s+label: "7', re.DOTALL | re.IGNORECASE).findall(iframepage)
+        video720 = re.compile(r'file: "([^"]+)",\s+label: "(?:7|H)', re.DOTALL | re.IGNORECASE).findall(iframepage)
         if not video720:
             if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
                 alturl, nalternative = GetAlternative(url, alternative)
@@ -117,7 +127,7 @@ def PPlayvid(url, name, download=None, alternative=1):
                 utils.notify('Oh oh','Couldn\'t find a supported videohost')
         else:
             videourl = video720[0]
-            playvid()
+            playvid(videourl, match)
     elif re.search('video_ext.php\?', videopage, re.DOTALL | re.IGNORECASE):
         match = re.compile('<iframe.*?src="([^"]+video_ext[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
         progress.update( 30, "", "Opening VK video page", "" )
@@ -131,39 +141,12 @@ def PPlayvid(url, name, download=None, alternative=1):
                 utils.notify('Oh oh','Couldn\'t find a supported videohost')
         else:
             playvid()
-    elif re.search('play/\?v=', videopage, re.DOTALL | re.IGNORECASE):
-        try:
-            match = re.compile(r'src="([^"]+play/\?v=\d{3,})"', re.DOTALL | re.IGNORECASE).findall(videopage)
-            progress.update( 50, "", "Opening porn00/pornAQ video page", "" )
-            iframepage = utils.getHtml(match[0], url)
-            pcloudid = re.compile(r"playermodes\('(\d+)'", re.DOTALL | re.IGNORECASE).findall(iframepage)[0]
-            pcloudurl = "https://api.pcloud.com/getvideolinks?fileid=%s&access_token=6EWjZL1NQ4yoIe5kZSj6Wq7Z0Yc1Wmg04EmBbwWttEcUekM7cWwX" % pcloudid
-            pcloudpage = utils.getHtml(pcloudurl, match[0])
-            pcloudjson = json.loads(pcloudpage)
-            xbmc.log(pcloudpage)
-            if pcloudjson["result"] != 0:
-                if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
-                    alturl, nalternative = GetAlternative(url, alternative)
-                    PPlayvid(alturl, name, download, nalternative)
-                else:
-                    progress.close()
-                    utils.notify('Oh oh','Couldn\'t find a supported videohost')
-            else:
-                videourl = "https://%s%s" % (pcloudjson["variants"][-1]["hosts"][0], pcloudjson["variants"][-1]["path"])
-                playvid()
-        except:
-            if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
-                alturl, nalternative = GetAlternative(url, alternative)
-                PPlayvid(alturl, name, download, nalternative)
-            else:
-                progress.close()
-                utils.notify('Oh oh','Couldn\'t find a supported videohost')
     elif re.search('/\?V=', videopage, re.DOTALL | re.IGNORECASE):
         try:
             match = re.compile('<iframe.*?src="([^"]+watch/[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
             progress.update( 50, "", "Opening porn00/pornAQ video page", "" )
             iframepage = utils.getHtml(match[0], url)
-            video720 = re.compile(r'file: "([^"]+)",\s+label: "7', re.DOTALL | re.IGNORECASE).findall(iframepage)
+            video720 = re.compile(r'file: "([^"]+)",\s+label: "(?:7|H)', re.DOTALL | re.IGNORECASE).findall(iframepage)
             if not video720:
                 if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
                     alturl, nalternative = GetAlternative(url, alternative)

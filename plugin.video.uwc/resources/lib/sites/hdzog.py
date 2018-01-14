@@ -43,11 +43,12 @@ def List(url):
     try:
         listhtml = utils.getHtml(url, '')
     except:
-        utils.notify('Oh oh','It looks like this website is down.')
+        
         return None
-    match = re.compile('<li>\n.+?<a href="(.+?)" title="(.+?)">\n.+?<div class="thumb thumb-paged" data-screen-main="1">\n\n.+?<img src="(.+?)"').findall(listhtml)
-    for videopage, name, img in match:
+    match = re.compile(r'<li>\s+<a href="([^"]+)" title="([^"]+)">\s+<[^<]+<img src="([^"]+)".*?time">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for videopage, name, img, duration in match:
         name = utils.cleantext(name)
+        name = name + " [COLOR deeppink]" + duration + "[/COLOR]"
         utils.addDownLink(name, videopage, 342, img, '')
     try:
         nextp=re.compile('<a href="(.+?)" title="Next Page" data-page-num.+?>Next page').findall(listhtml)
@@ -71,9 +72,10 @@ def Search(url, keyword=None):
 @utils.url_dispatcher.register('344', ['url'])
 def Categories(url):
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<a href="(.+?)" title=".+?">\n.+?<div class="thumb">\n.+?<img class="thumb" src="(.+?)" alt="(.+?)"/>').findall(listhtml)
+    match = re.compile(r'<li>\s+<a href="([^"]+)"[^<]+<[^<]+<img.*?src="([^"]+)".*?title">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for catpage, img, name in match:
         name = utils.cleantext(name)
+        catpage = catpage + '?sortby=post_date'
         utils.addDir(name, catpage, 341, img, '')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -81,12 +83,12 @@ def Categories(url):
 @utils.url_dispatcher.register('345', ['url'])
 def Channels(url):
     listhtml = utils.getHtml(url, '')
-    match = re.compile('<a href="(.+?)" title=".+?">.+?<div class="thumb">.+?<img src="(.+?)" alt="(.+?)" />', re.DOTALL).findall(listhtml)
+    match = re.compile('<A href="([^"]+)"[^<]+<[^<]+<img.*?src="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for catpage, img, name in match:
         name = utils.cleantext(name)
         utils.addDir(name, catpage, 341, img, '')
     try:
-        nextp=re.compile('<a href="(.+?)" title="Next Page" data-page-num.+?>Next page').findall(listhtml)
+        nextp=re.compile('href="(/channels/[^"]+)" title="Next', re.DOTALL | re.IGNORECASE).findall(listhtml)
         print "next: ", 'http://www.hdzog.com' + nextp[0]
         utils.addDir('Next Page', 'http://www.hdzog.com' + nextp[0], 345,'')
     except: pass

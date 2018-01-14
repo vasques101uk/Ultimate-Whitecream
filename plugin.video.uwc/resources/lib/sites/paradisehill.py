@@ -41,7 +41,7 @@ def List(url, page=1):
     try:
         listhtml = utils.getHtml(url, '')
     except:
-        utils.notify('Oh oh','It looks like this website is down.')
+        
         return None
     match = re.compile(r'link" href="([^"]+)"[^>]+>\s+<span class="bci-title">([^<]+)</span>.+?src="([^"]+)"[^>]+>\s*?</span>\s+</a>', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, name, img in match:
@@ -85,8 +85,8 @@ def Playvid(url, name, download=None):
     if utils.addon.getSetting("paradisehill") == "true": playall = True
     else: playall = ''
     videopage = utils.getHtml(url, '')
-    match = re.compile('films="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
-    videos = match[0].split('|||')
+    match = re.compile('"src":"([^"]+)', re.DOTALL | re.IGNORECASE).findall(videopage)
+    videos = match
     
     if playall == '':
         if len(videos) > 1:
@@ -99,7 +99,8 @@ def Playvid(url, name, download=None):
             if videopart == -1:
                 return
             videourl = videos[videopart]
-        else: videourl = videos[0]    
+        else: videourl = videos[0]
+        videourl = videourl.replace('\/','/')
         videourl = videourl + "|referer="+ url
 
     if download == 1 and playall == '':

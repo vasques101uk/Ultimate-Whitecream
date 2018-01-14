@@ -1,3 +1,19 @@
+[B]Version 1.1.55[/B]
+Fixed: Porntrex listing - next page categories (private videos are hidden)
+Fixed: Porn00
+Fixed: Czechhd
+Fixed: HDZog
+Fixed: ParadiseHill
+Fixed: Other stuff I forgot
+Removed: Nudeflix
+
+
+[B]Version 1.1.54[/B]
+Added: Streamate and Bongacams (thanks hdgdl)
+Fixed: MrSexe, Pornhub, Rapidvideo
+Fixed: Tubepornclassics, Daftsex, Naked
+
+
 [B]Version 1.1.53[/B]
 Fixed: Myfreecams
 Added: Rapidvideo support in utils (for Ero-tik)
