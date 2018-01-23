@@ -76,5 +76,5 @@ def YFTCat(url):
 
 @utils.url_dispatcher.register('192', ['url', 'name'], ['download'])
 def YFTPlayvid(url, name, download=None):
-    utils.PLAYVIDEO(url, name, download)
+    utils.PLAYVIDEO(url, name, download, '''src=\s*["']([^'"]+)''')
 

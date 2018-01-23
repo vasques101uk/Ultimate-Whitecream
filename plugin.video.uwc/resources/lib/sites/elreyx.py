@@ -83,18 +83,13 @@ def EXPlayvid(url, name, download=None):
     progress.create('Play video', 'Searching videofile.')
     progress.update( 10, "", "Loading video page", "" )
     videopage = utils.getHtml(url, '')
-    try:
-        links = re.compile('<iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
-        videourls = " "
-        for link in links:
-            if '2424rs' in link:
-                try:
-                    link = utils.getHtml(link, url)
-                except: pass
-            videourls = videourls + " " + link
-        utils.playvideo(videourls, name, download, url)
-    except:
-        utils.playvideo(videopage, name, download, url)
+    links = re.compile('<iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
+    for link in links:
+        try:
+            videopage += utils.getHtml(link, url)
+        except:
+            pass
+    utils.playvideo(videopage, name, download, url)
 
 
 @utils.url_dispatcher.register('115', ['url'])

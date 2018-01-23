@@ -40,7 +40,7 @@ def XTCList(url):
         listhtml = utils.getHtml(url, '')
     except:
         return None
-    match = re.compile('<a href="([^"]+)".*?><img.*?data-original="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile('<a href="([^"]+)"><img.*?data-original="([^"]+)" alt="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, img, name in match:
         name = utils.cleantext(name)
         utils.addDownLink(name, videopage, 202, img, '')

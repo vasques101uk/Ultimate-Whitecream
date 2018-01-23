@@ -103,7 +103,8 @@ def WXFList(url, page=1, onelist=None):
 
 @utils.url_dispatcher.register('13', ['url', 'name'], ['download'])
 def WXFVideo(url, name, download=None):
-    utils.PLAYVIDEO(url, name, download)
+    vp = utils.VideoPlayer(name, download)
+    vp.play_from_site_link(url, url)
 
 
 def getWXFSortMethod():

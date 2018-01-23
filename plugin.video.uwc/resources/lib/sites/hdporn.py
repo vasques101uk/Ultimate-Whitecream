@@ -105,7 +105,7 @@ def PPlayvid(url, name, download=None, alternative=1):
     videopage = utils.getHtml(url, '', '', True)
     if re.search('o(?:pen)?load', videopage, re.DOTALL | re.IGNORECASE):
         progress.close()
-        utils.PLAYVIDEO(url, name, download)
+        utils.PLAYVIDEO(url, name, download, 'src="([^"]+)"')
     elif re.search('server|video/\?v=', videopage, re.DOTALL | re.IGNORECASE):
         match = re.compile(r'/(server|video)/\?v=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videopage)
         for folder, id in match:

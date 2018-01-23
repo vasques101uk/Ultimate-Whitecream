@@ -81,4 +81,11 @@ def Categories(url):
 
 @utils.url_dispatcher.register('162', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
-    utils.PLAYVIDEO(url, name, download)
+    player = utils.VideoPlayer(name, download, regex='[sS][rR][cC]="([^"]+)"')
+    player.progress.update(25, "", "Loading video page", "")
+    videopage = utils.getHtml(url, '')
+    links = re.compile('<iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
+    for link in links:
+        utils.kodilog(link)
+        videopage += utils.getHtml(link, url)
+    player.play_from_html(videopage)

@@ -21,8 +21,8 @@
 __scriptname__ = "Ultimate Whitecream"
 __author__ = "Whitecream"
 __scriptid__ = "plugin.video.uwc"
-__credits__ = "Whitecream, Fr33m1nd, anton40, NothingGnome"
-__version__ = "1.1.56"
+__credits__ = "Whitecream, Fr33m1nd, anton40, NothingGnome, holisticdioxide"
+__version__ = "1.1.57"
 
 import urllib
 import urllib2
@@ -45,6 +45,14 @@ import xbmcaddon
 import xbmcvfs
 import cloudflare
 from jsunpack import unpack
+import urlresolver
+import xbmcvfs
+from functools import wraps
+
+uwc_plugins_path = 'special://home/addons/plugin.video.uwc/resources/urlresolver_plugins/'
+if xbmcvfs.exists(uwc_plugins_path):
+    urlresolver.add_plugin_dirs(xbmc.translatePath(uwc_plugins_path))
+
 
 
 from url_dispatcher import URL_Dispatcher
@@ -352,297 +360,6 @@ def kodilog(logvar):
     xbmc.log(str(logvar), xbmc.LOGNOTICE)
 
 
-def PLAYVIDEO(url, name, download=None):
-    progress.create('Play video', 'Searching videofile.')
-    progress.update( 10, "", "Loading video page", "" )
-    videosource = getHtml(url, url)
-    playvideo(videosource, name, download, url)
-
-
-def playvideo(videosource, name, download=None, url=None):
-    import urlresolver
-    hosts = []
-    videourl=None
-    if re.search('openload\.(?:co|io)?/', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('OpenLoad')
-    if re.search('oload\.(?:co|io|tv|stream|info)?/', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('OpenLoad')
-    if re.search('streamin\.to/', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Streamin')
-    if re.search('flashx\.tv/', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('FlashX')
-    if re.search('mega3x\.net/', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Mega3X')
-    if re.search('streamcloud\.eu/', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('StreamCloud')
-    if re.search('jetload\.tv/', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Jetload')
-    if re.search('videowood\.tv/', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Videowood')
-    if re.search('streamdefence.com/view\.php', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Streamdefence')
-    if re.search('strdef.world', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Streamdefence')        
-    if re.search('dato\.?porn.\.?', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Datoporn')
-    if re.search('zstream\.to/', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('ZStream')
-    if re.search('rapidvideo\.com/', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Rapidvideo')        
-    if re.search('vidlox\.tv/', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Vidlox')
-    if re.search('streamcherry\.com', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Streamcherry')
-    if re.search('<source', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Direct Source')
-    if not 'keeplinks' in url:
-        if re.search('keeplinks\.eu/p', videosource, re.DOTALL | re.IGNORECASE):
-            hosts.append('Keeplinks <--')
-    if re.search('filecrypt.cc/Container', videosource, re.DOTALL | re.IGNORECASE):
-        hosts.append('Filecrypt')
-    if len(hosts) == 0:
-        progress.close()
-        notify('Oh oh','Couldn\'t find any video')
-        return
-    elif len(hosts) > 1:
-        if addon.getSetting("dontask") == "true":
-            vidhost = hosts[0]
-        else:
-            vh = dialog.select('Videohost:', hosts)
-            if vh == -1:
-                return
-            vidhost = hosts[vh]
-    else:
-        vidhost = hosts[0]
-
-    if vidhost == 'OpenLoad':
-        progress.update( 40, "", "Loading Openload", "" )
-        openloadurl = re.compile(r"//(?:www\.)?o(?:pen)?load\.(?:co|io|tv|stream|info)?/(?:embed|f)/([0-9a-zA-Z-_]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        openloadurl = chkmultivids(openloadurl)
-
-        openloadurl1 = 'http://openload.io/embed/%s/' % openloadurl
-        progress.update( 50, "", "Loading Openload", "Sending it to urlresolver" )
-        try:
-            video = urlresolver.resolve(openloadurl1)
-            if video:
-                progress.update( 80, "", "Loading Openload", "Found the video" )
-                videourl = video
-        except:
-            notify('Oh oh','Couldn\'t find playable OpenLoad link')
-            return
-
-    elif vidhost == 'Streamin':
-        progress.update( 40, "", "Loading Streamin", "" )
-        streaminurl = re.compile(r"//(?:www\.)?streamin\.to/(?:embed-)?([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        streaminurl = chkmultivids(streaminurl)
-        streaminurl = 'http://streamin.to/embed-%s-670x400.html' % streaminurl
-        progress.update( 50, "", "Loading Streamin", "Sending it to urlresolver")
-        video = urlresolver.resolve(streaminurl)
-        if video:
-            progress.update( 80, "", "Loading Streamin", "Found the video" )
-            videourl = video
-
-    elif vidhost == 'FlashX':
-        progress.update( 40, "", "Loading FlashX", "" )
-        flashxurl = re.compile(r"//(?:www\.)?flashx\.tv/(?:embed-)?([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        media_id = chkmultivids(flashxurl)
-        flashxurl = 'http://www.flashx.tv/%s.html' % media_id
-        progress.update( 50, "", "Loading FlashX", "Sending it to urlresolver" )
-        video = urlresolver.resolve(flashxurl)
-        if video:
-            progress.update( 80, "", "Loading FlashX", "Found the video" )
-            videourl = video
-
-    elif vidhost == 'Mega3X':
-        progress.update( 40, "", "Loading Mega3X", "" )
-        mega3xurl = re.compile(r"(https?://(?:www\.)?mega3x.net/(?:embed-)?(?:[0-9a-zA-Z]+).html)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        mega3xurl = chkmultivids(mega3xurl)
-        mega3xsrc = getHtml(mega3xurl,'', openloadhdr)
-        mega3xjs = re.compile("<script[^>]+>(eval.*?)</sc", re.DOTALL | re.IGNORECASE).findall(mega3xsrc)
-        progress.update( 80, "", "Getting video file from Mega3X", "" )
-        mega3xujs = unpack(mega3xjs[0])
-        videourl = re.compile(',"(http.*?mp4)"', re.DOTALL | re.IGNORECASE).findall(mega3xujs)
-        videourl = videourl[0]
-
-    elif vidhost == 'Datoporn':
-        progress.update( 40, "", "Loading Datoporn", "" )
-        datourl = re.compile(r"//(?:www\.)?dato\.?porn\.(?:co|com)?/(?:embed-)?([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        datourl = chkmultivids(datourl)
-        datourl = "http://datoporn.com/embed-" + datourl + ".html"
-        datosrc = getHtml(datourl,'', openloadhdr)
-        if "File was deleted" in datosrc:
-            notify('Oh oh','File is deleted from Datoporn')
-            return
-        try:
-            datojs = re.compile("<script[^>]+>(eval[^<]+)</sc", re.DOTALL | re.IGNORECASE).findall(datosrc)
-            datoujs = unpack(datojs[0])
-        except:
-            datoujs = datosrc
-        progress.update( 80, "", "Getting video file from Datoporn", "" )
-        videourl = re.compile('file:"([^"]+mp4)"', re.DOTALL | re.IGNORECASE).findall(datoujs)
-        videourl = videourl[0]
-
-    elif vidhost == 'StreamCloud':
-        progress.update( 40, "", "Opening Streamcloud", "" )
-        streamcloudurl = re.compile(r"//(?:www\.)?streamcloud\.eu?/([0-9a-zA-Z-_/.]+html)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        streamcloudurl = chkmultivids(streamcloudurl)
-        streamcloudurl = "http://streamcloud.eu/" + streamcloudurl
-        progress.update( 50, "", "Getting Streamcloud page", "" )
-        schtml = postHtml(streamcloudurl)
-        form_values = {}
-        match = re.compile('<input.*?name="(.*?)".*?value="(.*?)">', re.DOTALL | re.IGNORECASE).findall(schtml)
-        for name, value in match:
-            form_values[name] = value.replace("download1","download2")
-        progress.update( 60, "", "Grabbing video file", "" )
-        newscpage = postHtml(streamcloudurl, form_data=form_values)
-        videourl = re.compile('file:\s*"(.+?)",', re.DOTALL | re.IGNORECASE).findall(newscpage)[0]
-
-    elif vidhost == 'Jetload':
-        progress.update( 40, "", "Loading Jetload", "" )
-        jlurl = re.compile(r'jetload\.tv/([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)
-        jlurl = chkmultivids(jlurl)
-        jlurl = "http://jetload.tv/" + jlurl
-        progress.update( 50, "", "Loading Jetload", "" )
-        #progress.update( 50, "", "Loading Jetload", "Sending it to urlresolver" )
-        #video = urlresolver.resolve(jlurl)
-        #if video:
-        #    progress.update( 80, "", "Loading Jetload", "Found the video" )
-        #    videourl = video
-        jlsrc = getHtml(jlurl, url)
-        videourl = re.compile(r'file: "([^"]+)', re.DOTALL | re.IGNORECASE).findall(jlsrc)
-        videourl = videourl[0]
-
-    elif vidhost == 'Videowood':
-        progress.update( 40, "", "Loading Videowood", "" )
-        vwurl = re.compile(r"//(?:www\.)?videowood\.tv/(?:embed|video)/([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        vwurl = chkmultivids(vwurl)
-        vwurl = 'http://www.videowood.tv/embed/' + vwurl
-        progress.update( 50, "", "Loading Videowood", "Sending it to urlresolver" )
-        video = urlresolver.resolve(vwurl)
-        if video:
-            progress.update( 80, "", "Loading Videowood", "Found the video" )
-            videourl = video
-
-    elif vidhost == 'Keeplinks <--':
-        progress.update( 40, "", "Loading Keeplinks", "" )
-        klurl = re.compile(r"//(?:www\.)?keeplinks\.eu/p([0-9a-zA-Z/]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        klurl = chkmultivids(klurl)
-        klurl = 'http://www.keeplinks.eu/p' + klurl
-        kllink = getVideoLink(klurl, '')
-        kllinkid = kllink.split('/')[-1]
-        klheader = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
-           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-           'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-           'Accept-Encoding': 'none',
-           'Accept-Language': 'en-US,en;q=0.8',
-           'Connection': 'keep-alive',
-           'Cookie': 'flag['+kllinkid+'] = 1;'}
-        klpage = getHtml(kllink, klurl, klheader)
-        playvideo(klpage, name, download, klurl)
-        return
-
-    elif vidhost == 'Streamdefence':
-        progress.update( 40, "", "Loading Streamdefence", "" )
-        sdurl = re.compile(r'streamdefence\.com/view.php\?ref=([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videosource)
-        if sdurl:
-            sdurl = chkmultivids(sdurl)
-            sdurl = 'http://www.streamdefence.com/view.php?ref=' + sdurl
-        else:
-            sdurl = re.compile(r'.strdef\.world/([^"]+)', re.DOTALL | re.IGNORECASE).findall(videosource)[0]
-            sdurl = 'https://www.strdef.world/' + sdurl
-        sdsrc = getHtml(sdurl, url)
-        progress.update( 80, "", "Getting video file from Streamdefence", "" )
-        sdpage = streamdefence(sdsrc)
-        playvideo(sdpage, name, download, sdurl)
-        return
-
-    elif vidhost == 'Filecrypt':
-        progress.update( 40, "", "Loading Filecrypt", "" )
-        fcurl = re.compile(r'filecrypt\.cc/Container/([^\.]+)\.html', re.DOTALL | re.IGNORECASE).findall(videosource)
-        fcurl = chkmultivids(fcurl)
-        fcurl = 'http://filecrypt.cc/Container/' + fcurl + ".html"
-        fcsrc = getHtml(fcurl, url)
-        fcmatch = re.compile(r"onclick=\"openLink.?'([\w\-]*)',", re.DOTALL | re.IGNORECASE).findall(fcsrc)
-        progress.update( 80, "", "Getting video file from Filecrypt", "" )
-        fcurls = ""
-        for fclink in fcmatch:
-            fcpage = "http://filecrypt.cc/Link/" + fclink + ".html"
-            fcpagesrc = getHtml(fcpage, fcurl)
-            fclink2 = re.search('<iframe .*? noresize src="(.*)"></iframe>', fcpagesrc)
-            if fclink2:
-                try:
-                    fcurl2 = getVideoLink(fclink2.group(1), fcpage)
-                    fcurls = fcurls + " " + fcurl2
-                except:
-                    pass
-        playvideo(fcurls, name, download, fcurl)
-        return
-        
-    elif vidhost == 'Vidlox':
-        if sys.version_info < (2, 7, 9):
-            progress.close()
-            notify('Oh oh','Python version to old, update to Krypton')
-            return
-        progress.update( 40, "", "Loading Vidlox", "" )
-        vlurl = re.compile(r"(?://|\.)vidlox\.tv/(?:embed-|)([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        media_id = chkmultivids(vlurl)
-        vlurl = 'http://vidlox.tv/%s' % media_id
-        progress.update( 50, "", "Loading Vidlox", "Sending it to urlresolver" )
-        video = urlresolver.resolve(vlurl)
-        if video:
-            progress.update( 80, "", "Loading Vidlox", "Found the video" )
-            videourl = video
-            
-    elif vidhost == 'ZStream':
-        progress.update( 40, "", "Loading Zstream", "" )
-        zstreamurl = re.compile(r"(?://|\.)zstream\.to/(?:embed-)?([0-9a-zA-Z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        zstreamurl = chkmultivids(zstreamurl)
-        zstreamurl = 'http://zstream.to/embed-%s.html' % zstreamurl
-        progress.update( 50, "", "Loading ZStream", "Sending it to urlresolver")
-        video = urlresolver.resolve(zstreamurl)
-        if video:
-            progress.update( 80, "", "Loading ZStream", "Found the video" )
-            videourl = video
-
-    elif vidhost == 'Streamcherry':
-        progress.update( 40, "", "Loading Streamcherry", "" )
-        scstreamurl = re.compile(r"(?://|\.)streamcherry\.com/(?:embed|f)/(\w+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        scstreamurl = chkmultivids(scstreamurl)
-        scstreamurl = 'https://streamcherry.com/embed/%s' % scstreamurl
-        progress.update( 50, "", "Loading Streamcherry", "Sending it to urlresolver")
-        video = urlresolver.resolve(scstreamurl)
-        if video:
-            progress.update( 80, "", "Loading Streamcherry", "Found the video" )
-            videourl = video
-
-    elif vidhost == 'Rapidvideo':
-        if sys.version_info < (2, 7, 9):
-            progress.close()
-            notify('Oh oh','Python version to old, update to Krypton')
-            return
-        progress.update( 40, "", "Loading Rapidvideo", "" )
-        rpvideourl = re.compile(r"(?://|\.)(?:rapidvideo|raptu)\.com/(?:embed/|[ev]/|\?v=)?([0-9A-Za-z]+)", re.DOTALL | re.IGNORECASE).findall(videosource)
-        rpvideourl = chkmultivids(rpvideourl)
-        rpvideourl = 'https://www.rapidvideo.com/embed/%s' % rpvideourl
-        progress.update( 50, "", "Loading Rapidvideo", "Sending it to urlresolver")
-        video = urlresolver.resolve(rpvideourl)
-        if video:
-            progress.update( 80, "", "Loading Rapidvideo", "Found the video" )
-            videourl = video
-
-    elif vidhost == 'Direct Source':
-        progress.update( 40, "", "Loading Direct source", "" )
-        dsurl = re.compile("""<source.*?src=(?:"|')([^"']+)[^>]+>""", re.DOTALL | re.IGNORECASE).findall(videosource)
-        dsurl = chkmultivids(dsurl)
-        videourl = dsurl
-    progress.close()
-    if videourl:
-        playvid(videourl, name, download)
-    else:
-        notify('Oh oh','Couldn\'t find a link')
-        return
-
-
 def playvid(videourl, name, download=None):
     if download == 1:
         downloadVideo(videourl, name)
@@ -656,11 +373,9 @@ def playvid(videourl, name, download=None):
 def chkmultivids(videomatch):
     videolist = list(set(videomatch))
     if len(videolist) > 1:
-        i = 1
         hashlist = []
-        for x in videolist:
-            hashlist.append('Video ' + str(i))
-            i += 1
+        for idx, x in enumerate(videolist):
+            hashlist.append('Video ' + str(idx + 1))
         mvideo = dialog.select('Multiple videos found', hashlist)
         if mvideo == -1:
             return
@@ -958,14 +673,15 @@ def videowood(data):
 
 
 def streamdefence(html):
-    if 'openload' in html:
-        return html
     match = re.search(r'\("([^"]+)', html, re.DOTALL | re.IGNORECASE)
-    if match:
-        result = match.group()
-        decoded = base64.b64decode(result)
-    else:
-        decoded = base64.b64decode(html)
+    try:
+        if match:
+            result = match.group()
+            decoded = base64.b64decode(result)
+        else:
+            decoded = base64.b64decode(html)
+    except TypeError:
+        return html
     return streamdefence(decoded)
 
 
@@ -1049,3 +765,174 @@ def textBox(heading,announce):
     TextBox()
     while xbmc.getCondVisibility('Window.IsVisible(10147)'):
         xbmc.sleep(500)
+
+
+class VideoPlayer():
+    def __init__(self, name, download=False, regex=None):
+        self.regex = regex if regex else '''(?:src|SRC|href|HREF)=\s*["']([^'"]+)'''
+        self.name = name
+        self.download = download
+        self.progress = xbmcgui.DialogProgress()
+        self.progress.create('Playing video', 'Searching for videofile')
+
+    def _cancellable(f):
+        @wraps(f)
+        def wrapped(inst, *args, **kwargs):
+            if inst.progress.iscanceled():
+                inst.progress.close()
+                return
+            return f(inst, *args, **kwargs)
+        return wrapped
+
+    def _clean_urls(self, url_list):
+        filtered_words = ['google']
+        filtered_ends = ['.js', '.css', '/premium.html']
+        added = set()
+        new_list = []
+        for source in url_list:
+            to_break = False
+            if source._url in added:
+                continue
+            for word in filtered_words:
+                if word in source._url or to_break:
+                    to_break = True
+                    break
+            for end in filtered_ends:
+                if source._url.endswith(end) or to_break:
+                    to_break = True
+                    break
+            else:
+                source.title = source._domain.split('.')[0]
+                added.add(source._url)
+                new_list.append(source)
+        return new_list
+
+    def play_from_site_link(self, url, referrer=None):
+        self.progress.update(25, "", "Loading video page", "")
+        html = getHtml(url, referrer)
+        html += self._check_suburls(html, url)
+        self.play_from_html(html)
+
+    @_cancellable
+    def play_from_html(self, html):
+        self.progress.update(50, "", "Searching for supported hosts", "")
+        direct_links = re.compile("""<source.*?src=(?:"|')([^"']+)[^>]+>""", re.DOTALL | re.IGNORECASE).findall(html)
+        if direct_links:
+            selected = 'https:' + direct_links[0] if direct_links[0].startswith('//') else direct_links[0]
+            hdr = dict(headers)
+            hdr['Referer'] = selected
+            self.play_from_direct_link(selected)
+        else:
+            sources = self._clean_urls([urlresolver.HostedMediaFile(x, title=x.split('/')[2]) for x in urlresolver.scrape_supported(html, self.regex)])
+            if not sources:
+                notify('Oh oh','Could not find a supported link')
+                return
+            self._select_source(sources)
+
+    @_cancellable
+    def _select_source(self, sources):
+        if not len(sources) > 1 or addon.getSetting("dontask") == "true":
+            source = sources[0]
+        else:
+            source = urlresolver.choose_source(sources)
+        if source:
+            self.play_from_link_to_resolve(source)
+
+    @_cancellable
+    def play_from_link_to_resolve(self, source):
+        self.progress.update(80, "", "Passing link to URLResolver", "Playing from " + source.title)
+        try:
+            link = source.resolve()
+        except urlresolver.resolver.ResolverError:
+            return
+        self.play_from_direct_link(link)
+
+    @_cancellable
+    def play_from_direct_link(self, direct_link):
+        self.progress.update(90, "", "Playing video", "")
+        playvid(direct_link, self.name, self.download)
+
+    def _check_suburls(self, html, referrer_url):
+        klurl = re.compile(r"//(?:www\.)?keeplinks\.eu/p([0-9a-zA-Z/]+)", re.DOTALL | re.IGNORECASE).findall(html)
+        sdurl = re.compile(r'streamdefence\.com/view.php\?ref=([^"]+)"', re.DOTALL | re.IGNORECASE).findall(html)
+        sdurl_world = re.compile(r'.strdef\.world/([^"]+)', re.DOTALL | re.IGNORECASE).findall(html)
+        fcurl = re.compile(r'filecrypt\.cc/Container/([^\.]+)\.html', re.DOTALL | re.IGNORECASE).findall(html)
+        if klurl:
+            self.progress.update(30, "", "Found keeplinks url", "")
+            html = self._solve_keep_links(klurl)
+        elif sdurl:
+            self.progress.update(30, "", "Found streamdefence url", "")
+            html = self._solve_streamdefence(sdurl, referrer_url, False)
+        elif sdurl_world:
+            self.progress.update(30, "", "Found streamdefence url", "")
+            html = self._solve_streamdefence(sdurl_world, referrer_url, True)
+        elif fcurl:
+            self.progress.update(30, "", "Found filecrypt url", "")
+            html = self._solve_filecrypt(fcurl, referrer_url)
+        return html
+
+    def _solve_keep_links(self, klurls):
+        self.progress.update(35, "", "Loading keeplinks sites", "")
+        klpages = ''
+        for kl_url in klurls:
+            klurl = 'http://www.keeplinks.eu/p' + kl_url
+            kllink = getVideoLink(klurl, '')
+            kllinkid = kllink.split('/')[-1]
+            klheader = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+            'Accept-Encoding': 'none',
+            'Accept-Language': 'en-US,en;q=0.8',
+            'Connection': 'keep-alive',
+            'Cookie': 'flag['+kllinkid+'] = 1;'}
+            klpage = getHtml(kllink, klurl, klheader)
+            klpages += klpage
+        return klpages
+
+    def _solve_streamdefence(self, sdurls, url, world=False):
+        self.progress.update(35, "", "Loading streamdefence sites", "")
+        sdpages = ''
+        for sd_url in sdurls:
+            if not world:
+                sdurl = 'http://www.streamdefence.com/view.php?ref=' + sd_url
+            else:
+                sdurl = 'https://www.strdef.world/' + sd_url
+            sdsrc = getHtml(sdurl, url)
+            sdpage = streamdefence(sdsrc)
+            sdpages += sdpage
+        return sdpages
+
+    def _solve_filecrypt(self, fc_urls, url):
+        self.progress.update(35, "", "Loading filecrypt sites", "")
+        sites = ''
+        for fc_url in fc_urls:
+            fcurl = 'http://filecrypt.cc/Container/' + fc_url + ".html"
+            fcsrc = getHtml(fcurl, url)
+            fcmatch = re.compile(r"openLink.?'([\w\-]*)',", re.DOTALL | re.IGNORECASE).findall(fcsrc)
+            fcurls = ""
+            for fclink in fcmatch:
+                fcpage = "http://filecrypt.cc/Link/" + fclink + ".html"
+                fcpagesrc = getHtml(fcpage, fcurl)
+                fclink2 = re.search('<iframe .*? noresize src="(.*)"></iframe>', fcpagesrc)
+                if fclink2:
+                    try:
+                        fcurl2 = getVideoLink(fclink2.group(1), fcpage)
+                        fcurls = fcurls + " " + fcurl2
+                    except:
+                        pass
+            sites += fcurls
+        return sites
+
+
+def playvideo(videosource, name, download=None, url=None, regex=None):
+    '''Deprecated function, use VideoPlayer class.
+    Exists for compatiblity with old site plug-ins.'''
+    vp = VideoPlayer(name, download, regex)
+    vp.play_from_html(videosource)
+
+
+def PLAYVIDEO(url, name, download=None, regex=None):
+    '''Deprecated function, use VideoPlayer class.
+    Exists for compatiblity with old site plug-ins.'''
+    vp = VideoPlayer(name, download, regex)
+    vp.play_from_site_link(url, url)

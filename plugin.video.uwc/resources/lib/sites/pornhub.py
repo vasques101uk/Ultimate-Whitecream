@@ -43,7 +43,7 @@ def List(url):
     except:
         return None
     main_block = re.compile('videos search-video-thumbs">(.*?)</ul>', re.DOTALL).findall(listhtml)[0]
-    match = re.compile('<li class="videoblock.*?<a href="([^"]+)" title="([^"]+)".*?data-mediumthumb="([^"]+)".*?<var class="duration">([^<]+)</var>(.*?)</div', re.DOTALL).findall(main_block)
+    match = re.compile('<li class="js-pop.*?<a href="([^"]+)" title="([^"]+)".*?data-mediumthumb="([^"]+)".*?<var class="duration">([^<]+)</var>(.*?)</div', re.DOTALL).findall(main_block)
     for videopage, name, img, duration, hd in match:
         if hd.find('HD') > 0:
             hd = " [COLOR orange]HD[/COLOR] "
@@ -74,7 +74,7 @@ def Search(url, keyword=None):
 @utils.url_dispatcher.register('393', ['url'])
 def Categories(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile(r'<div class="category-wrapper">\s*?<a href="([^"]+)"\s*?alt="([^"]+)"[^>]+>\s*?<img src="([^"]+)"', re.DOTALL).findall(cathtml)
+    match = re.compile(r'<div class="category-wrapper.*?<a href="([^"]+)"\s*?alt="([^"]+)"[^>]+>\s*?<img src="([^"]+)"', re.DOTALL).findall(cathtml)
     for catpage, name, img in match:
         if '?' in catpage:
             utils.addDir(name, 'https://www.pornhub.com' + catpage + "&o=cm", 391, img, '')

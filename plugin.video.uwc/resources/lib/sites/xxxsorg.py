@@ -67,23 +67,11 @@ def ListSearch(url):
 
 @utils.url_dispatcher.register('422', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
-    progress.create('Play video', 'Searching videofile.')
-    progress.update( 10, "", "Loading video page", "" )
-    url = url.split('#')[0]
-    videopage = utils.getHtml(url, '')
-    try:
-        entrycontent = re.compile('entry-content">(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(videopage)[0]
-        links = re.compile('href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(entrycontent)
-        videourls = " "
-        for link in links:
-            if 'securely' in link:
-                try:
-                    link = utils.getVideoLink(link, url)
-                except: pass
-            videourls = videourls + " " + link
-        utils.playvideo(videourls, name, download, url)
-    except:
-        utils.playvideo(videopage, name, download, url)
+    vp = utils.VideoPlayer(name, download)
+    vp.progress.update(25, "", "Loading video page", "")
+    video_page = utils.getHtml(url, '')
+    entry_content = re.compile('entry-content">(.*?)</div>', re.DOTALL | re.IGNORECASE).search(video_page).group(1)
+    vp.play_from_html(entry_content)
 
 
 @utils.url_dispatcher.register('423', ['url']) 

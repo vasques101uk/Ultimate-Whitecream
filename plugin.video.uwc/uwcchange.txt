@@ -1,28 +1,7 @@
-[B]Version 1.1.56[/B]
-Fixed: WatchXXXFree
-Fixed: Beeg
-Fixed: ElReyX
-Fixed: XvideoSpanish
-Fixed: HQPorner
-Fixed: StreamXXX
+[B]Version 1.1.57[/B]
+New site: PornsLand
+Fixed: Freeomovie pagination
+Fixed: Czech3x pagination
 Fixed: Xtasie
-Fixed: Ero-tik
-Fixed: K18
-Fixed: DaftSex
-Fixed: CzechHD (renamed to Czech3x)
-Fixed: Xtheatre
-Fixed: PelisxPorno
-Fixed: Eroticage
-Fixed: SpankBang
-Fixed: AmateurCool
-Fixed: Vporn
-Fixed: xHamster
-Fixed: Porndig
-Fixed: CamSoda
-Fixed: HDZog
-Fixed: TubePornClassic categories
-Fixed: PornHub video listing
-Fixed: Milf.nl video listing
-Fixed: HQPorner preview images
-Removed: HentaiHaven
-General video source fixes
+Fixed: PornHub
+Changed: Host detection is now done by URLResolver. This should result in more hosts to choose from.

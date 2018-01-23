@@ -1,3 +1,12 @@
+[B]Version 1.1.57[/B]
+New site: PornsLand
+Fixed: Freeomovie pagination
+Fixed: Czech3x pagination
+Fixed: Xtasie
+Fixed: PornHub
+Changed: Host detection is now done by URLResolver. This should result in more hosts to choose from.
+
+
 [B]Version 1.1.56[/B]
 Fixed: WatchXXXFree
 Fixed: Beeg

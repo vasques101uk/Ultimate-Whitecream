@@ -99,4 +99,9 @@ def Actors(url):
 
 @utils.url_dispatcher.register('132', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
-    utils.PLAYVIDEO(url, name, download)
+    html = utils.getHtml(url, url)
+    matches = re.compile('iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(html)
+    for match in matches:
+        html += utils.getHtml(match, url)
+    vp = utils.VideoPlayer(name, download, regex='''=\s*["']([^'"]+)''')
+    vp.play_from_html(html)

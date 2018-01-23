@@ -91,7 +91,4 @@ def Cat(url):
 
 @utils.url_dispatcher.register('232', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
-    progress.create('Play video', 'Searching videofile.')
-    progress.update( 10, "", "Loading video page", "" )
-    videopage = utils.getHtml(url, '')
-    utils.playvideo(videopage, name, download, url)
+    utils.PLAYVIDEO(url, name, download, 'iframe src="([^"]+)"')
