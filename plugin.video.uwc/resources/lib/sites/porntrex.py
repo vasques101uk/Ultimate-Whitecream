@@ -54,7 +54,8 @@ def PTList(url, page=1, onelist=None):
         else:
             hd = " "
         name = name + hd + "[COLOR deeppink]" + duration + "[/COLOR]"
-        if img.startswith('//'): img = 'http:' + img
+        if img.startswith('//'): img = 'https:' + img
+        img = re.sub(r"cdn\d?", "www", img)
         
         imgint = randint(1,10)
         newimg = str(imgint) + '.jpg'
@@ -106,6 +107,8 @@ def PTCat(url):
     cathtml = utils.getHtml(url, '')
     match = re.compile('<a class="item" href="([^"]+)" title="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(cathtml)
     for catpage, name, img in match:
+        if img.startswith('//'): img = 'https:' + img
+        img = re.sub(r"cdn\d?", "www", img)
         catpage = catpage + '?mode=async&function=get_block&block_id=list_videos_common_videos_list&sort_by=post_date&from=1'
         utils.addDir(name, catpage, 51, img, 1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
