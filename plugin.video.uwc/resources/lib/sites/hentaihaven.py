@@ -24,16 +24,16 @@ from resources.lib import utils
 
 
 headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0',
-       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-       'Accept-Encoding': 'gzip',
-       'Accept-Language': 'en-US,en;q=0.5'}
+           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+           'Accept-Encoding': 'gzip',
+           'Accept-Language': 'en-US,en;q=0.5'}
 
 
 @utils.url_dispatcher.register('460')
 def Main():
-    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://hentaihaven.org/pick-your-poison/',463,'','')
-    utils.addDir('[COLOR hotpink]A to Z[/COLOR]','http://hentaihaven.org/pick-your-series/',464,'','')
-    utils.addDir('[COLOR hotpink]Uncensored[/COLOR]','http://hentaihaven.org/ajax.php?action=pukka_infinite_scroll&page_no=1&grid_params=infinite_scroll=on&infinite_page=2&infinite_more=true&current_page=taxonomy&front_page_cats=&inner_grid%5Buse_inner_grid%5D=on&inner_grid%5Btax%5D=post_tag&inner_grid%5Bterm_id%5D=53&inner_grid%5Bdate%5D=&search_query=&tdo_tag=uncensored&sort=date',461,'','')
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]', 'http://hentaihaven.org/pick-your-poison/', 463, '', '')
+    utils.addDir('[COLOR hotpink]A to Z[/COLOR]', 'http://hentaihaven.org/pick-your-series/', 464, '', '')
+    utils.addDir('[COLOR hotpink]Uncensored[/COLOR]', 'http://hentaihaven.org/ajax.php?action=pukka_infinite_scroll&page_no=1&grid_params=infinite_scroll=on&infinite_page=2&infinite_more=true&current_page=taxonomy&front_page_cats=&inner_grid%5Buse_inner_grid%5D=on&inner_grid%5Btax%5D=post_tag&inner_grid%5Bterm_id%5D=53&inner_grid%5Bdate%5D=&search_query=&tdo_tag=uncensored&sort=date', 461, '', '')
     List('http://hentaihaven.org/ajax.php?action=pukka_infinite_scroll&page_no=1&grid_params=infinite_scroll=on')
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
@@ -59,7 +59,8 @@ def List(url):
         if int(maxpages) > page:
             nextp = url.replace("no="+str(page),"no="+str(npage))
             utils.addDir('Next Page ('+str(npage)+')', nextp,461,'')
-    except: pass
+    except:
+        pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -98,7 +99,6 @@ def A2Z(url):
 
 
 def sucuri(html):
-    self.cookie = None
     s = re.compile("S\s*=\s*'([^']+)").findall(html)[0]
     s = base64.b64decode(s)
     s = s.replace(' ', '')
@@ -110,9 +110,9 @@ def sucuri(html):
     s = re.sub(r'\n', '', s)
     s = re.sub(r'document\.cookie', 'cookie', s)
     cookie = '' ; exec(s)
-    self.cookie = re.compile('([^=]+)=(.*)').findall(cookie)[0]
-    self.cookie = '%s=%s' % (self.cookie[0], self.cookie[1])
-    return self.cookie
+    cookie = re.compile('([^=]+)=(.*)').findall(cookie)[0]
+    cookie = '%s=%s' % (cookie[0], cookie[1])
+    return cookie
 
 def get_hh_html(url, referer='', hdr=headers, NoCookie=None, data=None):
     html = utils.getHtml(url, referer, hdr, NoCookie, data)
