@@ -17,32 +17,31 @@
 '''
 
 import re
+from random import randint
 
 import xbmc
 import xbmcplugin
 import xbmcgui
 from resources.lib import utils
-from random import randint
 
 progress = utils.progress
 
 
 @utils.url_dispatcher.register('50')    
 def PTMain():
-    utils.addDir('[COLOR hotpink]Categories[/COLOR]','http://www.porntrex.com/categories/',53,'','')
-    utils.addDir('[COLOR hotpink]Search[/COLOR]','http://www.porntrex.com/search/',54,'','')
-    PTList('http://www.porntrex.com/latest-updates/1/',1)
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]', 'https://www.porntrex.com/categories/', 53, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]', 'https://www.porntrex.com/search/', 54, '', '')
+    PTList('https://www.porntrex.com/latest-updates/1/', 1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 @utils.url_dispatcher.register('51', ['url'], ['page'])
 def PTList(url, page=1, onelist=None):
     if onelist:
-        url = url.replace('/1/','/'+str(page)+'/')
+        url = url.replace('/1/', '/' + str(page) + '/')
     try:
         listhtml = utils.getHtml(url, '')
     except:
-        
         return None
     match = re.compile('class="video-item.*?href="([^"]+)" title="([^"]+)".*?original="([^"]+)"(.*?)clock-o"></i>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, name, img, hd, duration in match:
@@ -54,45 +53,35 @@ def PTList(url, page=1, onelist=None):
         else:
             hd = " "
         name = name + hd + "[COLOR deeppink]" + duration + "[/COLOR]"
-        if img.startswith('//'): img = 'https:' + img
+        if img.startswith('//'):
+            img = 'https:' + img
         img = re.sub(r"cdn\d?", "www", img)
-        
-        imgint = randint(1,10)
+        imgint = randint(1, 10)
         newimg = str(imgint) + '.jpg'
-        img = img.replace('1.jpg',newimg)
+        img = img.replace('1.jpg', newimg)
         utils.addDownLink(name, videopage, 52, img, '')
     if not onelist:
         if re.search('<li class="next">', listhtml, re.DOTALL | re.IGNORECASE):
             npage = page + 1
             if '/categories/' in url:
-                url = url.replace('from='+str(page),'from='+str(npage))
+                url = url.replace('from='+str(page), 'from='+str(npage))
             else:
-                url = url.replace('/'+str(page)+'/','/'+str(npage)+'/')
+                url = url.replace('/'+str(page)+'/', '/'+str(npage)+'/')
             utils.addDir('Next Page ('+str(npage)+')', url, 51, '', npage)
         xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 @utils.url_dispatcher.register('52', ['url', 'name'], ['download'])
 def PTPlayvid(url, name, download=None):
-
-    progress.create('Play video', 'Searching videofile.')
-    progress.update( 25, "", "Loading video page", "" )
-
+    progress.create('Play video', 'Searching for videofile.')
+    progress.update(25, "", "Loading video page", "")
     videopage = utils.getHtml(url, '')
-    match = re.compile("video_alt_url2: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
-    match2 = re.compile("video_alt_url: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
-    match3 = re.compile("video_url: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
-    try:
-        videourl = match[0]
-    except:
-        try:
-            videourl = match2[0]
-        except:
-            videourl = match3[0]
-    
-    progress.update( 75, "", "Video found", "" )
+    match_720p = re.compile("video_alt_url2: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
+    match_480p = re.compile("video_alt_url: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
+    match_360p = re.compile("video_url: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
+    videourl = match_720p[0] if match_720p else match_480p[0] if match_480p else match_360p[0]
+    progress.update(75, "", "Video found", "")
     progress.close()
-
     if download == 1:
         utils.downloadVideo(videourl, name)
     else:
@@ -107,7 +96,8 @@ def PTCat(url):
     cathtml = utils.getHtml(url, '')
     match = re.compile('<a class="item" href="([^"]+)" title="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(cathtml)
     for catpage, name, img in match:
-        if img.startswith('//'): img = 'https:' + img
+        if img.startswith('//'):
+            img = 'https:' + img
         img = re.sub(r"cdn\d?", "www", img)
         catpage = catpage + '?mode=async&function=get_block&block_id=list_videos_common_videos_list&sort_by=post_date&from=1'
         utils.addDir(name, catpage, 51, img, 1)
@@ -120,7 +110,6 @@ def PTSearch(url, keyword=None):
     if not keyword:
         utils.searchDir(url, 54)
     else:
-        title = keyword.replace(' ','+')
+        title = keyword.replace(' ', '+')
         searchUrl = searchUrl + title + '/'
-        print "Searching URL: " + searchUrl
         PTList(searchUrl, 1)
