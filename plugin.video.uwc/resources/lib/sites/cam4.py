@@ -66,9 +66,8 @@ def List(url, page=1):
     try:
         listhtml = utils.getHtml(url, url)
     except:
-        
         return None
-    match = re.compile('profileDataBox"> <a href="([^"]+)".*?src="([^"]+)" title="Chat Now Free with ([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile('profileDataBox">.*?<a href="([^"]+)".*?src="([^"]+)" title="Chat Now Free with ([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videourl, img, name in match:
         name = utils.cleantext(name)
         videourl = "http://www.cam4.com" + videourl
