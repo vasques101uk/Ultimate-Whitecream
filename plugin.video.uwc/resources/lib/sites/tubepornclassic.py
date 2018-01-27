@@ -78,8 +78,10 @@ def Cat(url):
 
 @utils.url_dispatcher.register('362', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
+    utils.progress.create('Playing video', 'Searching for videofile')
+    utils.progress.update(25, "", "Loading video page", "")
     videopage = utils.getHtml(url, '')
-    videourl = re.compile("'file': '([^']+)", re.DOTALL | re.IGNORECASE).findall(videopage)[-1]
+    videourl = re.compile('video_url="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)[-1]
     videourl = utils.getVideoLink(videourl, url)
     if download == 1:
         utils.downloadVideo(videourl, name)
@@ -87,4 +89,5 @@ def Playvid(url, name, download=None):
         iconimage = xbmc.getInfoImage("ListItem.Thumb")
         listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+        utils.progress.update(90, "", "Playing video", "")
         xbmc.Player().play(videourl, listitem)

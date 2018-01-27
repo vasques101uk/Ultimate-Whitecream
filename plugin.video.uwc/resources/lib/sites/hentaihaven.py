@@ -41,7 +41,7 @@ def Main():
 @utils.url_dispatcher.register('461', ['url'])
 def List(url):
     try:
-        listhtml = get_hh_html(url, '')
+        listhtml = utils.getHtml(url, '')
     except:
         return None
     listhtml = listhtml.replace('\\','')
@@ -49,7 +49,7 @@ def List(url):
     for videopage, img, other, name in match1:
         name = utils.cleantext(name)
         if 'uncensored' in other:
-            name = name + " [COLOR hotpink]Uncensored[/COLOR]"        
+            name = name + " [COLOR orange]Uncensored[/COLOR]"        
         utils.addDownLink(name, videopage, 462, img, '')
     try:
         page = re.compile('page_no=(\d+)', re.DOTALL | re.IGNORECASE).findall(url)[0]
@@ -66,12 +66,14 @@ def List(url):
 
 @utils.url_dispatcher.register('462', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
-    videopage = get_hh_html(url)
+    videopage = utils.getHtml(url)
     if "<source" in videopage:
         videourl = re.compile('<source.*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)[0]
     else:
         videourl = re.compile('class="btn btn-1 btn-1e" href="([^"]+)" target="_blank"', re.DOTALL | re.IGNORECASE).findall(videopage)[0]
     if videourl:
+        if 'play.php' in videourl:
+            videourl = utils.getVideoLink(videourl, url)
         utils.playvid(videourl, name, download)
     else:
         utils.notify('Oh oh','Couldn\'t find a video')
@@ -79,7 +81,7 @@ def Playvid(url, name, download=None):
 
 @utils.url_dispatcher.register('463', ['url'])
 def Categories(url):
-    cathtml = get_hh_html(url, '')
+    cathtml = utils.getHtml(url, '')
     match = re.compile('/tag/([^/]+)/" cla[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(cathtml)
     for catpage, name in match:
         catpage = "http://hentaihaven.org/ajax.php?action=pukka_infinite_scroll&page_no=1&grid_params=infinite_scroll=on&infinite_page=2&infinite_more=true&current_page=taxonomy&front_page_cats=&inner_grid%5Buse_inner_grid%5D=on&inner_grid%5Btax%5D=post_tag&inner_grid%5Bterm_id%5D=53&inner_grid%5Bdate%5D=&search_query=&tdo_tag=" + catpage + "&sort=date" 
@@ -89,35 +91,10 @@ def Categories(url):
 
 @utils.url_dispatcher.register('464', ['url'])
 def A2Z(url):
-    cathtml = get_hh_html(url, '')
+    cathtml = utils.getHtml(url, '')
     match = re.compile(r'class="cat_section"><a\s+href="([^"]+)"[^>]+>([^<]+)<.*?src="([^"]+)"(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(cathtml)
     for catpage, name, img, other in match:
         if 'uncensored' in other:
             name = name + " [COLOR hotpink]Uncensored[/COLOR]"
         utils.addDir(name, catpage, 461, img)    
     xbmcplugin.endOfDirectory(utils.addon_handle)
-
-
-def sucuri(html):
-    s = re.compile("S\s*=\s*'([^']+)").findall(html)[0]
-    s = base64.b64decode(s)
-    s = s.replace(' ', '')
-    s = re.sub('String\.fromCharCode\(([^)]+)\)', r'chr(\1)', s)
-    s = re.sub('\.slice\((\d+),(\d+)\)', r'[\1:\2]', s)
-    s = re.sub('\.charAt\(([^)]+)\)', r'[\1]', s)
-    s = re.sub('\.substr\((\d+),(\d+)\)', r'[\1:\1+\2]', s)
-    s = re.sub(';location.reload\(\);', '', s)
-    s = re.sub(r'\n', '', s)
-    s = re.sub(r'document\.cookie', 'cookie', s)
-    cookie = '' ; exec(s)
-    cookie = re.compile('([^=]+)=(.*)').findall(cookie)[0]
-    cookie = '%s=%s' % (cookie[0], cookie[1])
-    return cookie
-
-def get_hh_html(url, referer='', hdr=headers, NoCookie=None, data=None):
-    html = utils.getHtml(url, referer, hdr, NoCookie, data)
-    if 'sucuri_cloudproxy_js' in html:
-        cookie = sucuri(html)
-        headers.update({'Referer': url, 'Cookie': cookie})
-        html = utils.getHtml(url, referer='', hdr=headers)
-    return html
