@@ -222,6 +222,8 @@ def List(channel, section, page=0):
         if len(hd) > 2:
             if hd.find('full') > 0:
                 hd = " [COLOR yellow]FULLHD[/COLOR] "
+            elif hd.find('4k') > 0:
+                hd = " [COLOR red]4K[/COLOR] "                
             else:
                 hd = " [COLOR orange]HD[/COLOR] "
         else:
@@ -240,7 +242,7 @@ def List(channel, section, page=0):
 @utils.url_dispatcher.register('292', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
     videopage = utils.getHtml(url, pdreferer, headers, data='')
-    links = re.compile('<a href="([^"]+)" class="post_download_link clearfix">[^>]+>.*?(\d+p).*?<',
+    links = re.compile('<a href="([^"]+)" class="post_download_link clearfix">[^>]+>([^<]+)<',
                        re.DOTALL | re.IGNORECASE).findall(videopage)
     videourl = getVideoUrl(links)
     videourl = utils.getVideoLink(videourl, url)
@@ -262,6 +264,7 @@ def getVideoUrl(testquality):
     p540 = findx('540p', testquality)
     p720 = findx('720p', testquality)
     p1080 = findx('1080p', testquality)
+    p4k = findx('UHD 4K', testquality)
 
     if p240 is not None:
         try: testurl = testquality[p240[0]][0]
@@ -284,6 +287,9 @@ def getVideoUrl(testquality):
     if p1080 is not None:
         try: testurl = testquality[p1080[0]][0]
         except: pass
+    if p4k is not None:
+        try: testurl = testquality[p4k[0]][0]
+        except: pass        
     return testurl
 
 
