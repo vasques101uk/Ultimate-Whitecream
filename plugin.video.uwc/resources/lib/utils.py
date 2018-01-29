@@ -22,7 +22,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "Whitecream"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "Whitecream, Fr33m1nd, anton40, NothingGnome, holisticdioxide"
-__version__ = "1.1.57"
+__version__ = "1.1.59"
 
 import urllib
 import urllib2
@@ -828,7 +828,7 @@ class VideoPlayer():
                 new_list.append(source)
         return new_list
 
-    def play_from_site_link(self, url, referrer=None):
+    def play_from_site_link(self, url, referrer=''):
         self.progress.update(25, "", "Loading video page", "")
         html = getHtml(url, referrer)
         html += self._check_suburls(html, url)
