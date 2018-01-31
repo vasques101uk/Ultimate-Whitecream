@@ -101,7 +101,5 @@ def Actors(url):
 def Playvid(url, name, download=None):
     html = utils.getHtml(url, url)
     matches = re.compile('iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(html)
-    for match in matches:
-        html += utils.getHtml(match, url)
-    vp = utils.VideoPlayer(name, download, regex='''=\s*["']([^'"]+)''')
+    vp = utils.VideoPlayer(name, download, regex='''(?:SRC|src)=\s*["']([^'"]+)''')
     vp.play_from_html(html)
