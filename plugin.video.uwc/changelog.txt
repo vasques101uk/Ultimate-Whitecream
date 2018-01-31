@@ -1,5 +1,8 @@
 [B]Version 1.1.59[/B]
 New site: Vidz7
+Added: Porndig 4K support
+Added: Porntrex 4K support and quality selector
+Fixed: Porntrex images and category alphabetical order
 
 
 [B]Version 1.1.58[/B]

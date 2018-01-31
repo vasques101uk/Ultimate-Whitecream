@@ -50,12 +50,18 @@ def PTList(url, page=1, onelist=None):
             continue
         if hd.find('HD') > 0:
             hd = " [COLOR orange]HD[/COLOR] "
+        elif hd.find('4k') > 0:
+            hd = " [COLOR orange]4K[/COLOR] "
         else:
             hd = " "
         name = name + hd + "[COLOR deeppink]" + duration + "[/COLOR]"
         if img.startswith('//'):
             img = 'https:' + img
-        img = re.sub(r"cdn\d?", "www", img)
+        img = re.sub(r"http:", "https:", img)
+        img = img.split('.')
+        if not img[0] == 'https://porntrex':
+            img[0] = 'https://www'
+        img = ('.').join(img)
         imgint = randint(1, 10)
         newimg = str(imgint) + '.jpg'
         img = img.replace('1.jpg', newimg)
@@ -76,10 +82,36 @@ def PTPlayvid(url, name, download=None):
     progress.create('Play video', 'Searching for videofile.')
     progress.update(25, "", "Loading video page", "")
     videopage = utils.getHtml(url, '')
-    match_720p = re.compile("video_alt_url2: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
-    match_480p = re.compile("video_alt_url: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
-    match_360p = re.compile("video_url: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
-    videourl = match_720p[0] if match_720p else match_480p[0] if match_480p else match_360p[0]
+    sources = {}
+    try:
+        sources['2160p 4k'] = re.compile("video_alt_url5: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
+    except IndexError:
+        pass
+    try:
+        sources['1440p'] = re.compile("video_alt_url4: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
+    except IndexError:
+        pass
+    try:
+        sources['1080p'] = re.compile("video_alt_url3: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
+    except IndexError:
+        pass
+    try:
+        sources['720p'] = re.compile("video_alt_url2: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
+    except IndexError:
+        pass
+    try:
+        sources['480p'] = re.compile("video_alt_url: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
+    except IndexError:
+        pass
+    try:
+        sources['360p'] = re.compile("video_url: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
+    except IndexError:
+        pass
+    videourl = utils.selector('Select quality', sources, dont_ask_valid=True, sort_by=lambda x: int(''.join([y for y in x if y.isdigit()])), reverse=True)
+    if not videourl:
+        progress.close()
+        return
+    utils.kodilog(videourl)
     progress.update(75, "", "Video found", "")
     progress.close()
     if download == 1:
@@ -95,7 +127,7 @@ def PTPlayvid(url, name, download=None):
 def PTCat(url):
     cathtml = utils.getHtml(url, '')
     match = re.compile('<a class="item" href="([^"]+)" title="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(cathtml)
-    for catpage, name, img in match:
+    for catpage, name, img in sorted(match, key=lambda x: x[1]):
         if img.startswith('//'):
             img = 'https:' + img
         img = re.sub(r"cdn\d?", "www", img)

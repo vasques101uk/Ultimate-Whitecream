@@ -788,6 +788,40 @@ def textBox(heading,announce):
         xbmc.sleep(500)
 
 
+def selector(dialog_name, select_from, dont_ask_valid=False, sort_by=None, reverse=False):
+    '''
+    Shows a dialog where the user can choose from the values provided
+    Returns the value of the selected key, or None if no selection was made
+    
+    Usage:
+        dialog_name = title of the dialog shown
+        select_from = a list or a dictionary which contains the options
+
+        optional arguments
+        dont_ask_valid (False) = sets if dontask addon setting should be considered
+                         if True, the dialog won't be shown and the first element
+                         will be selected automatically
+        sort_by (None) = in case of dictionaries the keys will be sorted according this value
+                  in case of a list, the list will be ordered
+        reverse (False) = sets if order should be reversed
+    '''
+    if isinstance(select_from, dict):
+        keys = sorted(list(select_from.keys()), key=sort_by, reverse=reverse)
+        values = [select_from[x] for x in keys]
+    else:
+        keys = sorted(select_from, key=sort_by, reverse=reverse)
+        values = None
+    if not keys:
+        return None
+    if (dont_ask_valid and addon.getSetting("dontask") == "true") or len(keys) == 1:
+        selected = 0
+    else:
+        selected = dialog.select(dialog_name, keys)
+    if selected == -1:
+        return None
+    return values[selected] if values else keys[selected]
+
+
 class VideoPlayer():
     def __init__(self, name, download=False, regex=None):
         self.regex = regex if regex else '''(?:src|SRC|href|HREF)=\s*["']([^'"]+)'''
