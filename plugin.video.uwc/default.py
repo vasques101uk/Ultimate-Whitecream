@@ -87,7 +87,7 @@ def INDEXS():
 @utils.url_dispatcher.register('2')
 def INDEXM():
     if sys.version_info >= (2, 7, 9):
-        utils.addDir('[COLOR hotpink]Xtheatre[/COLOR]','http://xtheatre.net/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
+        utils.addDir('[COLOR hotpink]Xtheatre[/COLOR]','https://xxxmoviestream.com/category/movies/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
     utils.addDir('[COLOR hotpink]PornHive[/COLOR]','http://www.pornhive.tv/en/movies/all',70,os.path.join(imgDir, 'ph.png'),'')
     utils.addDir('[COLOR hotpink]JustPorn[/COLOR]','http://justporn.to/category/dvdrips-full-movies/',245,os.path.join(imgDir, 'justporn.png'),'')
     utils.addDir('[COLOR hotpink]ElReyX[/COLOR]','http://elreyx.com/index1.html',116,os.path.join(imgDir, 'elreyx.png'),'')

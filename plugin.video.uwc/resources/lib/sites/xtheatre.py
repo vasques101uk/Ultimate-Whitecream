@@ -48,7 +48,7 @@ def XTCat(url):
     cathtml = utils.getHtml(url, '')
     match = re.compile('src="([^"]+)"[^<]+</noscript>.*?<a href="([^"]+)"[^<]+<span>([^<]+)</s.*?">([^<]+)', re.DOTALL | re.IGNORECASE).findall(cathtml)
     for img, catpage, name, videos in match:
-        catpage = catpage
+        catpage = catpage + 'page/1/' if catpage.endswith('/') else catpage + '/page/1/'
         name = name + ' [COLOR deeppink]' + videos + '[/COLOR]'
         utils.addDir(name, catpage, 21, img, 1)
     xbmcplugin.endOfDirectory(utils.addon_handle)
@@ -62,12 +62,12 @@ def XTSearch(url, keyword=None):
     else:
         title = keyword.replace(' ','+')
         searchUrl = searchUrl + title
-        print "Searching URL: " + searchUrl
         XTList(searchUrl, 1)
 
 
 @utils.url_dispatcher.register('21', ['url'], ['page'])
 def XTList(url, page=1):
+    original_url = str(url)
     sort = getXTSortMethod()
     if re.search('\?', url, re.DOTALL | re.IGNORECASE):
         url = url + '&filtre=' + sort + '&display=extract'
@@ -78,7 +78,6 @@ def XTList(url, page=1):
     except:
         return None
     match = re.compile('src="([^"]+)" class="attachment-thumb_site.*?<a href="([^"]+)"[^<]+<span>([^<]+).*?">.*?<p>([^<]+)', re.DOTALL | re.IGNORECASE).findall(listhtml)
-
     for img, videopage, name, desc in match:
         name = utils.cleantext(name)
         desc = utils.cleanhtml(desc)
@@ -86,8 +85,8 @@ def XTList(url, page=1):
         utils.addDownLink(name, videopage, 23, img, desc)
     if re.search('<link rel="next"', listhtml, re.DOTALL | re.IGNORECASE):
         npage = page + 1        
-        url = url.replace('/page/'+str(page)+'/','/page/'+str(npage)+'/')
-        utils.addDir('Next Page ('+str(npage)+')', url, 21, '', npage)
+        next_url = original_url.replace('/page/' + str(page) + '/' , '/page/' + str(npage) + '/')
+        utils.addDir('Next Page ('+str(npage)+')', next_url, 21, '', npage)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
