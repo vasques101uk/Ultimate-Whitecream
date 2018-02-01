@@ -28,9 +28,9 @@ from resources.lib import utils
 
 @utils.url_dispatcher.register('475')
 def Main():
-	utils.addDir('[COLOR red]Refresh Camsoda images[/COLOR]','',479,'',Folder=False)
-	List('http://www.camsoda.com/api/v1/browse/online')
-	xbmcplugin.endOfDirectory(utils.addon_handle)
+    utils.addDir('[COLOR red]Refresh Camsoda images[/COLOR]', '', 479, '', Folder=False)
+    List('http://www.camsoda.com/api/v1/browse/online')
+    xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
 @utils.url_dispatcher.register('476', ['url'])
@@ -46,7 +46,7 @@ def List(url):
         name = utils.cleanhtml(camgirl['display_name']).encode("ascii", errors="ignore")
         videourl = "https://www.camsoda.com/api/v1/video/vtoken/" + camgirl['username']
         img = "https:" + camgirl['thumb_small']
-        utils.addDownLink(name, videourl, 478, img,  camgirl['subject_html'], noDownload=True)
+        utils.addDownLink(name, videourl, 478, img, camgirl['subject_html'], noDownload=True)
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -55,14 +55,16 @@ def clean_database(showdialog=True):
     conn = sqlite3.connect(xbmc.translatePath("special://database/Textures13.db"))
     try:
         with conn:
-            list = conn.execute("SELECT id, cachedurl FROM texture WHERE url LIKE '%%%s%%';" % ".camsoda.com")
-            for row in list:
+            lst = conn.execute("SELECT id, cachedurl FROM texture WHERE url LIKE '%%%s%%';" % ".camsoda.com")
+            for row in lst:
                 conn.execute("DELETE FROM sizes WHERE idtexture LIKE '%s';" % row[0])
-                try: os.remove(xbmc.translatePath("special://thumbnails/" + row[1]))
-                except: pass
+                try:
+                    os.remove(xbmc.translatePath("special://thumbnails/" + row[1]))
+                except:
+                    pass
             conn.execute("DELETE FROM texture WHERE url LIKE '%%%s%%';" % ".camsoda.com")
             if showdialog:
-                utils.notify('Finished','Camsoda images cleared')
+                utils.notify('Finished', 'Camsoda images cleared')
     except:
         pass
 
@@ -73,19 +75,18 @@ def Playvid(url, name):
     response = utils.getHtml(url)
     data = json.loads(response)
     if "camhouse" in data['stream_name']:
-       videourl = "https://camhouse.camsoda.com/" + data['app'] + "/mp4:" + data['stream_name'] + "_mjpeg/playlist.m3u8?token=" + data['token']
+        videourl = "https://camhouse.camsoda.com/" + data['app'] + "/mp4:" + data['stream_name'] + "_h264_aac_480p/playlist.m3u8?token=" + data['token']
     else:
-       videourl = "https://" + data['edge_servers'][0] + "/" + data['app'] + "/mp4:" + data['stream_name'] + "_mjpeg/playlist.m3u8?token=" + data['token']
+        videourl = "https://" + data['edge_servers'][0] + "/" + data['app'] + "/mp4:" + data['stream_name'] + "_h264_aac_480p/playlist.m3u8?token=" + data['token']
     iconimage = xbmc.getInfoImage("ListItem.Thumb")
     listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    listitem.setProperty("IsPlayable","true")
+    listitem.setProperty("IsPlayable", "true")
     if int(sys.argv[1]) == -1:
-       pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-       pl.clear()
-       pl.add(videourl, listitem)
-       xbmc.Player().play(pl)
+        pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        pl.clear()
+        pl.add(videourl, listitem)
+        xbmc.Player().play(pl)
     else:
-       listitem.setPath(str(videourl))
-       xbmcplugin.setResolvedUrl(utils.addon_handle, True, listitem)
-
+        listitem.setPath(str(videourl))
+        xbmcplugin.setResolvedUrl(utils.addon_handle, True, listitem)

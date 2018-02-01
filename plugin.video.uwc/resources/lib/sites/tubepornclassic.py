@@ -42,7 +42,7 @@ def List(url):
         listhtml = utils.getHtml(url, '')
     except:
         return None
-    match = re.compile('<a href="([^"]+)" title="([^"]+)".*?original="([^"]+)".*?duration">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    match = re.compile('<a href="([^"]+)" title="([^"]+)".*?src="([^"]+)".*?duration">([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
     for videopage, name, img, duration in match:
         name = utils.cleantext(name)
         name = name + " [COLOR deeppink]" + duration + "[/COLOR]"
