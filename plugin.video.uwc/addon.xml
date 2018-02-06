@@ -17,12 +17,14 @@
         <license>GPL 2.0</license>
         <summary lang="en">Watch [COLOR red][B]ADULT[/B][/COLOR] Movies with Ultimate WhiteCream</summary>
         <description lang="en">Watch [COLOR red][B]ADULT[/B][/COLOR] Movies with Ultimate WhiteCream</description>
-		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
+		<disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider. DMCA - holisticdioxide@protonmail.com</disclaimer>
 		<assets>
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
         <news>[B]Version 1.1.60[/B]
-Fixed: Xtheatre pagination</news>
+Fixed: Xtheatre pagination
+Fixed: Xhamster
+Fixed: Anybunny</news>
     </extension>
 </addon>

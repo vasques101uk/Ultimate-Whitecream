@@ -34,7 +34,6 @@ class Mega3xResolver(UrlResolver):
         if jsunpack.detect(js):
             html += jsunpack.unpack(js)
         if html:
-            common.logger.log_warning(html)
             source = re.search(',"(http.*?mp4)"', html, re.I)
             if source:
                 return source.group(1) + helpers.append_headers(headers)        

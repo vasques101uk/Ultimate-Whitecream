@@ -22,7 +22,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "Whitecream"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "Whitecream, Fr33m1nd, anton40, NothingGnome, holisticdioxide"
-__version__ = "1.1.59"
+__version__ = "1.1.60"
 
 import urllib
 import urllib2
@@ -53,26 +53,19 @@ uwc_plugins_path = 'special://home/addons/plugin.video.uwc/resources/urlresolver
 if xbmcvfs.exists(uwc_plugins_path):
     urlresolver.add_plugin_dirs(xbmc.translatePath(uwc_plugins_path))
 
-
-
 from url_dispatcher import URL_Dispatcher
 
 url_dispatcher = URL_Dispatcher()
 
-
-
-USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
+USER_AGENT = urlresolver.lib.net.get_ua()
 
 headers = {'User-Agent': USER_AGENT,
-           'Accept': '*/*',
+           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+           'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+           'Accept-Encoding': 'gzip',
+           'Accept-Language': 'en-US,en;q=0.8',
            'Connection': 'keep-alive'}
-
-openloadhdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
-       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-       'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-       'Accept-Encoding': 'none',
-       'Accept-Language': 'en-US,en;q=0.8',
-       'Connection': 'keep-alive'}
+openloadhdr = headers
 
 addon_handle = int(sys.argv[1])
 addon = xbmcaddon.Addon(id=__scriptid__)
@@ -87,7 +80,7 @@ rootDir = xbmc.translatePath(rootDir)
 resDir = os.path.join(rootDir, 'resources')
 imgDir = os.path.join(resDir, 'images')
 uwcicon = xbmc.translatePath(os.path.join(rootDir, 'icon.png'))
-uwcchange = xbmc.translatePath(os.path.join(rootDir, 'uwcchange.txt'))
+changelog = xbmc.translatePath(os.path.join(rootDir, 'changelog.txt'))
 
 profileDir = addon.getAddonInfo('profile')
 profileDir = xbmc.translatePath(profileDir).decode("utf-8")
@@ -141,7 +134,7 @@ class StopDownloading(Exception):
 
 def downloadVideo(url, name):
 
-    def _pbhook(downloaded, filesize, url=None,dp=None):
+    def _pbhook(downloaded, filesize, url=None, dp=None):
         try:
             percent = min((downloaded*100)/filesize, 100)
             currently_downloaded = float(downloaded) / (1024 * 1024)
@@ -178,13 +171,14 @@ def downloadVideo(url, name):
             return None
 
     def doDownload(url, dest, dp):
-
-        try: headers = dict(urlparse.parse_qsl(url.rsplit('|', 1)[1]))
-        except: headers = dict('')
+        try:
+            headers = dict(urlparse.parse_qsl(url.rsplit('|', 1)[1]))
+        except:
+            headers = dict('')
 
         if 'openload' in url:
             headers = openloadhdr
-            
+
         if 'spankbang.com' in url:
             url = getVideoLink(url,url)
 
@@ -192,16 +186,17 @@ def downloadVideo(url, name):
         file = dest.rsplit(os.sep, 1)[-1]
         resp = getResponse(url, headers, 0)
 
-
         if not resp:
             xbmcgui.Dialog().ok("Ultimate Whitecream", 'Download failed', 'No response from server')
             return False
-
-        try:    content = int(resp.headers['Content-Length'])
-        except: content = 0
-
-        try:    resumable = 'bytes' in resp.headers['Accept-Ranges'].lower()
-        except: resumable = False
+        try:
+            content = int(resp.headers['Content-Length'])
+        except:
+            content = 0
+        try:
+            resumable = 'bytes' in resp.headers['Accept-Ranges'].lower()
+        except:
+            resumable = False
         if resumable:
             print "Download is resumable"
 
@@ -312,7 +307,7 @@ def downloadVideo(url, name):
         badchars = '\\/:*?\"<>|\''
         for c in badchars:
             s = s.replace(c, '')
-        return s;
+        return s
 
     download_path = addon.getSetting('download_path')
     if download_path == '':
@@ -896,6 +891,10 @@ class VideoPlayer():
 
     @_cancellable
     def play_from_link_to_resolve(self, source):
+        if type(source) is str:
+            use_universal = True if addon.getSetting("universal_resolvers") == "true" else False
+            title = source.split('/')[2].split('.')[0] if '.' in source.split('/')[2] else source.split('/')[2]
+            source = urlresolver.HostedMediaFile(source, title=title, include_universal=use_universal)
         self.progress.update(80, "", "Passing link to URLResolver", "Playing from " + source.title)
         try:
             link = source.resolve()

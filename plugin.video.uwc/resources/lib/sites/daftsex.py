@@ -21,7 +21,6 @@ import sys
 import xbmc
 import xbmcplugin
 import xbmcgui
-import urlresolver
 from resources.lib import utils
 
 @utils.url_dispatcher.register('610')
@@ -51,13 +50,11 @@ def List(url, page=0):
 
 @utils.url_dispatcher.register('612', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
+    vp = utils.VideoPlayer(name)
+    vp.progress.update(25, "", "Loading video page", "")
     vidsite = utils.getHtml(url, 'https://daftsex.com/')
     video = 'https://vk.com/video' + re.compile("Fav.Toggle\(this, '([^']+)'", re.DOTALL | re.IGNORECASE).findall(vidsite)[0]
-    videourl = urlresolver.resolve(video)
-    iconimage = xbmc.getInfoImage("ListItem.Thumb")
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-    xbmc.Player().play(videourl, listitem)
+    vp.play_from_link_to_resolve(video)
 
 
 @utils.url_dispatcher.register('613', ['url'], ['keyword'])

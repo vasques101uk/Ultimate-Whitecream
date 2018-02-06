@@ -23,13 +23,8 @@ from resources.lib import utils
 
 addon = utils.addon
 
-header = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          'Accept-Encoding': 'gzip',
-          'Accept-Language': 'en-US,en;q=0.5'}
-
 def create_header_for_source(source_id):
-    hdr = dict(header)
+    hdr = dict(utils.headers)
     hdr['Cookie'] = 'defaultSourceID=' + str(source_id)
     return hdr
 

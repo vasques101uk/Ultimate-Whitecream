@@ -23,12 +23,6 @@ import xbmcplugin
 import xbmcgui
 from resources.lib import utils
 
-cookie = {'Cookie': 'lang=en; search_video=%7B%22sort%22%3A%22da%22%2C%22duration%22%3A%22%22%2C%22channels%22%3A%22%3B0.1.2%22%2C%22quality%22%3A0%2C%22date%22%3A%22%22%7D;'}
-
-header = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0',
-       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-       'Accept-Encoding': 'gzip, deflate, br',
-       'Accept-Language': 'en-US,en;q=0.5'}
 
 @utils.url_dispatcher.register('505')
 def Main():
@@ -43,7 +37,7 @@ def Main():
 @utils.url_dispatcher.register('506', ['url'])
 def List(url):
     try:
-        response = utils.getHtml(url, '', header)
+        response = utils.getHtml(url, '')
     except:
         return None
     match0 = re.compile('<head>(.*?)</head>.*?index-videos.*?>(.*?)<footer>', re.DOTALL | re.IGNORECASE).findall(response)
@@ -65,7 +59,7 @@ def List(url):
 @utils.url_dispatcher.register('507', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
     response = utils.getHtml(url)
-    match = re.compile("file: '(http[^']+)", re.DOTALL | re.IGNORECASE).findall(response)
+    match = re.compile('<!-- NO FLASH -->.*?href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(response)
     if match:
         utils.playvid(match[0], name, download)
     else:
@@ -73,7 +67,7 @@ def Playvid(url, name, download=None):
 
 @utils.url_dispatcher.register('508', ['url'])
 def Categories(url):
-    cathtml = utils.getHtml(url, '', header)
+    cathtml = utils.getHtml(url, '')
     match0 = re.compile('<div class="letter-blocks page">(.*?)<footer>', re.DOTALL | re.IGNORECASE).findall(cathtml)
     match = re.compile('<a href="(.+?)" >([^<]+)<').findall(match0[0])
     for url, name in match:

@@ -23,12 +23,6 @@ import xbmcplugin
 from resources.lib import utils
 
 
-headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:59.0) Gecko/20100101 Firefox/59.0',
-           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-           'Accept-Encoding': 'gzip',
-           'Accept-Language': 'en-US,en;q=0.5'}
-
-
 @utils.url_dispatcher.register('460')
 def Main():
     utils.addDir('[COLOR hotpink]Categories[/COLOR]', 'http://hentaihaven.org/pick-your-poison/', 463, '', '')

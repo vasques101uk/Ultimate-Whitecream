@@ -87,7 +87,7 @@ def INDEXS():
 @utils.url_dispatcher.register('2')
 def INDEXM():
     if sys.version_info >= (2, 7, 9):
-        utils.addDir('[COLOR hotpink]Xtheatre[/COLOR]','https://xxxmoviestream.com/category/movies/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
+        utils.addDir('[COLOR hotpink]Xtheatre[/COLOR]','http://xtheatre.net/page/1/',20,os.path.join(imgDir, 'xt.png'),'')
     utils.addDir('[COLOR hotpink]PornHive[/COLOR]','http://www.pornhive.tv/en/movies/all',70,os.path.join(imgDir, 'ph.png'),'')
     utils.addDir('[COLOR hotpink]JustPorn[/COLOR]','http://justporn.to/category/dvdrips-full-movies/',245,os.path.join(imgDir, 'justporn.png'),'')
     utils.addDir('[COLOR hotpink]ElReyX[/COLOR]','http://elreyx.com/index1.html',116,os.path.join(imgDir, 'elreyx.png'),'')
@@ -152,11 +152,19 @@ def OpenDownloadFolder(url):
 
 
 def change():
-    if os.path.isfile(utils.uwcchange):
-        heading = '[B][COLOR hotpink]Whitecream[/COLOR] [COLOR white]Changelog[/COLOR][/B]'
-        utils.textBox(heading,utils.uwcchange)
-        os.remove(utils.uwcchange)
-
+    if addon.getSetting('changelog_seen_version') == utils.__version__ or not os.path.isfile(utils.changelog):
+        return
+    addon.setSetting('changelog_seen_version', utils.__version__)
+    heading = '[B][COLOR hotpink]Whitecream[/COLOR] [COLOR white]Changelog[/COLOR][/B]'
+    with open(utils.changelog) as f:
+        cl_lines = f.readlines()
+    announce = ''
+    for line in cl_lines:
+        if line == '\n':
+            break
+        announce += line
+    utils.textBox(heading, announce)
+    
 
 if not addon.getSetting('uwcage') == 'true':
     age = dialog.yesno('WARNING: This addon contains adult material.','You may enter only if you are at least 18 years of age.', nolabel='Exit', yeslabel='Enter')
