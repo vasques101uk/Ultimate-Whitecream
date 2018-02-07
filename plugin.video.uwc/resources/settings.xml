@@ -8,6 +8,7 @@
         <setting id="paradisehill" label="30004" type="bool" default="false" />
         <setting id="posterfanart" label="30005" type="bool" default="false" />
         <setting id="download_path" type="folder" source="video" label="Download Folder"  option="writeable" default=""/>
+        <setting id="open_smr_settings" type="action" label="30027" enable="true" option="close" action="RunPlugin(plugin://plugin.video.uwc/?mode=8)" />
     </category>
     <category label="Chaturbate">
         <setting type="lsep" label="30110" />
