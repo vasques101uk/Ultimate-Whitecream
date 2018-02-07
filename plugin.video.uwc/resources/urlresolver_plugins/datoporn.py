@@ -18,9 +18,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-from resolveurl.plugins.__generic_resolver__ import GenericResolver
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
-class DatoPornResolver(GenericResolver):
+class DatoPornResolver(ResolveGeneric):
     name = "datoporn"
     domains = ['datoporn.com', 'dato.porn', 'datoporn.co']
     pattern = '(?://|\.)(datoporn\.com|dato\.porn|datoporn\.co)/(?:embed[/-])?([0-9a-zA-Z]+)'
