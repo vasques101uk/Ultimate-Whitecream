@@ -17,10 +17,10 @@
 '''
 
 import re
-from urlresolver import common
-from urlresolver.resolver import UrlResolver, ResolverError
+from resolveurl import common
+from resolveurl.resolver import ResolveUrl, ResolverError
 
-class VartucResolver(UrlResolver):
+class VartucResolver(ResolveUrl):
     name = "vartuc"
     domains = ['vartuc.com', "azblowjobtube.com"]
     pattern = '(?://|\.)(vartuc\.com|azblowjobtube\.com)/embed/([^"]+)'
