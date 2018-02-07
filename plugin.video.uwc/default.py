@@ -151,6 +151,13 @@ def OpenDownloadFolder(url):
     xbmc.executebuiltin('ActivateWindow(Videos, '+url+')')
 
 
+@utils.url_dispatcher.register('8')
+def smrSettings():
+    try: import resolveurl
+    except: pass
+    resolveurl.display_settings()
+
+
 def change():
     if addon.getSetting('changelog_seen_version') == utils.__version__ or not os.path.isfile(utils.changelog):
         return
