@@ -45,19 +45,19 @@ import xbmcaddon
 import xbmcvfs
 import cloudflare
 from jsunpack import unpack
-import urlresolver
+import resolveurl
 import xbmcvfs
 from functools import wraps
 
 uwc_plugins_path = 'special://home/addons/plugin.video.uwc/resources/urlresolver_plugins/'
 if xbmcvfs.exists(uwc_plugins_path):
-    urlresolver.add_plugin_dirs(xbmc.translatePath(uwc_plugins_path))
+    resolveurl.add_plugin_dirs(xbmc.translatePath(uwc_plugins_path))
 
 from url_dispatcher import URL_Dispatcher
 
 url_dispatcher = URL_Dispatcher()
 
-USER_AGENT = urlresolver.lib.net.get_ua()
+USER_AGENT = resolveurl.lib.net.get_ua()
 
 headers = {'User-Agent': USER_AGENT,
            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -874,7 +874,7 @@ class VideoPlayer():
             self.play_from_direct_link(selected)
         else:
             use_universal = True if addon.getSetting("universal_resolvers") == "true" else False
-            sources = self._clean_urls([urlresolver.HostedMediaFile(x, title=x.split('/')[2], include_universal=use_universal) for x in urlresolver.scrape_supported(html, self.regex)])
+            sources = self._clean_urls([resolveurl.HostedMediaFile(x, title=x.split('/')[2], include_universal=use_universal) for x in resolveurl.scrape_supported(html, self.regex)])
             if not sources:
                 notify('Oh oh','Could not find a supported link')
                 return
@@ -885,7 +885,7 @@ class VideoPlayer():
         if not len(sources) > 1 or addon.getSetting("dontask") == "true":
             source = sources[0]
         else:
-            source = urlresolver.choose_source(sources)
+            source = resolveurl.choose_source(sources)
         if source:
             self.play_from_link_to_resolve(source)
 
@@ -894,11 +894,11 @@ class VideoPlayer():
         if type(source) is str:
             use_universal = True if addon.getSetting("universal_resolvers") == "true" else False
             title = source.split('/')[2].split('.')[0] if '.' in source.split('/')[2] else source.split('/')[2]
-            source = urlresolver.HostedMediaFile(source, title=title, include_universal=use_universal)
+            source = resolveurl.HostedMediaFile(source, title=title, include_universal=use_universal)
         self.progress.update(80, "", "Passing link to URLResolver", "Playing from " + source.title)
         try:
             link = source.resolve()
-        except urlresolver.resolver.ResolverError:
+        except resolveurl.resolver.ResolverError:
             return
         self.play_from_direct_link(link)
 
