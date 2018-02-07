@@ -13,7 +13,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 
-from urlresolver.plugins.__generic_resolver__ import GenericResolver
+from resolveurl.plugins.__generic_resolver__ import GenericResolver
 
 class ImperioPornoResolver(GenericResolver):
     name = "imperioporno"
