@@ -2,6 +2,7 @@
 Fixed: Xtheatre pagination
 Fixed: Xhamster
 Fixed: Anybunny
+Fixed: HClips
 
 
 [B]Version 1.1.59[/B]
