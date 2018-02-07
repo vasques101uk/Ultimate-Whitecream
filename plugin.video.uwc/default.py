@@ -148,14 +148,16 @@ def ONELIST(page=1):
 
 @utils.url_dispatcher.register('4', ['url'])
 def OpenDownloadFolder(url):
-    xbmc.executebuiltin('ActivateWindow(Videos, '+url+')')
+    xbmc.executebuiltin('ActivateWindow(Videos, ' + url + ')')
 
 
 @utils.url_dispatcher.register('8')
 def smrSettings():
-    try: import resolveurl
-    except: pass
-    resolveurl.display_settings()
+    try:
+        import resolveurl
+        resolveurl.display_settings()
+    except ImportError:
+        pass
 
 
 def change():

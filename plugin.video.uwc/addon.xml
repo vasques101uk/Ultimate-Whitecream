@@ -26,6 +26,8 @@
 Fixed: Xtheatre pagination
 Fixed: Xhamster
 Fixed: Anybunny
-Fixed: HClips</news>
+Fixed: HClips
+Changed to ResolveURL from URLResolver
+ResolveURL settings can now be opened directly from Ultimate Whitecream settings</news>
     </extension>
 </addon>

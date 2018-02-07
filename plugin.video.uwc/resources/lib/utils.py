@@ -895,7 +895,7 @@ class VideoPlayer():
             use_universal = True if addon.getSetting("universal_resolvers") == "true" else False
             title = source.split('/')[2].split('.')[0] if '.' in source.split('/')[2] else source.split('/')[2]
             source = resolveurl.HostedMediaFile(source, title=title, include_universal=use_universal)
-        self.progress.update(80, "", "Passing link to URLResolver", "Playing from " + source.title)
+        self.progress.update(80, "", "Passing link to ResolveURL", "Playing from " + source.title)
         try:
             link = source.resolve()
         except resolveurl.resolver.ResolverError:

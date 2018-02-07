@@ -2,8 +2,7 @@
 
 '''
     Ultimate Whitecream
-    Copyright (C) 2015 Whitecream
-    Copyright (C) 2015 anton40
+    Copyright (C) 2018 Whitecream, anton40, holisticdioxide
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -114,16 +113,13 @@ def ChannelList(url):
 
 @utils.url_dispatcher.register('382', ['url', 'name'], ['download'])    
 def Playvid(url, name, download=None):
+    vp = utils.VideoPlayer(name, download)
+    vp.progress.update(25, "", "Loading video page", "")
     html = utils.getHtml(url, '')
     videourl = re.compile('video_url="([^"]+)"').findall(html)
     videourl = decrypt_hclips(videourl[0])
-    if download == 1:
-        utils.downloadVideo(videourl, name)
-    else:    
-        iconimage = xbmc.getInfoImage("ListItem.Thumb")
-        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-        xbmc.Player().play(videourl, listitem)
+    vp.play_from_direct_link(videourl)
+
 
 def decrypt_hclips(video_url):
     chars = []

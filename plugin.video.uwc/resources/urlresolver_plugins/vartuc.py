@@ -1,5 +1,5 @@
 '''
-    vartuc resolver for URLResolver
+    vartuc resolver for ResolveURL
     Copyright (C) 2018 holisticdioxide
 
     This program is free software: you can redistribute it and/or modify
@@ -37,7 +37,7 @@ class VartucResolver(ResolveUrl):
         js_path = 'https://' + self.domains[0] + js_link + '&ver=x'
         js = self.net.http_GET(js_path, headers=self.headers).content
         js = js.split(";")
-        js = [line for line in js if (line.startswith("gh") and '=' in line) or line.startswith("irue842")]
+        js = [line for line in js if (line.startswith("gh") or line.startswith("irue842")) and '=' in line and '(' not in line and ')' not in line]
         js = "\n".join(js)
         exec js
         try:
@@ -47,7 +47,7 @@ class VartucResolver(ResolveUrl):
             raise ResolverError('Video not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://www.vartuc.com/embed/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')
 
     @classmethod
     def _is_enabled(cls):
