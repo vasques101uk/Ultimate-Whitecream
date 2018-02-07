@@ -5,7 +5,7 @@
        provider-name="Whitecream, holisticdioxide">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
-        <import addon="script.module.urlresolver"  version="4.0.0" />
+        <import addon="script.module.resolveurl" version="5.0.00"/>
         <import addon="script.video.F4mProxy" version="2.5.7" />
     </requires>
     <extension point="xbmc.python.pluginsource"
