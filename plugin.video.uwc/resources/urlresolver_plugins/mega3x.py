@@ -14,11 +14,11 @@
 '''
 
 import re
-from urlresolver import common
-from urlresolver.resolver import UrlResolver, ResolverError
-from urlresolver.plugins.lib import jsunpack, helpers
+from resolveurl import common
+from resolveurl.resolver import ResolveUrl, ResolverError
+from resolveurl.plugins.lib import jsunpack, helpers
 
-class Mega3xResolver(UrlResolver):
+class Mega3xResolver(ResolveUrl):
     name = "mega3x"
     domains = ['mega3x.net']
     pattern = '(?://|\.)(?:www\.)?(mega3x.net)/(?:embed-)?([0-9a-zA-Z]+).html'
