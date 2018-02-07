@@ -13,9 +13,9 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 
-from resolveurl.plugins.__generic_resolver__ import GenericResolver
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
-class BitPornoResolver(GenericResolver):
+class BitPornoResolver(ResolveGeneric):
     name = "bitporno"
     domains = ['bitporno.com']
     pattern = '(?://|\.)(bitporno\.com)/(?:embed)/([0-9a-zA-Z]+)'
