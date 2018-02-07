@@ -160,7 +160,7 @@ def change():
         cl_lines = f.readlines()
     announce = ''
     for line in cl_lines:
-        if line == '\n':
+        if not line.strip():
             break
         announce += line
     utils.textBox(heading, announce)
