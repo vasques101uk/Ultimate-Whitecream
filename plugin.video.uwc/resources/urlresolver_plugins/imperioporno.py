@@ -13,9 +13,9 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 
-from resolveurl.plugins.__generic_resolver__ import GenericResolver
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
-class ImperioPornoResolver(GenericResolver):
+class ImperioPornoResolver(ResolveGeneric):
     name = "imperioporno"
     domains = ['imperioporno.tv']
     pattern = '(?://|\.)(imperioporno\.tv)/wp-content/plugins/repro/video.php([0-9a-zA-Z?=.&]+)'
