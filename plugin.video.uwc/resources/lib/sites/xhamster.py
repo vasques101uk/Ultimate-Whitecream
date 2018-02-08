@@ -17,12 +17,16 @@ import urllib2
 import os
 import re
 import sys
+import json
 
 import xbmc
 import xbmcplugin
 import xbmcgui
 from resources.lib import utils
 
+# xhamster serves different sites to newer and older browsers, a predefined user agent is needed
+xhamster_headers = dict(utils.headers)
+xhamster_headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
 
 @utils.url_dispatcher.register('505')
 def Main():
@@ -37,7 +41,7 @@ def Main():
 @utils.url_dispatcher.register('506', ['url'])
 def List(url):
     try:
-        response = utils.getHtml(url, '')
+        response = utils.getHtml(url, hdr=xhamster_headers)
     except:
         return None
     match0 = re.compile('<head>(.*?)</head>.*?index-videos.*?>(.*?)<footer>', re.DOTALL | re.IGNORECASE).findall(response)
@@ -58,16 +62,16 @@ def List(url):
 
 @utils.url_dispatcher.register('507', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
-    response = utils.getHtml(url)
-    match = re.compile('<!-- NO FLASH -->.*?href="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(response)
+    response = utils.getHtml(url, hdr=xhamster_headers)
+    match = get_xhamster_link(response)
     if match:
-        utils.playvid(match[0], name, download)
+        utils.playvid(match, name, download)
     else:
         utils.notify('Oh oh','Couldn\'t find a video')
 
 @utils.url_dispatcher.register('508', ['url'])
 def Categories(url):
-    cathtml = utils.getHtml(url, '')
+    cathtml = utils.getHtml(url, hdr=xhamster_headers)
     match0 = re.compile('<div class="letter-blocks page">(.*?)<footer>', re.DOTALL | re.IGNORECASE).findall(cathtml)
     match = re.compile('<a href="(.+?)" >([^<]+)<').findall(match0[0])
     for url, name in match:
@@ -85,3 +89,13 @@ def Search(url, keyword=None):
         searchUrl = searchUrl + title
         xbmc.log("Search: " + searchUrl)
         List(searchUrl)
+
+def get_xhamster_link(html):
+    try:
+        html = [line.strip() for line in html.split('\n') if line.strip().startswith("window.initials")][0]
+        xjson = json.loads(html[18:-1])
+        highest_quality_source = xjson["xplayerSettings"]["sources"]["mp4"][-1]
+        links = (highest_quality_source["fallback"], highest_quality_source["url"])
+        return links[0] if 'xhcdn' in links[0] else links[1]
+    except IndexError:
+        return None
