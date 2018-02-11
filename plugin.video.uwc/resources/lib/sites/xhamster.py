@@ -1,10 +1,12 @@
 '''
     Ultimate Whitecream
-    Copyright (C) 2016 Whitecream, hdgdl
+    Copyright (C) 2016 Whitecream, hdgdl, holisticdioxide
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -81,21 +83,25 @@ def Categories(url):
 @utils.url_dispatcher.register('509', ['url'], ['keyword'])
 def Search(url, keyword=None):
     searchUrl = url
-    xbmc.log("Search: " + searchUrl)
     if not keyword:
         utils.searchDir(url, 509)
     else:
         title = keyword.replace(' ','_')
         searchUrl = searchUrl + title
-        xbmc.log("Search: " + searchUrl)
         List(searchUrl)
 
 def get_xhamster_link(html):
+    for line in html.split('\n'):
+        line = line.strip()
+        if line.startswith("window.initials"):
+            jsonline = line[18:-1]
+            break
+    else:
+        return None
     try:
-        html = [line.strip() for line in html.split('\n') if line.strip().startswith("window.initials")][0]
-        xjson = json.loads(html[18:-1])
+        xjson = json.loads(jsonline)
         highest_quality_source = xjson["xplayerSettings"]["sources"]["mp4"][-1]
-        links = (highest_quality_source["fallback"], highest_quality_source["url"])
-        return links[0] if 'xhcdn' in links[0] else links[1]
+        links = (highest_quality_source["url"], highest_quality_source["fallback"])
+        return links[0] if 'xhcdn' in links[0] or not links[1] else links[1]
     except IndexError:
         return None

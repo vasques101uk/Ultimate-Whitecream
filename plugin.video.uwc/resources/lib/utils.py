@@ -818,8 +818,9 @@ def selector(dialog_name, select_from, dont_ask_valid=False, sort_by=None, rever
 
 
 class VideoPlayer():
-    def __init__(self, name, download=False, regex=None):
+    def __init__(self, name, download=False, regex=None, direct_regex=None):
         self.regex = regex if regex else '''(?:src|SRC|href|HREF)=\s*["']([^'"]+)'''
+        self.direct_regex = direct_regex if direct_regex else """<source.*?src=(?:"|')([^"']+)[^>]+>"""
         self.name = name
         self.download = download
         self.progress = xbmcgui.DialogProgress()
@@ -866,11 +867,10 @@ class VideoPlayer():
     @_cancellable
     def play_from_html(self, html):
         self.progress.update(50, "", "Searching for supported hosts", "")
-        direct_links = re.compile("""<source.*?src=(?:"|')([^"']+)[^>]+>""", re.DOTALL | re.IGNORECASE).findall(html)
+        direct_links = re.compile(self.direct_regex, re.DOTALL | re.IGNORECASE).findall(html)
         if direct_links:
             selected = 'https:' + direct_links[0] if direct_links[0].startswith('//') else direct_links[0]
-            hdr = dict(headers)
-            hdr['Referer'] = selected
+            self.progress.update(50, "", "", "Playing from direct link")
             self.play_from_direct_link(selected)
         else:
             use_universal = True if addon.getSetting("universal_resolvers") == "true" else False
