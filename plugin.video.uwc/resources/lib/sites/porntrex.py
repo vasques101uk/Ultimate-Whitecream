@@ -1,6 +1,6 @@
 '''
     Ultimate Whitecream
-    Copyright (C) 2015 Whitecream
+    Copyright (C) 2018 Whitecream, holisticdioxide
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,6 +35,14 @@ def PTMain():
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
+@utils.url_dispatcher.register('55')    
+def JHMain():
+    utils.addDir('[COLOR hotpink]Categories[/COLOR]', 'https://www.javwhores.com/categories/', 53, '', '')
+    utils.addDir('[COLOR hotpink]Search[/COLOR]', 'https://www.javwhores.com/search/', 54, '', '')
+    PTList('https://www.javwhores.com/latest-updates/1/', 1)
+    xbmcplugin.endOfDirectory(utils.addon_handle)
+
+
 @utils.url_dispatcher.register('51', ['url'], ['page'])
 def PTList(url, page=1, onelist=None):
     if onelist:
@@ -58,8 +66,9 @@ def PTList(url, page=1, onelist=None):
         if img.startswith('//'):
             img = 'https:' + img
         img = re.sub(r"http:", "https:", img)
+        domain = img.split('/')[2].split('.')[-2]
         img = img.split('.')
-        if not img[0] == 'https://porntrex':
+        if not img[0] == 'https://' + domain:
             img[0] = 'https://www'
         img = ('.').join(img)
         imgint = randint(1, 10)
@@ -70,10 +79,10 @@ def PTList(url, page=1, onelist=None):
         if re.search('<li class="next">', listhtml, re.DOTALL | re.IGNORECASE):
             npage = page + 1
             if '/categories/' in url:
-                url = url.replace('from='+str(page), 'from='+str(npage))
+                url = url.replace('from=' + str(page), 'from=' + str(npage))
             else:
-                url = url.replace('/'+str(page)+'/', '/'+str(npage)+'/')
-            utils.addDir('Next Page ('+str(npage)+')', url, 51, '', npage)
+                url = url.replace('/' + str(page) + '/', '/' + str(npage) + '/')
+            utils.addDir('Next Page (' + str(npage) + ')', url, 51, '', npage)
         xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -82,36 +91,17 @@ def PTPlayvid(url, name, download=None):
     progress.create('Play video', 'Searching for videofile.')
     progress.update(25, "", "Loading video page", "")
     videopage = utils.getHtml(url, '')
-    sources = {}
-    try:
-        sources['2160p 4k'] = re.compile("video_alt_url5: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
-    except IndexError:
-        pass
-    try:
-        sources['1440p'] = re.compile("video_alt_url4: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
-    except IndexError:
-        pass
-    try:
-        sources['1080p'] = re.compile("video_alt_url3: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
-    except IndexError:
-        pass
-    try:
-        sources['720p'] = re.compile("video_alt_url2: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
-    except IndexError:
-        pass
-    try:
-        sources['480p'] = re.compile("video_alt_url: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
-    except IndexError:
-        pass
-    try:
-        sources['360p'] = re.compile("video_url: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
-    except IndexError:
-        pass
-    videourl = utils.selector('Select quality', sources, dont_ask_valid=True, sort_by=lambda x: int(''.join([y for y in x if y.isdigit()])), reverse=True)
+    if 'video_url_text' not in videopage:
+        videourl = re.compile("video_url: '([^']+)'", re.DOTALL | re.IGNORECASE).search(videopage).group(1)
+    else:
+        sources = {}
+        srcs = re.compile("video(?:_alt_|_)url(?:[0-9]|): '([^']+)'.*?video(?:_alt_|_)url(?:[0-9]|)_text: '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)
+        for src, quality in srcs:
+            sources[quality] = src
+        videourl = utils.selector('Select quality', sources, dont_ask_valid=True, sort_by=lambda x: int(''.join([y for y in x if y.isdigit()])), reverse=True)
     if not videourl:
         progress.close()
         return
-    utils.kodilog(videourl)
     progress.update(75, "", "Video found", "")
     progress.close()
     if download == 1:
