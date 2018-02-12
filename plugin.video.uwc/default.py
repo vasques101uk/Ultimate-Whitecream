@@ -76,7 +76,6 @@ def INDEXS():
     utils.addDir('[COLOR hotpink]XXX Streams (eu)[/COLOR]','http://xxxstreams.eu/',410,os.path.join(imgDir, 'xxxstreams.png'),'')
     utils.addDir('[COLOR hotpink]XXX Streams (org)[/COLOR]','http://xxxstreams.org/',420,os.path.join(imgDir, 'xxxsorg.png'),'')
     utils.addDir('[COLOR hotpink]K18[/COLOR]','http://k18.co/',230,os.path.join(imgDir, 'k18.png'),'')
-    utils.addDir('[COLOR hotpink]Sexix[/COLOR]','http://sexix.net/',450,os.path.join(imgDir, 'sexix.png'),'')
     utils.addDir('[COLOR hotpink]DaftSex[/COLOR]','https://daftsex.com/',610,os.path.join(imgDir, 'daftsex.png'),'')
     utils.addDir('[COLOR hotpink]PornsLand[/COLOR]','https://porns.land/recent-porns/',620,os.path.join(imgDir, 'pl.png'),'')
     utils.addDir('[COLOR hotpink]Vidz7[/COLOR]','http://www.vidz7.com/',640,'','')
