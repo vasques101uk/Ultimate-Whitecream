@@ -22,7 +22,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "Whitecream"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "Whitecream, Fr33m1nd, anton40, NothingGnome, holisticdioxide"
-__version__ = "1.1.60"
+__version__ = "1.1.61"
 
 import urllib
 import urllib2
