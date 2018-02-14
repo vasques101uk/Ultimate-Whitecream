@@ -51,8 +51,8 @@ def NLVIDEOLIST(url, page=1):
         if len(hd) > 2:
             hd = " [COLOR orange]HD[/COLOR] "
         else:
-            hd = " "    
-        videourl = siteurl + url
+            hd = " "
+        videourl = url if url.startswith('http') else siteurl + url
         duration2 = "[COLOR deeppink]" +  duration + "[/COLOR]"
         utils.addDownLink(name + hd + duration2, videourl, 102, img, '')
     try:

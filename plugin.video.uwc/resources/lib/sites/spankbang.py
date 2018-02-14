@@ -88,19 +88,13 @@ def Categories(url):
 
 @utils.url_dispatcher.register('442', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
+    vp = utils.VideoPlayer(name, download)
+    vp.progress.update(25, "", "Loading video page", "")
     html = utils.getHtml(url, '')
-    stream_id = re.compile("stream_id  = '([^']+)';").findall(html)
-    stream_key = re.compile("stream_key  = '([^']+)'").findall(html)
-    stream_hd = re.compile("stream_hd  = (1|0)").findall(html)
-    if int(stream_hd[0]) == 1:
-        source = '/title/720p__mp4'
-    else:
-        source = '/title/480p__mp4'
-    videourl = base_url + '/_' + stream_id[0] + '/' + stream_key[0] + source
-    if download == 1:
-        utils.downloadVideo(videourl, name)
-    else:
-        iconimage = xbmc.getInfoImage("ListItem.Thumb")
-        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-        xbmc.Player().play(videourl, listitem)
+    sources = {}
+    srcs = re.compile("stream_url_(240p|320p|480p|720p|1080p|4k).*?= '([^']+|)'", re.DOTALL | re.IGNORECASE).findall(html)
+    for quality, videourl in srcs:
+        if videourl:
+            sources[quality] = videourl
+    videourl = utils.selector('Select quality', sources, dont_ask_valid=True, sort_by=lambda x: 1081 if x == '4k' else int(x[:-1]), reverse=True)
+    vp.play_from_direct_link(videourl)

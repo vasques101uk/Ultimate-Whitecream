@@ -837,7 +837,7 @@ class VideoPlayer():
 
     def _clean_urls(self, url_list):
         filtered_words = ['google']
-        filtered_ends = ['.js', '.css', '/premium.html']
+        filtered_ends = ['.js', '.css', '/premium.html', '.jpg', '.gif', '.png', '.ico']
         added = set()
         new_list = []
         for source in url_list:

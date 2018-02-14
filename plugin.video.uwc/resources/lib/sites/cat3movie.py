@@ -43,7 +43,7 @@ def List(url):
         
         return None
     match = re.compile("<main(.*?)</main", re.DOTALL | re.IGNORECASE).findall(listhtml)[0]
-    match1 = re.compile('<a class="" href="([^"]+)" title="([^"]+)">\n<img src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(match)
+    match1 = re.compile('<a class="" href="([^"]+)" title="([^"]+)">.*?<img src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(match)
     cookieString = getCookiesString()
     for videopage, name, img in match1:
         name = utils.cleantext(name)
