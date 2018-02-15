@@ -22,7 +22,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "Whitecream"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "Whitecream, Fr33m1nd, anton40, NothingGnome, holisticdioxide"
-__version__ = "1.1.61"
+__version__ = "1.1.62"
 
 import urllib
 import urllib2
@@ -526,6 +526,9 @@ def cleantext(text):
     text = text.replace('&#039;','`')
     text = text.replace('&ntilde;','ñ')
     text = text.replace('&rsquo;','\'')
+    text = text.replace('&#133;','...')
+    text = text.replace('&#40;', '(')
+    text = text.replace('&#41;', ')')
     return text.strip()
 
 

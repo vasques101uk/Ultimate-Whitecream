@@ -81,6 +81,7 @@ def INDEXS():
     utils.addDir('[COLOR hotpink]Vidz7[/COLOR]','http://www.vidz7.com/',640,'','')
     utils.addDir('[COLOR hotpink]YourPorn[/COLOR]','https://yourporn.sexy/',650,os.path.join(imgDir, 'yourpornsexy.png'),'')
     utils.addDir('[COLOR hotpink]JavWhores[/COLOR]','https://www.javwhores.com/',55,os.path.join(imgDir, 'javwhores.png'),'')
+    utils.addDir('[COLOR hotpink]DatoPorn[/COLOR]','http://datoporn.co/',670,os.path.join(imgDir, 'datoporn.png'),'')
 
     utils.addDir('[COLOR hotpink]One list, to watch them all[/COLOR]','',5,'',1)
     xbmcplugin.endOfDirectory(utils.addon_handle, cacheToDisc=False)
