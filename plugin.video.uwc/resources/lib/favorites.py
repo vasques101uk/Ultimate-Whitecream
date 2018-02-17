@@ -31,7 +31,6 @@ dialog = utils.dialog
 favoritesdb = utils.favoritesdb
 
 
-
 conn = sqlite3.connect(favoritesdb)
 c = conn.cursor()
 try:
@@ -40,6 +39,7 @@ try:
 except:
     pass
 conn.close()
+
 
 @utils.url_dispatcher.register('901')  
 def List():
@@ -62,19 +62,38 @@ def List():
         utils.notify('No Favorites','No Favorites found')
         return
 
+
 @utils.url_dispatcher.register('900', ['fav','favmode','name','url','img'])  
-def Favorites(fav,favmode,name,url,img):
+def Favorites(fav, favmode, name, url, img):
     if fav == "add":
-        delFav(url)
-        addFav(favmode, name, url, img)
-        utils.notify('Favorite added','Video added to the favorites')
+        if check_if_favorite_exists(url):
+            utils.notify('Favorite already exists', 'Video already in favorites')
+        else:
+            addFav(favmode, name, url, img)
+            utils.notify('Favorite added', 'Video added to the favorites')
     elif fav == "del":
         delFav(url)
-        utils.notify('Favorite deleted','Video removed from the list')
+        utils.notify('Favorite deleted', 'Video removed from the list')
+        xbmc.executebuiltin('Container.Refresh')
+    elif fav == "move_to_end":
+        move_fav_to_end(url)
+        utils.notify('Favorite moved', 'Video moved to end of the list')
         xbmc.executebuiltin('Container.Refresh')
 
 
-def addFav(mode,name,url,img):
+def check_if_favorite_exists(url):
+    conn = sqlite3.connect(favoritesdb)
+    conn.text_factory = str
+    c = conn.cursor()
+    c.execute("SELECT * FROM favorites WHERE url = ?", (url,))
+    row = c.fetchone()
+    conn.close()
+    if row:
+        return True
+    return False
+
+
+def addFav(mode, name, url, img):
     conn = sqlite3.connect(favoritesdb)
     conn.text_factory = str
     c = conn.cursor()
@@ -86,8 +105,25 @@ def addFav(mode,name,url,img):
 def delFav(url):
     conn = sqlite3.connect(favoritesdb)
     c = conn.cursor()
-    c.execute("DELETE FROM favorites WHERE url = '%s'" % url)
+    c.execute("DELETE FROM favorites WHERE url = ?", (url,))
     conn.commit()
     conn.close()
 
 
+def delete_duplicates():
+    conn = sqlite3.connect(favoritesdb)
+    c = conn.cursor()
+    c.execute("DELETE FROM favorites " +
+              "WHERE rowid NOT IN " +
+              "(SELECT MIN(rowid) as rowid FROM favorites GROUP BY url)")
+    conn.commit()
+    conn.close()
+
+
+def move_fav_to_end(url):
+    delete_duplicates()
+    conn = sqlite3.connect(favoritesdb)
+    c = conn.cursor()
+    c.execute("UPDATE favorites SET rowid = (SELECT MAX(rowid) FROM favorites) + 1 WHERE url = ?", (url,))
+    conn.commit()
+    conn.close()

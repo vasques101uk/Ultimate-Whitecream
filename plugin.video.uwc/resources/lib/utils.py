@@ -539,8 +539,7 @@ def cleanhtml(raw_html):
 
 def addDownLink(name, url, mode, iconimage, desc='', stream=None, fav='add', noDownload=False):
     contextMenuItems = []
-    if fav == 'add': favtext = "Add to"
-    elif fav == 'del': favtext = "Remove from"
+    favtext = "Remove from" if fav == 'del' else "Add to" # fav == 'add' or 'del'
     u = (sys.argv[0] +
          "?url=" + urllib.quote_plus(url) +
          "&mode=" + str(mode) +
@@ -558,7 +557,7 @@ def addDownLink(name, url, mode, iconimage, desc='', stream=None, fav='add', noD
          "&img=" + urllib.quote_plus(iconimage) +
          "&name=" + urllib.quote_plus(name))
     ok = True
-    if len(iconimage) < 1:
+    if not iconimage:
         iconimage = uwcicon
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     liz.setArt({'thumb': iconimage, 'icon': iconimage})
@@ -569,15 +568,24 @@ def addDownLink(name, url, mode, iconimage, desc='', stream=None, fav='add', noD
     liz.setArt({'fanart': fanart})
     if stream:
         liz.setProperty('IsPlayable', 'true')
-    if len(desc) < 1:
-        liz.setInfo(type="Video", infoLabels={"Title": name})
-    else:
+    if desc:
         liz.setInfo(type="Video", infoLabels={"Title": name, "plot": desc, "plotoutline": desc})
+    else:
+        liz.setInfo(type="Video", infoLabels={"Title": name})
     video_streaminfo = {'codec': 'h264'}
     liz.addStreamInfo('video', video_streaminfo)
-    contextMenuItems.append(('[COLOR hotpink]' + favtext + ' favorites[/COLOR]', 'xbmc.RunPlugin('+favorite+')'))
-    if noDownload == False:
-        contextMenuItems.append(('[COLOR hotpink]Download Video[/COLOR]', 'xbmc.RunPlugin('+dwnld+')'))
+    contextMenuItems.append(('[COLOR hotpink]' + favtext + ' favorites[/COLOR]', 'xbmc.RunPlugin(' + favorite + ')'))
+    if fav == 'del':
+        favorite_move_to_end = (sys.argv[0] +
+            "?url=" + urllib.quote_plus(url) +
+            "&fav=" + 'move_to_end' +
+            "&favmode=" + str(mode) +
+            "&mode=" + str('900') +
+            "&img=" + urllib.quote_plus(iconimage) +
+            "&name=" + urllib.quote_plus(name))
+        contextMenuItems.append(('[COLOR hotpink]Move favorite to end[/COLOR]', 'xbmc.RunPlugin(' + favorite_move_to_end + ')'))
+    if not noDownload:
+        contextMenuItems.append(('[COLOR hotpink]Download Video[/COLOR]', 'xbmc.RunPlugin(' + dwnld + ')'))
     liz.addContextMenuItems(contextMenuItems, replaceItems=False)
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=False)
     return ok

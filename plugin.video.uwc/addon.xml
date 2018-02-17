@@ -23,6 +23,7 @@
 			<fanart>fanart.jpg</fanart>
 		</assets>
         <news>[B]Version 1.1.62[/B]
-New site: Datoporn</news>
+New site: Datoporn
+Added minimal option to organize favorites: "Move favorite to end" is available from the context menu to move the video to the end of the favorites list</news>
     </extension>
 </addon>
