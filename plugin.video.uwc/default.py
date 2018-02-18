@@ -155,11 +155,7 @@ def OpenDownloadFolder(url):
 
 @utils.url_dispatcher.register('8')
 def smrSettings():
-    try:
-        import resolveurl
-        resolveurl.display_settings()
-    except ImportError:
-        pass
+    utils.resolveurl.display_settings()
 
 
 def change():

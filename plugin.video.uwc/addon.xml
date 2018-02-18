@@ -6,6 +6,7 @@
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.resolveurl" version="5.0.00"/>
+        <import addon="script.module.resolveurl.xxx" version="2.0.01"/>
         <import addon="script.video.F4mProxy" version="2.5.7" />
     </requires>
     <extension point="xbmc.python.pluginsource"
@@ -24,6 +25,7 @@
 		</assets>
         <news>[B]Version 1.1.62[/B]
 New site: Datoporn
-Added minimal option to organize favorites: "Move favorite to end" is available from the context menu to move the video to the end of the favorites list</news>
+Added minimal option to organize favorites: "Move favorite to end" is available from the context menu to move the video to the end of the favorites list
+Switch to ResolveURL XXX plugins from internally bundled ResolveURL plugins</news>
     </extension>
 </addon>

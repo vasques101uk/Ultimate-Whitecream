@@ -49,9 +49,9 @@ import resolveurl
 import xbmcvfs
 from functools import wraps
 
-uwc_plugins_path = 'special://home/addons/plugin.video.uwc/resources/urlresolver_plugins/'
-if xbmcvfs.exists(uwc_plugins_path):
-    resolveurl.add_plugin_dirs(xbmc.translatePath(uwc_plugins_path))
+xxx_plugins_path = 'special://home/addons/script.module.resolveurl.xxx/resources/plugins/'
+if xbmcvfs.exists(xxx_plugins_path):
+    resolveurl.add_plugin_dirs(xbmc.translatePath(xxx_plugins_path))
 
 from url_dispatcher import URL_Dispatcher
 
