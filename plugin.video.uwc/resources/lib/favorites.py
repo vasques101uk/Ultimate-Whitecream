@@ -127,3 +127,85 @@ def move_fav_to_end(url):
     c.execute("UPDATE favorites SET rowid = (SELECT MAX(rowid) FROM favorites) + 1 WHERE url = ?", (url,))
     conn.commit()
     conn.close()
+
+@utils.url_dispatcher.register('912')
+def clear_fav():
+    if not utils.dialog.yesno('Warning','This will delete all your favorites', 'Continue?', nolabel='No', yeslabel='Yes'):
+        return
+    conn = sqlite3.connect(favoritesdb)
+    c = conn.cursor()
+    c.execute("DELETE FROM favorites")
+    conn.commit()
+    conn.close()
+    xbmc.executebuiltin('Container.Refresh')
+    utils.notify("Favorites deleted", "")
+
+
+@utils.url_dispatcher.register('910')
+def backup_fav():
+    path = utils.xbmcgui.Dialog().browseSingle(0, 'Select directory to place backup' ,'myprograms')
+    progress = utils.progress
+    progress.create('Backing up', 'Initializing')
+    if not path:
+        return
+    import json
+    import gzip
+    import datetime
+    progress.update(25, "Reading database")
+    conn = sqlite3.connect(favoritesdb)
+    conn.text_factory = str
+    c = conn.cursor()
+    c.execute("SELECT * FROM favorites")
+    favorites = [{"name": name, "url": url, "mode": mode, "img": img} for (name, url, mode, img) in c.fetchall()]
+    if not favorites:
+        progress.close()
+        utils.notify("Favorites empty", "No favorites to back up")
+        return
+    conn.close()
+    time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    backup_content = {"meta": {"type": "uwc-favorites", "version": 1, "datetime": time}, "data": favorites}
+    if progress.iscanceled():
+        progress.close()
+        return
+    progress.update(75, "Writing backup file")
+    filename = "uwc-favorites_" + time + '.bak'
+    try:
+        with gzip.open(path + filename, "wb") as fav_file:
+            json.dump(backup_content, fav_file)
+    except IOError:
+        progress.close()
+        utils.notify("Error: invalid path", "Do you have permission to write to the selected folder?")
+        return
+    progress.close()
+    utils.dialog.ok("Backup complete", "Backup file: {}".format(path + filename))
+
+
+@utils.url_dispatcher.register('911')
+def restore_fav():
+    path = utils.dialog.browseSingle(1, 'Select backup file' ,'myprograms')
+    if not path:
+        return
+    import json
+    import gzip
+    try:
+        with gzip.open(path, "rb") as fav_file:
+            backup_content = json.load(fav_file)
+    except (ValueError, IOError):
+        utils.notify("Error", "Invalid backup file")
+        return
+    if not backup_content["meta"]["type"] == "uwc-favorites":
+        utils.notify("Error", "Invalid backup file")
+        return
+    favorites = backup_content["data"]
+    if not favorites:
+        utils.notify("Error", "Empty backup")
+    added = 0
+    skipped = 0
+    for favorite in favorites:
+        if check_if_favorite_exists(favorite["url"]):
+            skipped += 1
+        else:
+            addFav(favorite["mode"], favorite["name"], favorite["url"], favorite["img"])
+            added += 1
+    xbmc.executebuiltin('Container.Refresh')
+    utils.dialog.ok("Restore complete", "Restore skips items that are already present in favorites to avoid duplicates", "Added: {}".format(added), "Skipped: {}".format(skipped))

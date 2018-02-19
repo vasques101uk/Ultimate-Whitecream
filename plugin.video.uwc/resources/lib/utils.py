@@ -713,6 +713,7 @@ def streamdefence(html):
 
 
 def searchDir(url, mode, page=None):
+    addDir('[COLOR hotpink]Add Keyword[/COLOR]', url, 902, uwcimage('uwc-search.png'), '', mode, Folder=False)
     conn = sqlite3.connect(favoritesdb)
     c = conn.cursor()
     try:
@@ -720,15 +721,15 @@ def searchDir(url, mode, page=None):
         for (keyword,) in c.fetchall():
             name = '[COLOR deeppink]' + urllib.unquote_plus(keyword) + '[/COLOR]'
             addDir(name, url, mode, uwcimage('uwc-search.png'), page=page, keyword=keyword)
-    except: pass
-    addDir('[COLOR hotpink]Add Keyword[/COLOR]', url, 902, uwcimage('uwc-search.png'), '', mode, Folder=False)
-    addDir('[COLOR hotpink]Clear list[/COLOR]', '', 903, uwcimage('uwc-search.png'), Folder=False)
+    except:
+        pass
     xbmcplugin.endOfDirectory(addon_handle)
 
 @url_dispatcher.register('902', ['url', 'channel'])
 def newSearch(url, channel):
     vq = _get_keyboard(heading="Searching for...")
-    if (not vq): return False, 0
+    if not vq:
+        return False, 0
     title = urllib.quote_plus(vq)
     addKeyword(title)
     xbmc.executebuiltin('Container.Refresh')
@@ -767,10 +768,92 @@ def delKeyword(keyword):
     xbmc.log('keyword: ' + keyword)
     conn = sqlite3.connect(favoritesdb)
     c = conn.cursor()
-    c.execute("DELETE FROM keywords WHERE keyword = '%s'" % keyword)
+    c.execute("DELETE FROM keywords WHERE keyword = ?" (keyword,))
     conn.commit()
     conn.close()
     xbmc.executebuiltin('Container.Refresh')
+
+
+@url_dispatcher.register('908')
+def backup_keywords():
+    path = xbmcgui.Dialog().browseSingle(0, 'Select directory to place backup' ,'myprograms')
+    progress.create('Backing up', 'Initializing')
+    if not path:
+        return
+    import json
+    import gzip
+    import datetime
+    progress.update(25, "Reading database")
+    conn = sqlite3.connect(favoritesdb)
+    conn.text_factory = str
+    c = conn.cursor()
+    c.execute("SELECT * FROM keywords")
+    keywords = [{"keyword": keyword} for (keyword,) in c.fetchall()]
+    if not keywords:
+        progress.close()
+        notify("Keywords empty", "No keywords to back up")
+        return
+    conn.close()
+    time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    backup_content = {"meta": {"type": "uwc-keywords", "version": 1, "datetime": time}, "data": keywords}
+    if progress.iscanceled():
+        progress.close()
+        return
+    progress.update(75, "Writing backup file")
+    filename = "uwc-keywords_" + time + '.bak'
+    try:
+        with gzip.open(path + filename, "wb") as fav_file:
+            json.dump(backup_content, fav_file)
+    except IOError:
+        progress.close()
+        notify("Error: invalid path", "Do you have permission to write to the selected folder?")
+        return
+    progress.close()
+    dialog.ok("Backup complete", "Backup file: {}".format(path + filename))
+
+
+def check_if_keyword_exists(keyword):
+    conn = sqlite3.connect(favoritesdb)
+    conn.text_factory = str
+    c = conn.cursor()
+    c.execute("SELECT * FROM keywords WHERE keyword = ?", (keyword,))
+    row = c.fetchone()
+    conn.close()
+    if row:
+        return True
+    return False
+
+
+@url_dispatcher.register('909')
+def restore_keywords():
+    path = dialog.browseSingle(1, 'Select backup file' ,'myprograms')
+    if not path:
+        return
+    import json
+    import gzip
+    try:
+        with gzip.open(path, "rb") as fav_file:
+            backup_content = json.load(fav_file)
+    except (ValueError, IOError):
+        notify("Error", "Invalid backup file")
+        return
+    if not backup_content["meta"]["type"] == "uwc-keywords":
+        notify("Error", "Invalid backup file")
+        return
+    keywords = backup_content["data"]
+    if not keywords:
+        notify("Error", "Empty backup")
+    added = 0
+    skipped = 0
+    for keyword in keywords:
+        keyw = keyword['keyword']
+        if check_if_keyword_exists(keyw):
+            skipped += 1
+        else:
+            addKeyword(keyw)
+            added += 1
+    xbmc.executebuiltin('Container.Refresh')
+    dialog.ok("Restore complete", "Restore skips items that are already present in keywords to avoid duplicates", "Added: {}".format(added), "Skipped: {}".format(skipped))
 
 
 def textBox(heading,announce):

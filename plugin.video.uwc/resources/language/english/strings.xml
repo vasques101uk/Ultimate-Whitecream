@@ -29,4 +29,10 @@
     <string id="30115">Fast (default)</string>
     <string id="30116">Slow</string>
     <string id="30117">Buffering? Try Slow</string>
+    <string id="30201">Backup favorites</string>
+    <string id="30202">Restore favorites</string>
+    <string id="30203">Clear favorites</string>
+    <string id="30211">Backup keywords</string>
+    <string id="30212">Restore keywords</string>
+    <string id="30213">Clear keywords</string>
 </strings>

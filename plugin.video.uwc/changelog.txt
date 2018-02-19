@@ -2,6 +2,9 @@
 New site: Datoporn
 Added minimal option to organize favorites: "Move favorite to end" is available from the context menu to move the video to the end of the favorites list
 Switch to ResolveURL XXX plugins from internally bundled ResolveURL plugins
+Keywords can now be cleared from the addon settings
+Added option to clear favorites from the addon settings
+Added option to backup and restore keywords and favorites
 
 
 [B]Version 1.1.61[/B]
