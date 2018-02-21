@@ -1,6 +1,6 @@
 '''
     Ultimate Whitecream
-    Copyright (C) 2015 Whitecream
+    Copyright (C) 2018 Whitecream, holisticdioxide
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,8 +17,6 @@
 '''
 
 import re
-import urlparse
-import json
 
 import xbmc
 import xbmcplugin
@@ -59,7 +57,7 @@ def PAQList(url, page=1, onelist=None):
             name = utils.cleantext(name)
             utils.addDownLink(name, videopage, 62, img, '')
     elif 'porn00' in url:
-        match = re.compile('<h2> <a title="([^"]+)" href="([^"]+)".*?src="([^"]+)" class="attachment-primary-post-thumbnail', re.DOTALL | re.IGNORECASE).findall(listhtml)
+        match = re.compile('<h2>\s+<a title="([^"]+)" href="([^"]+)".*?src="([^"]+)" class="attachment-primary-post-thumbnail', re.DOTALL | re.IGNORECASE).findall(listhtml)
         for name, videopage, img in match:
             name = utils.cleantext(name)
             utils.addDownLink(name, videopage, 62, img, '')    
@@ -71,121 +69,29 @@ def PAQList(url, page=1, onelist=None):
         xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
-def GetAlternative(url, alternative):
-    progress.update( 70, "", "Loading alternative page", "" )
-    if alternative == 1:
-        nalternative = 2
-        url = url + str(nalternative)
-    else:
-        nalternative = int(alternative) + 1
-        url.replace('/'+str(alternative),'/'+str(nalternative))
-    return url, nalternative
+def get_porn00(url):
+    videopage = utils.getHtml(url)
+    try:
+        alternatives_div = re.compile('<div id="alternatives">(.*?)</div', re.DOTALL | re.IGNORECASE).search(videopage).group(1)
+        alternatives = re.compile('''href=['"]([^'"]+)['"]''', re.DOTALL | re.IGNORECASE).findall(alternatives_div)
+        for alternative in alternatives:
+            videopage += utils.getHtml(alternative)
+    except AttributeError:
+        pass
+    return '\n'.join(re.compile('<div class="video-box">(.*?)</iframe', re.DOTALL | re.IGNORECASE).findall(videopage))
+
+
+def get_pornaq(url):
+    videopage = utils.getHtml(url)
+    return re.compile('<div class="imatge alta">(.*?)</iframe', re.DOTALL | re.IGNORECASE).search(videopage).group(1)
 
 
 @utils.url_dispatcher.register('62', ['url', 'name'], ['download'])
-def PPlayvid(url, name, download=None, alternative=1):
-
-    def playvid(videourl, referer):
-        progress.close()
-        if download == 1:
-            utils.downloadVideo(videourl, name)
-        else:
-            videourl = videourl + "|referer="+ referer
-            iconimage = xbmc.getInfoImage("ListItem.Thumb")
-            listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-            listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-            xbmc.Player().play(videourl, listitem)    
-    
-    progress.create('Play video', 'Searching videofile.')
-    progress.update( 25, "", "Loading video page", "" )
-    
-    if progress.iscanceled():
-        progress.close()
-        return
-    videopage = utils.getHtml(url, '', '', True)
-    if re.search('o(?:pen)?load', videopage, re.DOTALL | re.IGNORECASE):
-        progress.close()
-        utils.PLAYVIDEO(url, name, download, 'src="([^"]+)"')
-    elif re.search('server|video/\?v=', videopage, re.DOTALL | re.IGNORECASE):
-        match = re.compile(r'/(server|video)/\?v=([^"]+)', re.DOTALL | re.IGNORECASE).findall(videopage)
-        for folder, id in match:
-            if id != 22:
-                match = id
-                fold = folder
-        match = "http://www.porn00.org/"+fold+"/?v=" + id
-        
-
-        progress.update( 50, "", "Opening porn00 video page", "" )
-        iframepage = utils.getHtml(match, url)
-        video720 = re.compile(r'file: "([^"]+)",\s+label: "(?:7|H)', re.DOTALL | re.IGNORECASE).findall(iframepage)
-        if not video720:
-            if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
-                alturl, nalternative = GetAlternative(url, alternative)
-                PPlayvid(alturl, name, download, nalternative)
-            else:
-                progress.close()
-                utils.notify('Oh oh','Couldn\'t find a supported videohost')
-        else:
-            videourl = video720[0]
-            playvid(videourl, match)
-    elif re.search('video_ext.php\?', videopage, re.DOTALL | re.IGNORECASE):
-        match = re.compile('<iframe.*?src="([^"]+video_ext[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
-        progress.update( 30, "", "Opening VK video page", "" )
-        videourl = getVK(match[0])
-        if not videourl:
-            if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
-                alturl, nalternative = GetAlternative(url, alternative)
-                PPlayvid(alturl, name, download, nalternative)
-            else:
-                progress.close()
-                utils.notify('Oh oh','Couldn\'t find a supported videohost')
-        else:
-            playvid()
-    elif re.search('/\?V=', videopage, re.DOTALL | re.IGNORECASE):
-        try:
-            match = re.compile('<iframe.*?src="([^"]+watch/[^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
-            progress.update( 50, "", "Opening porn00/pornAQ video page", "" )
-            iframepage = utils.getHtml(match[0], url)
-            video720 = re.compile(r'file: "([^"]+)",\s+label: "(?:7|H)', re.DOTALL | re.IGNORECASE).findall(iframepage)
-            if not video720:
-                if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
-                    alturl, nalternative = GetAlternative(url, alternative)
-                    PPlayvid(alturl, name, download, nalternative)
-                else:
-                    progress.close()
-                    utils.notify('Oh oh','Couldn\'t find a supported videohost')
-            else:
-                videourl = video720[0]
-                playvid()
-        except:
-            if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
-                alturl, nalternative = GetAlternative(url, alternative)
-                PPlayvid(alturl, name, download, nalternative)
-            else:
-                progress.close()
-                utils.notify('Oh oh','Couldn\'t find a supported videohost')        
-    elif re.search('google.com/file', videopage, re.DOTALL | re.IGNORECASE):
-        match = re.compile('file/d/([^/]+)/', re.DOTALL | re.IGNORECASE).findall(videopage)
-        googleurl = "https://docs.google.com/uc?id="+match[0]+"&export=download"
-        progress.update( 50, "", "Opening Google docs video page", "" )
-        googlepage = utils.getHtml(googleurl, '')
-        video720 = re.compile('"downloadUrl":"([^?]+)', re.DOTALL | re.IGNORECASE).findall(googlepage)
-        if not video720:
-            if re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
-                alturl, nalternative = GetAlternative(url, alternative)
-                PPlayvid(alturl, name, download, nalternative)
-            else:
-                progress.close()
-                utils.notify('Oh oh','Couldn\'t find a supported videohost')
-        else:
-            videourl = video720[0]
-            playvid()
-    elif re.search('id="alternatives"', videopage, re.DOTALL | re.IGNORECASE):
-        alturl, nalternative = GetAlternative(url, alternative)
-        PPlayvid(alturl, name, download, nalternative)
-    else:
-        progress.close()
-        utils.notify('Oh oh','Couldn\'t find a supported videohost')
+def PPlayvid(url, name, download=None):
+    vp = utils.VideoPlayer(name, download)
+    vp.progress.update(25, "", "Loading video page", "")
+    html = get_pornaq(url) if 'pornaq' in url else get_porn00(url)
+    vp.play_from_html(html)
 
 
 @utils.url_dispatcher.register('63', ['url'])
@@ -214,48 +120,4 @@ def PSearch(url, keyword=None):
     else:
         title = keyword.replace(' ','+')
         searchUrl = searchUrl + title
-        print "Searching URL: " + searchUrl
         PAQList(searchUrl, 1)
-
-
-def getVK(url):
-
-    def __get_private(oid, video_id):
-        private_url = 'http://vk.com/al_video.php?act=show_inline&al=1&video=%s_%s' % (oid, video_id)
-        html = utils.getHtml(private_url,'')
-        html = re.sub(r'[^\x00-\x7F]+', ' ', html)
-        match = re.search('var\s+vars\s*=\s*({.+?});', html)
-        try: return json.loads(match.group(1))
-        except: return {}
-        return {}
-    
-    query = url.split('?', 1)[-1]
-    query = urlparse.parse_qs(query)
-    api_url = 'http://api.vk.com/method/video.getEmbed?oid=%s&video_id=%s&embed_hash=%s' % (query['oid'][0], query['id'][0], query['hash'][0])
-    progress.update( 40, "", "Opening VK video page", "" )
-    html = utils.getHtml(api_url,'')
-    html = re.sub(r'[^\x00-\x7F]+', ' ', html)
-    
-    try: result = json.loads(html)['response']
-    except: result = __get_private(query['oid'][0], query['id'][0])
-    
-    quality_list = []
-    link_list = []
-    best_link = ''
-    for quality in ['url240', 'url360', 'url480', 'url540', 'url720']:
-        if quality in result:
-            quality_list.append(quality[3:])
-            link_list.append(result[quality])
-            best_link = result[quality]
-    
-    if quality_list:
-        if len(quality_list) > 1:
-            result = xbmcgui.Dialog().select('Choose the quality', quality_list)
-            if result == -1:
-                utils.notify('Oh oh','No video selected')
-            else:
-                return link_list[result] + '|User-Agent=%s' % (utils.USER_AGENT)
-        else:
-            return link_list[0] + '|User-Agent=%s' % (utils.USER_AGENT)
-    return
-

@@ -1,7 +1,6 @@
 '''
     Ultimate Whitecream
-    Copyright (C) 2015 Whitecream
-    Copyright (C) 2015 Fr33m1nd
+    Copyright (C) 2018 Whitecream, Fr33m1nd, holisticdioxide
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,8 +21,6 @@ import re
 import xbmcplugin
 from resources.lib import utils
 
-progress = utils.progress
-  
 
 @utils.url_dispatcher.register('130')
 def Main():
@@ -100,6 +97,5 @@ def Actors(url):
 @utils.url_dispatcher.register('132', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
     html = utils.getHtml(url, url)
-    matches = re.compile('iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(html)
-    vp = utils.VideoPlayer(name, download, regex='''(?:SRC|src)=\s*["']([^'"]+)''')
+    vp = utils.VideoPlayer(name, download, regex='''(?:SRC|src|"embedURL" content)=\s*["']([^'"]+)''')
     vp.play_from_html(html)
