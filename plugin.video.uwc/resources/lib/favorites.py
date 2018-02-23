@@ -66,8 +66,22 @@ def List():
 @utils.url_dispatcher.register('900', ['fav','favmode','name','url','img'])  
 def Favorites(fav, favmode, name, url, img):
     if fav == "add":
-        if check_if_favorite_exists(url):
-            utils.notify('Favorite already exists', 'Video already in favorites')
+        existing_favorite = select_favorite(url)
+        if existing_favorite:
+            if existing_favorite[0] == name and existing_favorite[3] == img and existing_favorite[2] == favmode:
+                utils.notify('Favorite already exists', 'Video already in favorites')
+            else:
+                if existing_favorite[2] != favmode:
+                    question = 'it'
+                if existing_favorite[0] != name:
+                    question = 'its name'
+                if existing_favorite[3] != img:
+                    question = 'its picture'
+                if existing_favorite[0] != name and existing_favorite[3] != img:
+                    question = 'its name and picture'
+                if utils.dialog.yesno('Video already in favorites','This video is already in the favorites with the title', existing_favorite[0], 'Update {}?'.format(question)):
+                    update_favorite(favmode, name, url, img)
+                    utils.notify('Favorite updated', 'Video updated')
         else:
             addFav(favmode, name, url, img)
             utils.notify('Favorite added', 'Video added to the favorites')
@@ -81,16 +95,23 @@ def Favorites(fav, favmode, name, url, img):
         xbmc.executebuiltin('Container.Refresh')
 
 
-def check_if_favorite_exists(url):
+def select_favorite(url):
     conn = sqlite3.connect(favoritesdb)
     conn.text_factory = str
     c = conn.cursor()
     c.execute("SELECT * FROM favorites WHERE url = ?", (url,))
     row = c.fetchone()
     conn.close()
-    if row:
-        return True
-    return False
+    return row
+
+
+def update_favorite(mode, name, url, img):
+    conn = sqlite3.connect(favoritesdb)
+    conn.text_factory = str
+    c = conn.cursor()
+    c.execute("UPDATE favorites set name = ?, image = ?, mode = ? where url = ?", (name, img, mode, url))
+    conn.commit()
+    conn.close()
 
 
 def addFav(mode, name, url, img):
@@ -202,7 +223,7 @@ def restore_fav():
     added = 0
     skipped = 0
     for favorite in favorites:
-        if check_if_favorite_exists(favorite["url"]):
+        if select_favorite(favorite["url"]):
             skipped += 1
         else:
             addFav(favorite["mode"], favorite["name"], favorite["url"], favorite["img"])

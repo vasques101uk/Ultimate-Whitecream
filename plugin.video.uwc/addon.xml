@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.uwc"
        name="Ultimate Whitecream"
-       version="1.1.62"
+       version="1.1.63"
        provider-name="Whitecream, holisticdioxide">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
@@ -23,14 +23,7 @@
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-        <news>[B]Version 1.1.62[/B]
-New site: Datoporn
-Fixed: Porn00
-Fixed: XvideoSpanish
-Added minimal option to organize favorites: "Move favorite to end" is available from the context menu to move the video to the end of the favorites list
-Switch to ResolveURL XXX plugins from internally bundled ResolveURL plugins
-Keywords can now be cleared from the addon settings
-Added option to clear favorites from the addon settings
-Added option to backup and restore keywords and favorites</news>
+        <news>[B]Version 1.1.63[/B]
+Favorites can be updated when adding them again with different pictures or names</news>
     </extension>
 </addon>
