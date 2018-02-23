@@ -1,10 +1,12 @@
 '''
     Ultimate Whitecream
     Copyright (C) 2016 Whitecream, hdgdl
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -70,7 +72,7 @@ def Playvid(url, name):
     listhtml = utils.getHtml(url, '')
     match = re.compile('(hls_[0-9]+s_[0-9a-z]+)', re.DOTALL | re.IGNORECASE).findall(listhtml)
     if match:
-        videourl = "http://transcode.k8s.naked.com/hls/" + match[0] + "/index.m3u8"
+        videourl = "https://static-transcode-k8s-do.camster.com/hls/" + match[0] + "/index.m3u8"
         iconimage = xbmc.getInfoImage("ListItem.Thumb")
         listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
@@ -85,5 +87,3 @@ def Playvid(url, name):
             xbmcplugin.setResolvedUrl(utils.addon_handle, True, listitem)
     else:
         utils.notify('Oh oh','Couldn\'t find a playable webcam link')
-
-

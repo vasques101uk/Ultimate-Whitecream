@@ -1,4 +1,5 @@
 [B]Version 1.1.63[/B]
+Fixed: Naked
 Favorites can be updated when adding them again with different pictures or names
 
 
