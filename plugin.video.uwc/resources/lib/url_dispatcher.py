@@ -90,6 +90,15 @@ class URL_Dispatcher:
         if unused_args: pass
         self.func_registry[mode](*args, **kwargs)
 
+    def showmodes(self):
+        import xbmc
+        for mode in sorted(self.func_registry, key=lambda x: int(x)):
+            value = self.func_registry[mode]
+            args = self.args_registry[mode]
+            kwargs = self.kwargs_registry[mode]
+            line = 'Mode %s Registered - %s args: %s kwargs: %s' %(str(mode), str(value), str(args), str(kwargs))
+            xbmc.log(line, xbmc.LOGNOTICE)
+
     # since all params are passed as strings, do any conversions necessary to get good types (e.g. boolean)
     def __coerce(self, arg):
         try:
