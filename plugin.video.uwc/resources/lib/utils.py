@@ -532,6 +532,7 @@ def cleantext(text):
     text = text.replace('&#133;','...')
     text = text.replace('&#40;', '(')
     text = text.replace('&#41;', ')')
+    text = text.replace('&nbsp;', ' ')
     return text.strip()
 
 
