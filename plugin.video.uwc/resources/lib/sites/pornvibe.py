@@ -76,5 +76,5 @@ def pornvibe_search(url, keyword=None):
 
 @utils.url_dispatcher.register('682', ['url', 'name'], ['download'])
 def pornvibe_play(url, name, download=None):
-    vp = utils.VideoPlayer(name, download=download, skip_direct=True)
+    vp = utils.VideoPlayer(name, download=download, regex='''<iframe src="([^"]+)''', skip_direct=True)
     vp.play_from_site_link(url, url)
