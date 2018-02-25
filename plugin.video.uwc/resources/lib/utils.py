@@ -362,6 +362,9 @@ def playvid(videourl, name, download=None):
         iconimage = xbmc.getInfoImage("ListItem.Thumb")
         listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
+        if '.mpd' in videourl:
+            listitem.setProperty('inputstreamaddon','inputstream.adaptive')
+            listitem.setProperty('inputstream.adaptive.manifest_type','mpd')
         xbmc.Player().play(videourl, listitem)
 
 
@@ -912,9 +915,10 @@ def selector(dialog_name, select_from, dont_ask_valid=False, sort_by=None, rever
 
 
 class VideoPlayer():
-    def __init__(self, name, download=False, regex=None, direct_regex=None):
+    def __init__(self, name, download=False, regex=None, direct_regex=None, skip_direct=None):
         self.regex = regex if regex else '''(?:src|SRC|href|HREF)=\s*["']([^'"]+)'''
         self.direct_regex = direct_regex if direct_regex else """<source.*?src=(?:"|')([^"']+)[^>]+>"""
+        self.skip_direct = skip_direct
         self.name = name
         self.download = download
         self.progress = xbmcgui.DialogProgress()
@@ -962,7 +966,7 @@ class VideoPlayer():
     def play_from_html(self, html):
         self.progress.update(50, "", "Searching for supported hosts", "")
         direct_links = re.compile(self.direct_regex, re.DOTALL | re.IGNORECASE).findall(html)
-        if direct_links:
+        if direct_links and not self.skip_direct:
             selected = 'https:' + direct_links[0] if direct_links[0].startswith('//') else direct_links[0]
             self.progress.update(50, "", "", "Playing from direct link")
             self.play_from_direct_link(selected)
