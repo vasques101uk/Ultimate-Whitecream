@@ -752,6 +752,7 @@ def clearSearch():
 def addKeyword(keyword):
     xbmc.log(keyword)
     conn = sqlite3.connect(favoritesdb)
+    conn.text_factory = str
     c = conn.cursor()
     c.execute("INSERT INTO keywords VALUES (?)", (keyword,))
     conn.commit()
