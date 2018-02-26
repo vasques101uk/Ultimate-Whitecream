@@ -61,5 +61,5 @@ def animeidhentai_search(url, keyword=None):
 
 @utils.url_dispatcher.register('662', ['url', 'name'], ['download'])
 def animeidhentai_play(url, name, download=None):
-    vp = utils.VideoPlayer(name, download=download, regex='''<(?:iframe|IFRAME).*?(?:src|SRC)\s*=\s*["']([^'"]+)''', skip_direct=True)
+    vp = utils.VideoPlayer(name, download=download, regex='''<(?:iframe|IFRAME).*?(?:src|SRC)\s*=\s*["']([^'"]+)''', direct_regex=None)
     vp.play_from_site_link(url)

@@ -917,10 +917,9 @@ def selector(dialog_name, select_from, dont_ask_valid=False, sort_by=None, rever
 
 
 class VideoPlayer():
-    def __init__(self, name, download=False, regex=None, direct_regex=None, skip_direct=None):
-        self.regex = regex if regex else '''(?:src|SRC|href|HREF)=\s*["']([^'"]+)'''
-        self.direct_regex = direct_regex if direct_regex else """<source.*?src=(?:"|')([^"']+)[^>]+>"""
-        self.skip_direct = skip_direct
+    def __init__(self, name, download=False, regex='''(?:src|SRC|href|HREF)=\s*["']([^'"]+)''', direct_regex="""<source.*?src=(?:"|')([^"']+)[^>]+>"""):
+        self.regex = regex
+        self.direct_regex = direct_regex
         self.name = name
         self.download = download
         self.progress = xbmcgui.DialogProgress()
@@ -967,18 +966,24 @@ class VideoPlayer():
     @_cancellable
     def play_from_html(self, html):
         self.progress.update(50, "", "Searching for supported hosts", "")
-        direct_links = re.compile(self.direct_regex, re.DOTALL | re.IGNORECASE).findall(html)
-        if direct_links and not self.skip_direct:
-            selected = 'https:' + direct_links[0] if direct_links[0].startswith('//') else direct_links[0]
-            self.progress.update(50, "", "", "Playing from direct link")
-            self.play_from_direct_link(selected)
-        else:
+        direct_links = None
+        if self.direct_regex:
+            direct_links = re.compile(self.direct_regex, re.DOTALL | re.IGNORECASE).findall(html)
+            if direct_links:
+                selected = 'https:' + direct_links[0] if direct_links[0].startswith('//') else direct_links[0]
+                self.progress.update(50, "", "", "Playing from direct link")
+                self.play_from_direct_link(selected)
+            elif not self.regex:
+                notify('Oh oh','Could not find a supported link')
+        if self.regex and not direct_links:
             use_universal = True if addon.getSetting("universal_resolvers") == "true" else False
             sources = self._clean_urls([resolveurl.HostedMediaFile(x, title=x.split('/')[2], include_universal=use_universal) for x in resolveurl.scrape_supported(html, self.regex)])
             if not sources:
                 notify('Oh oh','Could not find a supported link')
                 return
             self._select_source(sources)
+        if not self.direct_regex and not self.regex:
+            raise ValueError("No regular expression specified")
 
     @_cancellable
     def _select_source(self, sources):
