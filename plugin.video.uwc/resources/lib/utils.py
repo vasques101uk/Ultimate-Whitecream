@@ -1083,14 +1083,14 @@ class VideoPlayer():
         return sites
 
 
-def playvideo(videosource, name, download=None, url=None, regex=None):
+def playvideo(videosource, name, download=None, url=None, regex='''(?:src|SRC|href|HREF)=\s*["']([^'"]+)'''):
     '''Deprecated function, use VideoPlayer class.
     Exists for compatiblity with old site plug-ins.'''
     vp = VideoPlayer(name, download, regex)
     vp.play_from_html(videosource)
 
 
-def PLAYVIDEO(url, name, download=None, regex=None):
+def PLAYVIDEO(url, name, download=None, regex='''(?:src|SRC|href|HREF)=\s*["']([^'"]+)'''):
     '''Deprecated function, use VideoPlayer class.
     Exists for compatiblity with old site plug-ins.'''
     vp = VideoPlayer(name, download, regex)

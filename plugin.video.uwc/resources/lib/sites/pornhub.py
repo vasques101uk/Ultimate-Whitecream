@@ -37,12 +37,11 @@ def Main():
 
 @utils.url_dispatcher.register('391', ['url'])
 def List(url):
-    print "pornhub::List " + url
     try:
         listhtml = utils.getHtml(url, '')
     except:
         return None
-    main_block = re.compile('videos search-video-thumbs">(.*?)</ul>', re.DOTALL).findall(listhtml)[0]
+    main_block = re.compile('videos search-video-thumbs[^>]+>(.*?)<div class="reset">', re.DOTALL).findall(listhtml)[0]
     match = re.compile('<li class="js-pop.*?<a href="([^"]+)" title="([^"]+)".*?data-mediumthumb="([^"]+)".*?<var class="duration">([^<]+)</var>(.*?)</div', re.DOTALL).findall(main_block)
     for videopage, name, img, duration, hd in match:
         if hd.find('HD') > 0:

@@ -1,7 +1,6 @@
 '''
     Ultimate Whitecream
-    Copyright (C) 2015 Whitecream
-    Copyright (C) 2015 Fr33m1nd
+    Copyright (C) 2018 Whitecream, Fr33m1nd, holisticdioxide
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -44,15 +43,19 @@ def EXList(url):
     except:
         
         return None
-    match = re.compile('notice_image">.*?<a title="([^"]+)" href="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for name, videopage, img in match:
-        utils.addDownLink(name, videopage, 112, img, '')
+    match = re.compile('notice_image">.*?<a title="([^"]+)" href="([^"]+)".*?src="([^"]+)".*?"notice_description">(.*?)</div', re.DOTALL | re.IGNORECASE).findall(listhtml)
+    for name, videopage, img, desc in match:
+        desc = utils.cleanhtml(desc).strip()
+        utils.addDownLink(name, videopage, 112, img, desc)
     try:
-        nextp=re.compile("<a href='([^']+)' title='([^']+)'>&raquo;</a>", re.DOTALL | re.IGNORECASE).findall(listhtml)
-        next = urllib.quote_plus(nextp[0][0])
-        next = next.replace(' ','+')
-        utils.addDir('Next Page', os.path.split(url)[0] + '/' + next, 111,'')
-    except: pass
+        nextp=re.compile("""class="current".*?<a href='([^']+)' title='([^']+)'""", re.DOTALL | re.IGNORECASE).search(listhtml)
+        next_page = urllib.quote_plus(nextp.group(1)).replace('%3A', ':').replace('%2F', '/')
+        if not next_page.startswith('http'):
+            next_page = os.path.split(url)[0] + '/' + next_page
+        text = nextp.group(2).split(' ')[1] if ' ' in nextp.group(2) else nextp.group(2)
+        utils.addDir('Next Page ({})'.format(text), next_page, 111,'')
+    except:
+        pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 
@@ -80,16 +83,17 @@ def EXCat(url):
 
 @utils.url_dispatcher.register('112', ['url', 'name'], ['download'])
 def EXPlayvid(url, name, download=None):
-    progress.create('Play video', 'Searching videofile.')
-    progress.update( 10, "", "Loading video page", "" )
+    regex = '''(?:iframe|IFRAME).*?(?:src|SRC)=['"]([^"']+)'''
+    vp = utils.VideoPlayer(name, download, regex=regex)
+    vp.progress.update(25, "", "Loading video page", "")
     videopage = utils.getHtml(url, '')
-    links = re.compile('<iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(videopage)
+    links = re.compile(regex, re.DOTALL | re.IGNORECASE).findall(videopage)
     for link in links:
         try:
             videopage += utils.getHtml(link, url)
         except:
             pass
-    utils.playvideo(videopage, name, download, url)
+    vp.play_from_html(videopage)
 
 
 @utils.url_dispatcher.register('115', ['url'])
