@@ -1004,8 +1004,11 @@ class VideoPlayer():
         try:
             link = source.resolve()
         except resolveurl.resolver.ResolverError:
-            return
-        self.play_from_direct_link(link)
+            link = False # ResolveURL returns False in some cases when resolving fails
+        if not link:
+            notify('Resolve failed', '{} link could not be resolved'.format(source.title))
+        else:
+            self.play_from_direct_link(link)
 
     @_cancellable
     def play_from_direct_link(self, direct_link):
