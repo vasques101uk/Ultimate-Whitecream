@@ -68,9 +68,14 @@ def pl_cat(url):
 def pl_channels(url):
     listhtml = utils.getHtml(url, 'https://porns.land/')
     match = re.compile('<div class="serie".*?href="([^"]+)".*?data-original="([^"]+)".*?<h2>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(listhtml)
-    for catpage, img, name in match:
+    for catpage, img, name in sorted(match, key=lambda x: x[2]):
         name = utils.cleantext(name)
         utils.addDir(name, catpage, 621, img, 1)
+    try:
+        next_page = re.compile('<a href="([^"]+)" data-ci-pagination-page="([^"]+)" rel="next"', re.DOTALL | re.IGNORECASE).findall(listhtml)[0]
+        utils.addDir('Next Page (' + next_page[1] + ')' , next_page[0], 624, '')
+    except:
+        pass
     xbmcplugin.endOfDirectory(utils.addon_handle)
 
 @utils.url_dispatcher.register('625', ['url'], ['keyword'])

@@ -65,6 +65,8 @@ def List(url):
 
 @utils.url_dispatcher.register('302', ['url', 'name'], ['download'])  
 def Playvid(url, name, download=None):
+    vp = utils.VideoPlayer(name, download)
+    vp.progress.update(25, "", "Loading video page", "")
     videopage = utils.getHtml(url, '')
     servervideo = re.compile("servervideo = '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
     vpath = re.compile("path = '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
@@ -72,13 +74,7 @@ def Playvid(url, name, download=None):
     filee = re.compile("filee = '([^']+)'", re.DOTALL | re.IGNORECASE).findall(videopage)[0]
     repp = hashlib.md5(repp).hexdigest()
     videourl = servervideo + vpath + repp + filee
-    if download == 1:
-        utils.downloadVideo(videourl, name)
-    else:
-        iconimage = xbmc.getInfoImage("ListItem.Thumb")
-        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-        xbmc.Player().play(videourl, listitem)
+    vp.play_from_direct_link(videourl)
 
 @utils.url_dispatcher.register('303', ['url'])  
 def Cat(url):

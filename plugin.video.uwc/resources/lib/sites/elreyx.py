@@ -67,14 +67,13 @@ def EXSearch(url, keyword=None):
     else:
         title = keyword.replace(' ','+')
         searchUrl = searchUrl + title + ".html"
-        print "Searching URL: " + searchUrl
         EXList(searchUrl)
 
 
 @utils.url_dispatcher.register('113', ['url'])
 def EXCat(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('<div id="categories" class="hidden-xs">(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    match = re.compile('<div id="categories" class="hidden-xs"(?:>| style="display:none;">)(.*?)</div>', re.DOTALL | re.IGNORECASE).findall(cathtml)
     match1 = re.compile('href="([^"]+)[^>]+>([^<]+)<', re.DOTALL | re.IGNORECASE).findall(match[0])
     for catpage, name in match1:
         utils.addDir(name, catpage, 111, '')

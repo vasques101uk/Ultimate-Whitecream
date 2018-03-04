@@ -126,7 +126,8 @@ def yourporn_play(url, name, download=None):
     html = utils.getHtml(url)
     if 'pl_vid_el transition' in html:
         html = yourporn_multiple_videos(html)
-    vp.play_from_html(html)
+    if html:
+        vp.play_from_html(html)
 
 
 def yourporn_multiple_videos(html):
@@ -135,5 +136,7 @@ def yourporn_multiple_videos(html):
     for vid_hash, title in videos:
         vids[title] = vid_hash
     sel_vid_hash = utils.selector('Multiple videos found', vids, dont_ask_valid=False, sort_by=lambda x: x)
-    vid_url = BASE_URL + "/post/" + sel_vid_hash + '.html'
-    return utils.getHtml(vid_url)
+    if sel_vid_hash:
+        vid_url = BASE_URL + "/post/" + sel_vid_hash + '.html'
+        return utils.getHtml(vid_url)
+    return None

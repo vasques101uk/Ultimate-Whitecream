@@ -18,6 +18,7 @@
 
 import urllib
 import re
+import json
 
 import xbmc
 import xbmcplugin
@@ -26,9 +27,7 @@ from resources.lib import utils
 
 addon = utils.addon
 
-USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
-
-headers = {'User-Agent': USER_AGENT,
+headers = {'User-Agent': utils.USER_AGENT,
            'X-Requested-With': 'XMLHttpRequest',
            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
            'Accept': '*/*',
@@ -163,7 +162,7 @@ def Pornstars(url, page=1):
     urldata = utils.getHtml(url, pdreferer, headers, data=data)
     urldata = ParseJson(urldata)
     i = 0
-    match = re.compile(r'pornstar_([\d]+).*?alt="([^"]+)".*?Videos</div> <div class="value">([\d]+)',
+    match = re.compile(r'pornstar_([\d]+).*?alt="([^"]+)".*?Videos</div>\s+<div class="value">([\d]+)',
                        re.DOTALL | re.IGNORECASE).findall(urldata)
     for ID, studio, videos in match:
         title = studio + " Videos: [COLOR deeppink]" + videos + "[/COLOR]"
@@ -182,7 +181,7 @@ def Studios(url, page=1):
     urldata = utils.getHtml(url, pdreferer, headers, data=data)
     urldata = ParseJson(urldata)
     i = 0
-    match = re.compile(r'studio_([\d]+).*?alt="([^"]+)".*?Videos</div> <div class="value">([\d]+)',
+    match = re.compile(r'studio_([\d]+).*?alt="([^"]+)".*?Videos</div>\s+<div class="value">([\d]+)',
                        re.DOTALL | re.IGNORECASE).findall(urldata)
     for ID, studio, videos in match:
         title = studio + " Videos: [COLOR deeppink]" + videos + "[/COLOR]"
@@ -216,7 +215,7 @@ def List(channel, section, page=0):
     urldata = ParseJson(urldata)
     i = 0
     match = re.compile(
-        r'<a.*?href="([^"]+)" title="([^"]+)">.*?</h2>(.*?)</div>.?<img src="([^"]+)".*?>.*?<span class="pull-left">(\d[^\s<]+)',
+        r'<a.*?href="([^"]+)" title="([^"]+)">.*?</h2>(.*?)</div>.?<img.*?src="([^"]+)".*?>.*?<span class="pull-left">(\d[^\s<]+)',
         re.DOTALL | re.IGNORECASE).findall(urldata)
     for url, name, hd, img, duration in match:
         if len(hd) > 2:
@@ -241,18 +240,14 @@ def List(channel, section, page=0):
 
 @utils.url_dispatcher.register('292', ['url', 'name'], ['download'])
 def Playvid(url, name, download=None):
+    vp = utils.VideoPlayer(name, download)
+    vp.progress.update(25, "", "Loading video page", "")
     videopage = utils.getHtml(url, pdreferer, headers, data='')
     links = re.compile('<a href="([^"]+)" class="post_download_link clearfix">[^>]+>([^<]+)<',
                        re.DOTALL | re.IGNORECASE).findall(videopage)
     videourl = getVideoUrl(links)
     videourl = utils.getVideoLink(videourl, url)
-    if download == 1:
-        utils.downloadVideo(videourl, name)
-    else:
-        iconimage = xbmc.getInfoImage("ListItem.Thumb")
-        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-        xbmc.Player().play(videourl, listitem)
+    vp.play_from_direct_link(videourl)
 
 
 def getVideoUrl(testquality):
@@ -296,7 +291,8 @@ def getVideoUrl(testquality):
 def findx(needle, haystack):
     if needle == haystack: return []
     # Strings are iterable, too
-    if isinstance(haystack, str) and len(haystack) <= 1: return None
+    if isinstance(haystack, str) and len(haystack) <= 1:
+        return None
     try:
         for i, e in enumerate(haystack):
             r = findx(needle, e)
@@ -309,9 +305,5 @@ def findx(needle, haystack):
 
 
 def ParseJson(urldata):
-    urldata = re.sub(r"(?si)\\/", "/", urldata)
-    urldata = re.sub(r'(?si)\\"', '"', urldata)
-    urldata = re.sub(r"(?si)\\t", " ", urldata)
-    urldata = re.sub(r"(?si)\\n", " ", urldata)
-    urldata = re.sub(r"(?si)\s{2,}", " ", urldata)
-    return urldata
+    urldata = json.loads(urldata)
+    return urldata['data']['content']

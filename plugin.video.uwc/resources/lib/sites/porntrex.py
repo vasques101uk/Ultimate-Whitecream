@@ -118,7 +118,8 @@ def PTPlayvid(url, name, download=None):
 @utils.url_dispatcher.register('53', ['url'])
 def PTCat(url):
     cathtml = utils.getHtml(url, '')
-    match = re.compile('<a class="item" href="([^"]+)" title="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(cathtml)
+    cat_block = re.compile('<span class="icon type-video">(.*?)<div class="footer-margin">', re.DOTALL | re.IGNORECASE).search(cathtml).group(1)
+    match = re.compile('<a class="item" href="([^"]+)" title="([^"]+)".*?src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(cat_block)
     for catpage, name, img in sorted(match, key=lambda x: x[1]):
         if img.startswith('//'):
             img = 'https:' + img

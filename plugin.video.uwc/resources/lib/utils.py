@@ -22,7 +22,7 @@ __scriptname__ = "Ultimate Whitecream"
 __author__ = "Whitecream"
 __scriptid__ = "plugin.video.uwc"
 __credits__ = "Whitecream, Fr33m1nd, anton40, NothingGnome, holisticdioxide"
-__version__ = "1.1.63"
+__version__ = "1.1.64"
 
 import urllib
 import urllib2
@@ -418,14 +418,14 @@ def getHtml(url, referer='', hdr=None, NoCookie=None, data=None):
         if e.code == 503 and 'cf-browser-verification' in result:
             result = cloudflare.solve(url,cj, USER_AGENT)
         else:
-            raise urllib2.HTTPError()
+            raise
     except Exception as e:
         if 'SSL23_GET_SERVER_HELLO' in str(e):
             notify('Oh oh','Python version to old - update to Krypton or FTMC')
-            raise urllib2.HTTPError()
+            raise
         else:
             notify('Oh oh','It looks like this website is down.')
-            raise urllib2.HTTPError()
+            raise
         return None
     if 'sucuri_cloudproxy_js' in result:
         headers['Cookie'] = get_sucuri_cookie(result)

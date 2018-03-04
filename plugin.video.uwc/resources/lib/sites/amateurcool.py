@@ -49,13 +49,8 @@ def List(url):
 
 @utils.url_dispatcher.register('492', ['url', 'name'], ['download'])
 def Playvid(videourl, name, download=None):
-    if download == 1:
-        utils.downloadVideo(videourl, name)
-    else:
-        iconimage = xbmc.getInfoImage("ListItem.Thumb")
-        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-        xbmc.Player().play(videourl, listitem)
+    vp = utils.VideoPlayer(name, download)
+    vp.play_from_direct_link(videourl)
 
 @utils.url_dispatcher.register('493', ['url'])
 def Categories(url):

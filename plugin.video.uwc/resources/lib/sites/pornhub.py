@@ -84,24 +84,18 @@ def Categories(url):
 
 @utils.url_dispatcher.register('392', ['url', 'name'], ['download'])    
 def Playvid(url, name, download=None):
+    vp = utils.VideoPlayer(name, download)
+    vp.progress.update(25, "", "Loading video page", "")
     html = utils.getHtml(url, '')
     match = re.compile(r"""quality_([0-9]{3,4})p\s*=(?:"|')?([^'";]+)(?:"|')?;""", re.DOTALL | re.IGNORECASE).findall(html)
     match = sorted(match, key=lambda x: int(x[0]), reverse=True)
     videolink = match[0][1]
     if "/*" in videolink:
         videolink = re.sub(r"/\*[^/]+/", "", videolink).replace("+","")
-
         linkparts = re.compile(r"(\w+)", re.DOTALL | re.IGNORECASE).findall(videolink)
         for part in linkparts:
             partval = re.compile(part+'="(.*?)";', re.DOTALL | re.IGNORECASE).findall(html)[0]
             partval = partval.replace('" + "','')
             videolink = videolink.replace(part, partval)
-
     videourl = videolink.replace(" ","")
-    if download == 1:
-        utils.downloadVideo(videourl, name)
-    else:
-        iconimage = xbmc.getInfoImage("ListItem.Thumb")
-        listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        listitem.setInfo('video', {'Title': name, 'Genre': 'Porn'})
-        xbmc.Player().play(videourl, listitem)
+    vp.play_from_direct_link(videourl)
