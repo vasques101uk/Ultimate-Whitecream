@@ -40,7 +40,7 @@ headers['Cookie'] = addon.getSetting('pd_cookie')
 pdreferer = 'https://www.porndig.com/videos/'
 
 class UrlOpenerPD(urllib.FancyURLopener):
-    version = USER_AGENT
+    version = utils.USER_AGENT
 
 
 def set_cookie():
