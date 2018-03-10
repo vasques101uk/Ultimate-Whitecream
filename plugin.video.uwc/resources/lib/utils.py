@@ -976,12 +976,18 @@ class VideoPlayer():
             elif not self.regex:
                 notify('Oh oh','Could not find a supported link')
         if self.regex and not direct_links:
-            use_universal = True if addon.getSetting("universal_resolvers") == "true" else False
-            sources = self._clean_urls([resolveurl.HostedMediaFile(x, title=x.split('/')[2], include_universal=use_universal) for x in resolveurl.scrape_supported(html, self.regex)])
-            if not sources:
-                notify('Oh oh','Could not find a supported link')
-                return
-            self._select_source(sources)
+            play_from_link_list(resolveurl.scrape_supported(html, self.regex))
+        if not self.direct_regex and not self.regex:
+            raise ValueError("No regular expression specified")
+    
+    @_cancellable
+    def play_from_link_list(self, links):
+        use_universal = True if addon.getSetting("universal_resolvers") == "true" else False
+        sources = self._clean_urls([resolveurl.HostedMediaFile(x, title=x.split('/')[2], include_universal=use_universal) for x links])
+        if not sources:
+            notify('Oh oh','Could not find a supported link')
+            return
+        self._select_source(sources)
         if not self.direct_regex and not self.regex:
             raise ValueError("No regular expression specified")
 
@@ -997,9 +1003,8 @@ class VideoPlayer():
     @_cancellable
     def play_from_link_to_resolve(self, source):
         if type(source) is str:
-            use_universal = True if addon.getSetting("universal_resolvers") == "true" else False
-            title = source.split('/')[2].split('.')[0] if '.' in source.split('/')[2] else source.split('/')[2]
-            source = resolveurl.HostedMediaFile(source, title=title, include_universal=use_universal)
+            play_from_link_list([source])
+            return
         self.progress.update(80, "", "Passing link to ResolveURL", "Playing from " + source.title)
         try:
             link = source.resolve()
