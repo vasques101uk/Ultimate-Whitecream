@@ -934,6 +934,7 @@ class VideoPlayer():
             return f(inst, *args, **kwargs)
         return wrapped
 
+    @_cancellable
     def _clean_urls(self, url_list):
         filtered_words = ['google']
         filtered_ends = ['.js', '.css', '/premium.html', '.jpg', '.gif', '.png', '.ico']
@@ -977,7 +978,10 @@ class VideoPlayer():
             elif not self.regex:
                 notify('Oh oh','Could not find a supported link')
         if self.regex and not direct_links:
-            self.play_from_link_list(resolveurl.scrape_supported(html, self.regex).extend(solved_suburls))
+            scraped_sources = resolveurl.scrape_supported(html, self.regex)
+            scraped_sources = scraped_sources if scraped_sources else []
+            scraped_sources.extend(solved_suburls)
+            self.play_from_link_list(scraped_sources)
         if not self.direct_regex and not self.regex:
             raise ValueError("No regular expression specified")
     
@@ -1019,12 +1023,13 @@ class VideoPlayer():
         self.progress.update(90, "", "Playing video", "")
         playvid(direct_link, self.name, self.download)
 
+    @_cancellable
     def _check_suburls(self, html, referrer_url):
         sdurl = re.compile(r'streamdefence\.com/view.php\?ref=([^"]+)"', re.DOTALL | re.IGNORECASE).findall(html)
         sdurl_world = re.compile(r'.strdef\.world/([^"]+)', re.DOTALL | re.IGNORECASE).findall(html)
         fcurl = re.compile(r'filecrypt\.cc/Container/([^\.]+)\.html', re.DOTALL | re.IGNORECASE).findall(html)
+        links = []
         if sdurl or sdurl_world or fcurl:
-            links = []
             self.progress.update(50, "", "Found subsites", "")
         if sdurl:
             links.extend(self._solve_streamdefence(sdurl, referrer_url, False))
@@ -1034,6 +1039,7 @@ class VideoPlayer():
             links.extend(self._solve_filecrypt(fcurl, referrer_url))
         return links
 
+    @_cancellable
     def _solve_streamdefence(self, sdurls, url, world=False):
         self.progress.update(55, "", "Loading streamdefence sites", "")
         sdpages = ''
@@ -1045,21 +1051,24 @@ class VideoPlayer():
             sdsrc = getHtml(sdurl, url if url else sdurl)
             sdpage = streamdefence(sdsrc)
             sdpages += sdpage
-        sources = re.compile('iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(sdpages)
+        sources = set(re.compile('iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(sdpages))
         return sources
 
+    @_cancellable
     def _solve_filecrypt(self, fc_urls, url):
         self.progress.update(55, "", "Loading filecrypt sites", "")
         sites = set()
         for fc_url in fc_urls:
             fcurl = 'http://filecrypt.cc/Container/' + fc_url + ".html"
-            fcsrc = getHtml(fcurl, url if url else fcurl)
+            fcsrc = getHtml(fcurl, url if url else fcurl, headers)
             fcmatch = re.compile(r"openLink.?'([\w\-]*)',", re.DOTALL | re.IGNORECASE).findall(fcsrc)
             for fclink in fcmatch:
                 fcpage = "http://filecrypt.cc/Link/" + fclink + ".html"
                 fcpagesrc = getHtml(fcpage, fcurl)
                 fclink2 = re.search('''top.location.href='([^']+)''', fcpagesrc)
-                if fclink2 and 'bullads' not in fclink2:
+                if fclink2:
+                    if 'bullads' in fclink2.group(1):
+                        continue
                     try:
                         fcurl2 = getVideoLink(fclink2.group(1), fcpage)
                         sites.add(fcurl2)
