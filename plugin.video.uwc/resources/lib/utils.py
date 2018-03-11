@@ -960,12 +960,13 @@ class VideoPlayer():
     def play_from_site_link(self, url, referrer=''):
         self.progress.update(25, "", "Loading video page", "")
         html = getHtml(url, referrer)
-        html += self._check_suburls(html, url)
-        self.play_from_html(html)
+        self.play_from_html(html, url)
 
     @_cancellable
-    def play_from_html(self, html):
-        self.progress.update(50, "", "Searching for supported hosts", "")
+    def play_from_html(self, html, url=None):
+        self.progress.update(40, "", "Searching for supported hosts", "")
+        solved_suburls = self._check_suburls(html, url)
+        self.progress.update(60, "", "Searching for supported hosts", "")
         direct_links = None
         if self.direct_regex:
             direct_links = re.compile(self.direct_regex, re.DOTALL | re.IGNORECASE).findall(html)
@@ -976,7 +977,7 @@ class VideoPlayer():
             elif not self.regex:
                 notify('Oh oh','Could not find a supported link')
         if self.regex and not direct_links:
-            self.play_from_link_list(resolveurl.scrape_supported(html, self.regex))
+            self.play_from_link_list(resolveurl.scrape_supported(html, self.regex).extend(solved_suburls))
         if not self.direct_regex and not self.regex:
             raise ValueError("No regular expression specified")
     
@@ -1019,73 +1020,51 @@ class VideoPlayer():
         playvid(direct_link, self.name, self.download)
 
     def _check_suburls(self, html, referrer_url):
-        klurl = re.compile(r"//(?:www\.)?keeplinks\.eu/p([0-9a-zA-Z/]+)", re.DOTALL | re.IGNORECASE).findall(html)
         sdurl = re.compile(r'streamdefence\.com/view.php\?ref=([^"]+)"', re.DOTALL | re.IGNORECASE).findall(html)
         sdurl_world = re.compile(r'.strdef\.world/([^"]+)', re.DOTALL | re.IGNORECASE).findall(html)
         fcurl = re.compile(r'filecrypt\.cc/Container/([^\.]+)\.html', re.DOTALL | re.IGNORECASE).findall(html)
-        if klurl or sdurl or sdurl_world or fcurl:
-            html = ''
-            self.progress.update(30, "", "Found subsites", "")
-        if klurl:
-            html += self._solve_keep_links(klurl)
-        elif sdurl:
-            html += self._solve_streamdefence(sdurl, referrer_url, False)
+        if sdurl or sdurl_world or fcurl:
+            links = []
+            self.progress.update(50, "", "Found subsites", "")
+        if sdurl:
+            links.extend(self._solve_streamdefence(sdurl, referrer_url, False))
         elif sdurl_world:
-            html += self._solve_streamdefence(sdurl_world, referrer_url, True)
+            links.extend(self._solve_streamdefence(sdurl_world, referrer_url, True))
         elif fcurl:
-            html += self._solve_filecrypt(fcurl, referrer_url)
-        return html
-
-    def _solve_keep_links(self, klurls):
-        self.progress.update(35, "", "Loading keeplinks sites", "")
-        klpages = ''
-        for kl_url in klurls:
-            klurl = 'http://www.keeplinks.eu/p' + kl_url
-            kllink = getVideoLink(klurl, '')
-            kllinkid = kllink.split('/')[-1]
-            klheader = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-            'Accept-Encoding': 'none',
-            'Accept-Language': 'en-US,en;q=0.8',
-            'Connection': 'keep-alive',
-            'Cookie': 'flag['+kllinkid+'] = 1;'}
-            klpage = getHtml(kllink, klurl, klheader)
-            klpages += klpage
-        return klpages
+            links.extend(self._solve_filecrypt(fcurl, referrer_url))
+        return links
 
     def _solve_streamdefence(self, sdurls, url, world=False):
-        self.progress.update(35, "", "Loading streamdefence sites", "")
+        self.progress.update(55, "", "Loading streamdefence sites", "")
         sdpages = ''
         for sd_url in sdurls:
             if not world:
                 sdurl = 'http://www.streamdefence.com/view.php?ref=' + sd_url
             else:
                 sdurl = 'https://www.strdef.world/' + sd_url
-            sdsrc = getHtml(sdurl, url)
+            sdsrc = getHtml(sdurl, url if url else sdurl)
             sdpage = streamdefence(sdsrc)
             sdpages += sdpage
-        return sdpages
+        sources = re.compile('iframe src="([^"]+)"', re.DOTALL | re.IGNORECASE).findall(sdpages)
+        return sources
 
     def _solve_filecrypt(self, fc_urls, url):
-        self.progress.update(35, "", "Loading filecrypt sites", "")
-        sites = ''
+        self.progress.update(55, "", "Loading filecrypt sites", "")
+        sites = set()
         for fc_url in fc_urls:
             fcurl = 'http://filecrypt.cc/Container/' + fc_url + ".html"
-            fcsrc = getHtml(fcurl, url)
+            fcsrc = getHtml(fcurl, url if url else fcurl)
             fcmatch = re.compile(r"openLink.?'([\w\-]*)',", re.DOTALL | re.IGNORECASE).findall(fcsrc)
-            fcurls = ""
             for fclink in fcmatch:
                 fcpage = "http://filecrypt.cc/Link/" + fclink + ".html"
                 fcpagesrc = getHtml(fcpage, fcurl)
-                fclink2 = re.search('<iframe .*? noresize src="(.*)"></iframe>', fcpagesrc)
-                if fclink2:
+                fclink2 = re.search('''top.location.href='([^']+)''', fcpagesrc)
+                if fclink2 and 'bullads' not in fclink2:
                     try:
                         fcurl2 = getVideoLink(fclink2.group(1), fcpage)
-                        fcurls = fcurls + " " + fcurl2
+                        sites.add(fcurl2)
                     except:
                         pass
-            sites += fcurls
         return sites
 
 
