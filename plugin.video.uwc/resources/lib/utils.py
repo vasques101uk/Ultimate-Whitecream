@@ -942,7 +942,7 @@ class VideoPlayer():
         new_list = []
         for source in url_list:
             to_break = False
-            if source._url in added:
+            if source._url in added or not source:
                 continue
             for word in filtered_words:
                 if word in source._url or to_break:
@@ -1067,8 +1067,6 @@ class VideoPlayer():
                 fcpagesrc = getHtml(fcpage, fcurl)
                 fclink2 = re.search('''top.location.href='([^']+)''', fcpagesrc)
                 if fclink2:
-                    if 'bullads' in fclink2.group(1):
-                        continue
                     try:
                         fcurl2 = getVideoLink(fclink2.group(1), fcpage)
                         sites.add(fcurl2)
