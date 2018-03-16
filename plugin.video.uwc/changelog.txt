@@ -5,6 +5,8 @@ Fixed: Videomegaporn
 Fixed: Xtasie pagination and category listing
 Fixed: PornsLand channels pagination
 Fixed: Porndig
+Fixed: YourPorn top pornstars
+Fixed: deleting keywords
 
 
 [B]Version 1.1.63[/B]

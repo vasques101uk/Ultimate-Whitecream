@@ -101,7 +101,7 @@ def yourporn_channels(url, section):
         categories = re.compile('''<span>Top SubCat Subs</span>(.*?)<div class='now_watching_div'>''', re.DOTALL | re.IGNORECASE).search(listhtml).group(1)
     else:
         handle = 'ps'
-        categories = re.compile('''<span>Top Porn Stars Subs</span>(.*?)<span>Top SubCat Subs</span>''', re.DOTALL | re.IGNORECASE).search(listhtml).group(1)
+        categories = re.compile('''<span>Top PornStars Subs</span>(.*?)<span>Top SubCat Subs</span>''', re.DOTALL | re.IGNORECASE).search(listhtml).group(1)
     match = re.compile("<a href='([^']+)'.*?<span class='top_sub_el_key_" + handle + "'>([^<]+)<.*?<span class='top_sub_el_count'>([^<]+)<", re.DOTALL | re.IGNORECASE).findall(categories)
     for catpage, name, count in sorted(match, key=lambda x: x[1]):
         name = name  + " [COLOR deeppink]" + count + "[/COLOR]"
